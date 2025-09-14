@@ -17,9 +17,6 @@
     <ClInclude Include="src\Shunya.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include=".gitignore" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="src\Core\Application.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
