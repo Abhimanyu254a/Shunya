@@ -1,0 +1,3 @@
+[submodule "Shunya-Core/Third_party/spdlog"]
+	path = Shunya-Core/Third_party/spdlog
+	url = https://github.com/gabime/spdlog.git

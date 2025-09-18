@@ -5,7 +5,7 @@ VisualStudioVersion = 17.13.35931.197
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Shunya-Core", "Shunya-Core\Shunya-Core.vcxproj", "{B1DB4815-E656-45AE-9DAF-445A6609ADCB}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PlayGround", "Field\Field.vcxproj", "{EA5EF17E-18C6-4548-B34D-CCED7FCB1982}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PlayGround", "PlayGround\Field.vcxproj", "{EA5EF17E-18C6-4548-B34D-CCED7FCB1982}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -58,7 +58,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>SHUNYA_CORE_EXPORTS;</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Shunya-Core\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Shunya-Core\src;$(SolutionDir)Shunya-Core\Third_party\spdlog\include;</AdditionalIncludeDirectories>
+      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -73,7 +74,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>SHUNYA_CORE_EXPORTS;</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Shunya-Core\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Shunya-Core\src;$(SolutionDir)Shunya-Core\Third_party\spdlog\include;</AdditionalIncludeDirectories>
+      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
