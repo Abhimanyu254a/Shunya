@@ -4,7 +4,7 @@
 
 namespace Shunya
 {
-	class SHUNYA_CORE_API Application
+	class SHUNYA_API Application
 	{
 	public:
 		Application();
