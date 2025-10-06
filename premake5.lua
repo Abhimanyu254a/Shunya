@@ -21,6 +21,7 @@ project "Shunya-Core"
         "%{prj.name}/src/**.cpp"
     }
     includedirs{
+        "%{prj.name}/src",
         "%{prj.name}/third_party/spdlog/include"
     }
 

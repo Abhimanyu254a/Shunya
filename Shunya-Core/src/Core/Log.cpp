@@ -23,19 +23,3 @@ namespace Shunya
 
 
 }
-
-// Core log macros
-
-#define Shunya_Core_Error(...)   :: Shunya::Log::GetCoreLogger()-> error(__VA_ARGS__)
-#define Shunya_Core_Warning(...) :: Shunya::Log::GetCoreLogger()-> warn(__VA_ARGS__)
-#define Shunya_Core_Info(...)	 :: Shunya::Log::GetCoreLogger()-> info(__VA_ARGS__)
-#define Shunya_Core_Fatal(...)   :: Shunya::Log::GetCoreLogger()-> fatal(__VA_ARGS__)
-#define Shunya_Core_Trace(...)   :: Shunya::Log::GetCoreLogger()-> trace(__VA_ARGS__)
-
-// Client Log Macros
-
-#define Shunya_Error(...)   :: Shunya::Log::GetClientLogger()-> error(__VA_ARGS__)
-#define Shunya_Warning(...) :: Shunya::Log::GetClientLogger()-> warn(__VA_ARGS__)
-#define Shunya_Info(...)	 :: Shunya::Log::GetClientLogger()-> info(__VA_ARGS__)
-#define Shunya_Fatal(...)   :: Shunya::Log::GetClientLogger()-> fatal(__VA_ARGS__)
-#define Shunya_Trace(...)   :: Shunya::Log::GetClientLogger()-> trace(__VA_ARGS__)

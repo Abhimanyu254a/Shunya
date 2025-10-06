@@ -13,6 +13,7 @@ int main(int argc, char** argv)
 	Shunya::Log::GetCoreLogger() -> warn("Initialized Log!");
 	Shunya::Log::GetClientLogger() -> info("Hello Shunya");
 	
+	
 	printf("Hello Shunya");
 	auto app = Shunya::CreateApplication();
 	app->Run();
