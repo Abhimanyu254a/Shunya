@@ -16,6 +16,9 @@ project "Shunya-Core"
     targetdir ("bin/" .. outputdir.. "/%{prj.name}")
     objdir ("bin/" .. outputdir.. "/%{prj.name}")
 
+    pchheader "SNY-PCH.h"
+    pchsource "Shunya-Core/src/Core/SNY-PCH.cpp"
+
     files{
         "%{prj.name}/src/**.h",
         "%{prj.name}/src/**.cpp"
