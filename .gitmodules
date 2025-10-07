@@ -1,3 +1,6 @@
 [submodule "Shunya-Core/Third_party/spdlog"]
 	path = Shunya-Core/Third_party/spdlog
 	url = https://github.com/gabime/spdlog.git
+[submodule "Shunya-Core/third_party/GLFW"]
+	path = Shunya-Core/third_party/GLFW
+	url = https://github.com/glfw/glfw.git
