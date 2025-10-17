@@ -36,6 +36,12 @@
     <ClInclude Include="src\Core\SNY-PCH.h">
       <Filter>Core</Filter>
     </ClInclude>
+    <ClInclude Include="src\Core\Window.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\WindowMaker.h">
+      <Filter>Core</Filter>
+    </ClInclude>
     <ClInclude Include="src\Shunya.h" />
   </ItemGroup>
   <ItemGroup>
@@ -46,6 +52,9 @@
       <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\SNY-PCH.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\WindowMaker.cpp">
       <Filter>Core</Filter>
     </ClCompile>
   </ItemGroup>

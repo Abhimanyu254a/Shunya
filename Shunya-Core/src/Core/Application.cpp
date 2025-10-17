@@ -1,13 +1,16 @@
 #include "SNY-PCH.h"
 #include "Log.h"
+
 #include "Application.h"
 #include "Events/ApplicationEvent.h"
 
+#include <GLFW/glfw3.h>
 
 namespace Shunya
 {
 	Application::Application()
 	{
+		m_Window = std::unique_ptr<Window>(Window::Create());
 
 	}
 	Application::~Application()
@@ -18,10 +21,10 @@ namespace Shunya
 
 	void Application::Run()
 	{
-		WindowResizeEvent e(1280, 720);
-		SHUNYA_TRACE(e.ToString());
 
-		while (true);
+		while (true) {
+			m_Window->OnUpdate();
+		}
 	}
 
 	

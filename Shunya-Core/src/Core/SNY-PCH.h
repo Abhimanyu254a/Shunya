@@ -1,6 +1,7 @@
 #pragma once
 
 
+#include "Log.h"
 
 // Standard Library
 #include<iostream>

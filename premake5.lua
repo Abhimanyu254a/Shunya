@@ -8,6 +8,12 @@ workspace "Shunya"
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
+IncludeDir = {}
+IncludeDir["GLFW"] = "Shunya-Core/third_party/GLFW/include"
+
+include "Shunya-Core\\third_party\\GLFW"
+
+
 project "Shunya-Core"
     location "Shunya-Core"
     kind "SharedLib"
@@ -25,7 +31,13 @@ project "Shunya-Core"
     }
     includedirs{
         "%{prj.name}/src",
-        "%{prj.name}/third_party/spdlog/include"
+        "%{prj.name}/third_party/spdlog/include",
+        "%{IncludeDir.GLFW}"
+    }
+
+    links{
+        "GLFW",
+        "opengl32.lib"
     }
 
     filter "system:windows"
