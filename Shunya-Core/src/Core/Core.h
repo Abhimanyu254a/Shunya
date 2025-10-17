@@ -13,4 +13,14 @@
 
 #endif
 
+#ifdef SHUNYA_ENABLE_ASSERTS
+	#define	SHUNYA_ASSERT(x, ...) {if(!(x)) {SHUNYA_ERROR("Assertion Failed : {0}", __VA__ARGS__); __debugbreak(); }}
+	#define SHUNYA_CORE_ASSERT(x , ...) {if(!x){SHUNYA_CORE_ERROR("Assertion Failed : {0}",__VA__ARGS__); __debugbreak(); } }
+#else
+	#define SHUNYA_ASSERT(x, ...)
+	#define SHUNYA_CORE_ASSERT(x, ...)
+#endif
+
+
+
 #define BIT(x) (1 << x)
