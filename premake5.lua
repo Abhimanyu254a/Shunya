@@ -58,14 +58,17 @@ project "Shunya-Core"
     
     filter "configurations:Debug" 
         defines {"Shunya_DEBUG"}
+        buildoptions "/MDd"
         symbols "On"
     
     filter "configurations:Release" 
         defines {"Shunya_RELEASE"}
+        buildoptions "/MD"
         optimize "On"
     
     filter "configurations:Dist" 
         defines {"Shunya_DIST"}
+        buildoptions "/MD"
         optimize "On"
 
 project "PlayGround"
@@ -112,12 +115,15 @@ project "PlayGround"
     
     filter "configurations:Debug" 
         defines {"Shunya_DEBUG"}
+        buildoptions "/MDd"
         symbols "On"
     
     filter "configurations:Release" 
         defines {"Shunya_RELEASE"}
+        buildoptions "/MD"
         optimize "On"
     
     filter "configurations:Dist" 
         defines {"Shunya_DIST"}
+        buildoptions "/MD"
         optimize "On"
