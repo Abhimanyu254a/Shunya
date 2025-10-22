@@ -1,5 +1,6 @@
 #include "SNY-PCH.h"
 
+#include <glad/glad.h>
 #include "WindowMaker.h"
 #include "Core/Events/ApplicationEvent.h"
 #include "Core/Events/MouseEvent.h"
@@ -41,6 +42,8 @@ namespace Shunya {
 		}
 		m_Window = glfwCreateWindow((int)props.Breadth, (int)props.Height, m_Data.Title.c_str(), nullptr, nullptr);
 		glfwMakeContextCurrent(m_Window); 
+		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+		SHUNYA_CORE_ASSERT(status, "Failed to initialize Glad!");
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 		SetVSync(true);
 		
