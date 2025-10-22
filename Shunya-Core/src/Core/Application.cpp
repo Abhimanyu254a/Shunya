@@ -6,7 +6,7 @@
 #include "Events/ApplicationEvent.h"
 #include "Events/KeyEvent.h"
 
-
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
 namespace Shunya
@@ -38,11 +38,8 @@ namespace Shunya
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<WindowClosedEvent>(BIND_FUN(OnWindowClose));
 
-
-
 		SHUNYA_CORE_TRACE("{0}", e.ToString());
 		
-
 		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();)
 		{
 			(*--it)->OnEvent(e);

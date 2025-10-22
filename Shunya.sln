@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GLFW", "Shunya-Core\third_party\GLFW\GLFW.vcxproj", "{154B857C-0182-860D-AA6E-6C109684020F}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Glad", "Shunya-Core\third_party\Glad\Glad.vcxproj", "{BDD6857C-A90D-870D-52FA-6C103E10030F}"
+EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PlayGround", "PlayGround\PlayGround.vcxproj", "{EA529F32-D60A-E17F-3F12-BADB2BE97B70}"
 	ProjectSection(ProjectDependencies) = postProject
 		{13AFCCD5-7F64-45CB-0859-3FA2740D3CCF} = {13AFCCD5-7F64-45CB-0859-3FA2740D3CCF}
@@ -23,6 +25,12 @@ Global
 		{154B857C-0182-860D-AA6E-6C109684020F}.dist|x64.Build.0 = dist|x64
 		{154B857C-0182-860D-AA6E-6C109684020F}.Release|x64.ActiveCfg = Release|x64
 		{154B857C-0182-860D-AA6E-6C109684020F}.Release|x64.Build.0 = Release|x64
+		{BDD6857C-A90D-870D-52FA-6C103E10030F}.Debug|x64.ActiveCfg = Debug|x64
+		{BDD6857C-A90D-870D-52FA-6C103E10030F}.Debug|x64.Build.0 = Debug|x64
+		{BDD6857C-A90D-870D-52FA-6C103E10030F}.dist|x64.ActiveCfg = dist|x64
+		{BDD6857C-A90D-870D-52FA-6C103E10030F}.dist|x64.Build.0 = dist|x64
+		{BDD6857C-A90D-870D-52FA-6C103E10030F}.Release|x64.ActiveCfg = Release|x64
+		{BDD6857C-A90D-870D-52FA-6C103E10030F}.Release|x64.Build.0 = Release|x64
 		{EA529F32-D60A-E17F-3F12-BADB2BE97B70}.Debug|x64.ActiveCfg = Debug|x64
 		{EA529F32-D60A-E17F-3F12-BADB2BE97B70}.Debug|x64.Build.0 = Debug|x64
 		{EA529F32-D60A-E17F-3F12-BADB2BE97B70}.dist|x64.ActiveCfg = dist|x64
