@@ -51,6 +51,12 @@
     <ClInclude Include="src\Core\WindowMaker.h">
       <Filter>Core</Filter>
     </ClInclude>
+    <ClInclude Include="src\Core\imgui_impl_glfw.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\imgui_opengl_Render.h">
+      <Filter>Core</Filter>
+    </ClInclude>
     <ClInclude Include="src\Shunya.h" />
   </ItemGroup>
   <ItemGroup>
@@ -70,6 +76,12 @@
       <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\WindowMaker.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\imgui_impl_glfw.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\imgui_opengl_Render.cpp">
       <Filter>Core</Filter>
     </ClCompile>
   </ItemGroup>

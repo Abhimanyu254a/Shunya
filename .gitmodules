@@ -4,3 +4,9 @@
 [submodule "Shunya-Core/third_party/GLFW"]
 	path = Shunya-Core/third_party/GLFW
 	url = https://github.com/glfw/glfw.git
+[submodule "Shunya/Shunya-Core/third_party"]
+	path = Shunya/Shunya-Core/third_party
+	url = https://github.com/Abhimanyu254a/imgui
+[submodule "Shunya-Core/third_party/iamGUI"]
+	path = Shunya-Core/third_party/iamGUI
+	url = https://github.com/Abhimanyu254a/imgui

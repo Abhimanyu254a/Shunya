@@ -11,9 +11,11 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 IncludeDir = {}
 IncludeDir["GLFW"] = "Shunya-Core/third_party/GLFW/include"
 IncludeDir["Glad"] = "Shunya-Core/third_party/Glad/include"
+IncludeDir["iamGUI"] = "Shunya-Core/third_party/iamGUI"
 
 include "Shunya-Core\\third_party\\GLFW"
 include "Shunya-Core\\third_party\\Glad"
+include "Shunya-Core\\third_party\\iamGUI"
 
 
 project "Shunya-Core"
@@ -35,12 +37,14 @@ project "Shunya-Core"
         "%{prj.name}/src",
         "%{prj.name}/third_party/spdlog/include",
         "%{IncludeDir.GLFW}",
-        "%{IncludeDir.Glad}"
+        "%{IncludeDir.Glad}",
+        "%{IncludeDir.iamGUI}"
     }
 
     links{
         "GLFW",
         "Glad",
+        "iamGUI",
         "opengl32.lib"
     }
 

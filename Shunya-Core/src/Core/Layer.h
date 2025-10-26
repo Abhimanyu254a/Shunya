@@ -13,7 +13,7 @@ namespace Shunya
 		Layer(const std::string& Debug = "Layer");
 		virtual ~Layer();
 
-		virtual void OnAttack() {};
+		virtual void OnAttach() {};
 		virtual void OnDetch() {};
 		virtual void OnUpdate() {};
 		virtual void OnEvent(Event& event) {};

@@ -12,9 +12,12 @@
 namespace Shunya
 {
 #define BIND_FUN(x) std::bind(&Application::x,this,std::placeholders::_1)
+	Application* Application::s_Instance = nullptr;
 
 	Application::Application()
 	{
+		SHUNYA_CORE_ASSERT(s_Instance, "Applicational ready exists!");
+		s_Instance = this;
 		m_Window = std::unique_ptr<Window>(Window::Create());
 		m_Window->SetEventCallback(BIND_FUN(OnEvent)) ;
   
@@ -27,10 +30,12 @@ namespace Shunya
 	void Application::PushLayer(Layer* layer)
 	{
 		m_LayerStack.PushLayer(layer);
+		layer->OnAttach();
 	}
 	void Application::PushOverlay(Layer* Overlay)
 	{
 		m_LayerStack.PushOverlay(Overlay);
+		Overlay->OnAttach();
 	}
 
 	void Application::OnEvent(Event& e)

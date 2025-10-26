@@ -37,6 +37,7 @@ namespace Shunya{
 		virtual void SetVSync(bool enableed) = 0;
 		virtual bool IsVSync() const = 0;
 
+
 		static Window* Create(const WindowProps& props = WindowProps());
 	};
 }
