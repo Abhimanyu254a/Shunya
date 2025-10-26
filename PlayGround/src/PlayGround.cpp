@@ -25,6 +25,7 @@ public:
    PlayGround()
    {
 	   PushLayer(new ExampleLayer());
+	   PushOverlay(new Shunya::imGUILayer());
    }
    ~PlayGround()
    {

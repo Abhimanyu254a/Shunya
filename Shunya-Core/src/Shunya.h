@@ -7,6 +7,7 @@
 #include "Core/Log.h"
 #include <Windows.h>
 #include "Core/Layer.h"
+#include "Core/imguiLayer.h"
 
 #pragma execution_character_set("utf-8")
 

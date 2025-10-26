@@ -12,6 +12,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PlayGround", "PlayGround\Pl
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Shunya-Core", "Shunya-Core\Shunya-Core.vcxproj", "{13AFCCD5-7F64-45CB-0859-3FA2740D3CCF}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "iamGUI", "Shunya-Core\third_party\iamGUI\iamGUI.vcxproj", "{41F6E403-2D98-0FDA-1653-232E0294962A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -43,6 +45,12 @@ Global
 		{13AFCCD5-7F64-45CB-0859-3FA2740D3CCF}.dist|x64.Build.0 = dist|x64
 		{13AFCCD5-7F64-45CB-0859-3FA2740D3CCF}.Release|x64.ActiveCfg = Release|x64
 		{13AFCCD5-7F64-45CB-0859-3FA2740D3CCF}.Release|x64.Build.0 = Release|x64
+		{41F6E403-2D98-0FDA-1653-232E0294962A}.Debug|x64.ActiveCfg = Debug|x64
+		{41F6E403-2D98-0FDA-1653-232E0294962A}.Debug|x64.Build.0 = Debug|x64
+		{41F6E403-2D98-0FDA-1653-232E0294962A}.dist|x64.ActiveCfg = dist|x64
+		{41F6E403-2D98-0FDA-1653-232E0294962A}.dist|x64.Build.0 = dist|x64
+		{41F6E403-2D98-0FDA-1653-232E0294962A}.Release|x64.ActiveCfg = Release|x64
+		{41F6E403-2D98-0FDA-1653-232E0294962A}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
