@@ -24,3 +24,4 @@
 
 
 #define BIT(x) (1 << x)
+#define SHUNYA_BIND(fn) std::bind(&fn, this, std::placeholders::_1)

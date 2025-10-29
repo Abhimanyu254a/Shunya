@@ -1,11 +1,16 @@
 #include "SNY-PCH.h"
+#include "Core/Core.h"
+#include "Core/Layer.h"
+#include "Application.h"
+#include "All_Event.h"
 
 #include "imgui.h"
 #include "imguiLayer.h"
 #include "Core/imgui_opengl_Render.h"
+#include "glad/glad.h"
 #include "GLFW/glfw3.h"
-#include "Application.h"
 #include "Core/imgui_impl_glfw.h"
+
 
 
 
@@ -20,15 +25,16 @@ namespace Shunya
 
     static inline float Saturate(float v) { return v < 0.0f ? 0.0f : v  > 1.0f ? 1.0f : v; }
 
-	imGUILayer::imGUILayer()
-		:Layer("imGUI_Layer"){ }
-	
-	imGUILayer::~imGUILayer(){ }
+    imGUILayer::imGUILayer()
+        :Layer("imGUI_Layer") {
+    }
 
-	//void imGUILayer::OnAttach() { 
-	//	ImGui::CreateContext();
+    imGUILayer::~imGUILayer() {}
+
+    //void imGUILayer::OnAttach() { 
+    //	ImGui::CreateContext();
  //       ImGui::SetCurrentContext(ImGui::GetCurrentContext());
-	//	
+    //	
 
  //       ImGuiIO& io = ImGui::GetIO();
  //       //GLFWgamepadstate gamepad;
@@ -66,7 +72,7 @@ namespace Shunya
  //       
  //       ImGui_ImplOpenGL3_Init("version 410");
  //       ImGui::StyleColorsDark();
-	//}
+    //}
     void imGUILayer::OnAttach()
     {
         // --- 1. Create Context and Set Flags ---
@@ -80,10 +86,10 @@ namespace Shunya
 
         // --- 2. Get the Native Window ---
 
-        Application& app = Application ::Get();
+        Application& app = Application::Get();
 
 
-      
+
 
         // --- 3. Initialize Backends ---
         /*ImGui_ImplGlfw_InitForOpenGL(window, true);*/
@@ -94,14 +100,12 @@ namespace Shunya
 
         // ALL The MAP_BUTTON AND MAP_ANALOG CALLS MUST BE DELETED FROM HERE
     }
-	void imGUILayer::OnDetch()
-	{
+    void imGUILayer::OnDetch()
+    {
+    }
 
-	}
-	void imGUILayer::OnEvent(Event& event)
-	{
 
-	}
+
     void  imGUILayer::OnUpdate()
     {
         // --- 1. Set up IO (Size, DeltaTime) ---
@@ -115,8 +119,6 @@ namespace Shunya
 
         // --- 2. Start New Frames ---
         ImGui_ImplOpenGL3_NewFrame();
-
-        
         ImGui::NewFrame();
 
         // --- 3. Poll Gamepad State (This is where the logic belongs) ---
@@ -158,8 +160,9 @@ namespace Shunya
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
     }
-	//void  imGUILayer::OnUpdate()
-	//{
+    //----------------------------------------
+    //void  imGUILayer::OnUpdate()
+    //{
  //       ImGuiIO& io = ImGui::GetIO();
  //       float time = (float)glfwGetTime();
  //       io.DeltaTime = m_time > 0.0f ? (time - m_time) : (1.0f / 60.0f);
@@ -175,9 +178,86 @@ namespace Shunya
  //       ImGui::Render();
  //       ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-	//}
+    //}
+    //-----------------------------------------------------
+
+    void imGUILayer::OnEvent(Event& event)
+    {
+        EventDispatcher dispatcher(event);
+
+        dispatcher.Dispatch<MouseMovedEvent>(SHUNYA_BIND(imGUILayer::OnMouseMovedEvent));
+        dispatcher.Dispatch<MouseButtonPressedEvent>(SHUNYA_BIND(imGUILayer::OnMouseButtonPressedEvent));
+        dispatcher.Dispatch<MouseScrolledEvent>(SHUNYA_BIND(imGUILayer::OnMouseScrolledEvent));
+        dispatcher.Dispatch<MouseButtonRelasedEvent>(SHUNYA_BIND(imGUILayer::OnMouseButtonRelasedEvent));
+        dispatcher.Dispatch<KeyReleasedEvent>(SHUNYA_BIND(imGUILayer::OnKeyReleasedEvent));
+        dispatcher.Dispatch<WindowResizeEvent>(SHUNYA_BIND(imGUILayer::OnWindowResizeEvent));
+        dispatcher.Dispatch<KeyPressedEvent>(SHUNYA_BIND(imGUILayer::OnKeyPressedEvent));
+
+    }
+
+    bool imGUILayer::OnMouseMovedEvent(MouseMovedEvent& e)
+    {
+
+        ImGuiIO& io = ImGui::GetIO();
+        io.MousePos = ImVec2(e.GetX(), e.GetY());
+
+        return false;
+    }
 
 
 
+    bool imGUILayer::OnMouseScrolledEvent(MouseScrolledEvent& e) 
+    {
+        
 
+        ImGuiIO& io = ImGui::GetIO();
+        io.MouseWheelH += e.Get_X();
+        io.MouseWheel += e.Get_Y();
+        return false;
+        
+
+
+    }
+    bool imGUILayer::OnMouseButtonPressedEvent(MouseButtonPressedEvent& e)
+    {
+        ImGuiIO& io = ImGui::GetIO();
+        io.MouseDown[e.m_MouseButtonEvent()] = true;
+
+        return false;
+
+    }
+    bool imGUILayer::OnMouseButtonRelasedEvent(MouseButtonRelasedEvent& e)
+    {
+
+        ImGuiIO& io = ImGui::GetIO();
+        io.MouseDown[e.m_MouseButtonEvent()] = false;
+
+        return false;
+    }
+
+
+
+    bool imGUILayer::OnKeyReleasedEvent(KeyReleasedEvent& e) 
+    {
+        ImGuiIO& io = ImGui::GetIO();
+        io.KeysData[e.GetKeyCode()];
+        return false;
+
+    }
+    bool imGUILayer::OnKeyPressedEvent(KeyPressedEvent& e) {
+
+        ImGuiIO& io = ImGui::GetIO();
+        io.KeysData[e.GetKeyCode()];
+        
+        return false;
+    }
+    bool imGUILayer::OnWindowResizeEvent(WindowResizeEvent& e) {
+        
+        ImGuiIO& io = ImGui::GetIO();
+        io.DisplaySize = ImVec2(e.GetBreadth(), e.GetLength());
+        io.DisplayFramebufferScale = ImVec2(1.0f, 1.0f);
+        glViewport(0, 0, e.GetBreadth(), e.GetLength());
+        return false;
+
+    }
 }
