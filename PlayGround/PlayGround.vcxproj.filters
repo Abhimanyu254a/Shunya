@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Shunya-Core">
+      <UniqueIdentifier>{13AFCCD5-7F64-45CB-0859-3FA2740D3CCF}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shunya-Core\third_party">
+      <UniqueIdentifier>{8CF12AC6-F828-735D-0133-D7806DE99956}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{2DAB880B-99B4-887C-2230-9F7C8E38947C}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\PlayGround.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Shunya-Core\third_party\glm">
+      <Filter>Shunya-Core\third_party</Filter>
+    </None>
+  </ItemGroup>
+</Project>

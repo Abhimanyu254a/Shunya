@@ -6,7 +6,7 @@ namespace Shunya
 {
 	LayerStack::LayerStack()
 	{
-		m_LayerInsert = m_Layers.begin();
+
 	}
 	LayerStack::~LayerStack()
 	{
@@ -15,13 +15,14 @@ namespace Shunya
 	}
 	void LayerStack::PushLayer(Layer* layer)
 	{
-		m_LayerInsert = m_Layers.emplace(m_LayerInsert, layer);
+		m_Layers.emplace(m_Layers.begin() + m_LayerInsertindex, layer);
+		m_LayerInsertindex++;
 	}
 
 	void LayerStack::PushOverlay(Layer* Overlay)
 	{
 		m_Layers.emplace_back(Overlay);
-		
+
 
 	}
 	void LayerStack::PopLayer(Layer* layer)
@@ -31,7 +32,7 @@ namespace Shunya
 		{
 
 			m_Layers.erase(it);
-			m_LayerInsert--;
+			m_LayerInsertindex--;
 		}
 	}
 

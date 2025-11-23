@@ -11,11 +11,13 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 IncludeDir = {}
 IncludeDir["GLFW"] = "Shunya-Core/third_party/GLFW/include"
 IncludeDir["Glad"] = "Shunya-Core/third_party/Glad/include"
-IncludeDir["iamGUI"] = "Shunya-Core/third_party/iamGUI"
+IncludeDir["imGUI"] = "Shunya-Core/third_party/imGUI"
+IncludeDir["glm"] = "Shunya-Core/third_party/glm"
 
 include "Shunya-Core\\third_party\\GLFW"
 include "Shunya-Core\\third_party\\Glad"
-include "Shunya-Core\\third_party\\iamGUI"
+include "Shunya-Core\\third_party\\imGUI"
+
 
 
 project "Shunya-Core"
@@ -27,24 +29,29 @@ project "Shunya-Core"
     objdir ("bin/" .. outputdir.. "/%{prj.name}")
 
     pchheader "SNY-PCH.h"
-    pchsource "Shunya-Core/src/Core/SNY-PCH.cpp"
+    pchsource "Shunya-Core/src/SNY-PCH.cpp"
 
     files{
         "%{prj.name}/src/**.h",
-        "%{prj.name}/src/**.cpp"
+        "%{prj.name}/src/**.cpp",
+        "%{prj.name}/third_party/glm/glm/**.hpp",
+        "%{prj.name}/third_party/glm/glm/**.inl"
+
     }
     includedirs{
         "%{prj.name}/src",
         "%{prj.name}/third_party/spdlog/include",
         "%{IncludeDir.GLFW}",
         "%{IncludeDir.Glad}",
-        "%{IncludeDir.iamGUI}"
+        "%{IncludeDir.imGUI}",
+        "%{IncludeDir.glm}"
+
     }
 
     links{
         "GLFW",
         "Glad",
-        "iamGUI",
+        "imGUI",
         "opengl32.lib"
     }
 
@@ -55,7 +62,9 @@ project "Shunya-Core"
 
         defines{
             "SHUNYA_CORE_EXPORTS", 
-            "SHUNYA_BUILD_DLL"
+            "SHUNYA_BUILD_DLL",
+            "IMGUI_DISABLE_WIN32_FUNCTIONS",
+            "GLFW_INCLUDE_NONE"
         }
 
         postbuildcommands{
@@ -89,7 +98,8 @@ project "PlayGround"
 
     files{
         "%{prj.name}/src/**.h",
-        "%{prj.name}/src/**.cpp"
+        "%{prj.name}/src/**.cpp",
+        "%{IncludeDir.glm}"
     }
     includedirs{
         "%{wks.location}/Shunya-Core/third_party/spdlog/include",

@@ -11,8 +11,9 @@
 #include "Window.h"
 #include "Events/KeyEvent.h"
 #include "Events/ApplicationEvent.h"
-#include "Core/LayerStack.h"
+#include "Core/LayerStack.h"  
 #include "Layer.h"
+#include "imGui/imguiLayer.h"
 
 namespace Shunya
 {
@@ -32,6 +33,7 @@ namespace Shunya
 		bool OnWindowClose(WindowClosedEvent& e);
 
 		std::unique_ptr<Window> m_Window;
+		imGUILayer* m_ImGuiLayer;
 		LayerStack m_LayerStack;
 		bool m_Running = true;
 		static Application* s_Instance;

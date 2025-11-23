@@ -149,6 +149,9 @@
     <ClCompile Include="src\PlayGround.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\Shunya-Core\third_party\glm" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Shunya-Core\Shunya-Core.vcxproj">
       <Project>{13AFCCD5-7F64-45CB-0859-3FA2740D3CCF}</Project>
     </ProjectReference>
