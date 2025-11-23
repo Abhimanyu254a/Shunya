@@ -6,6 +6,7 @@
 #include "Core/Events/MouseEvent.h"
 #include "Core/Events/KeyEvent.h"
 
+
 namespace Shunya {
 	static bool is_GLFWInitialized = false;
 
@@ -13,7 +14,7 @@ namespace Shunya {
 	{
 		SHUNYA_CORE_ERROR("{0}\n {1}", error, description);
 	}
-	
+
 	Window* Window::Create(const WindowProps& props)
 	{
 		return new WindowMaker(props);
@@ -24,7 +25,7 @@ namespace Shunya {
 		Init(props);
 	}
 
-	WindowMaker::~WindowMaker(){ }
+	WindowMaker::~WindowMaker() {}
 
 	void WindowMaker::Init(const WindowProps& props)
 	{
@@ -37,29 +38,29 @@ namespace Shunya {
 		if (!is_GLFWInitialized) {
 			int window_start = glfwInit();
 			SHUNYA_CORE_ASSERT(window_start, "Couldn't initalize GLFW")
-			glfwSetErrorCallback(GLFWErrorCallBack);
+				glfwSetErrorCallback(GLFWErrorCallBack);
 			is_GLFWInitialized = true;
 		}
 		m_Window = glfwCreateWindow((int)props.Breadth, (int)props.Height, m_Data.Title.c_str(), nullptr, nullptr);
-		glfwMakeContextCurrent(m_Window); 
+		glfwMakeContextCurrent(m_Window);
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 		SHUNYA_CORE_ASSERT(status, "Failed to initialize Glad!");
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 		SetVSync(true);
-		
-		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width,int length) {
-			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window); 
+
+		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int length) {
+			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
 			data.Width = width;
 			data.Length = length;
-			
+
 			WindowResizeEvent event(width, length);
 			data.EventCallback(event);
 			});
 
 		glfwSetWindowCloseCallback(m_Window, [](GLFWwindow* window)
 			{
-			
+
 				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 				WindowClosedEvent(event);
 				data.EventCallback(event);
@@ -68,6 +69,13 @@ namespace Shunya {
 
 		glfwSetKeyCallback(m_Window, [](GLFWwindow* window, int key, int scancode, int action, int mods)
 			{
+
+
+
+
+
+
+
 				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
 				switch (action)
@@ -92,9 +100,23 @@ namespace Shunya {
 				}
 				}
 			});
+		glfwSetCharCallback(m_Window, [](GLFWwindow* window, unsigned int keycode)
+			{
+
+
+
+
+				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+				KeyTypedEvent event(keycode);
+				data.EventCallback(event);
+			});
+
 
 		glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* window, int button, int action, int mods)
 			{
+
+
+
 				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
 				switch (action)
@@ -114,10 +136,14 @@ namespace Shunya {
 				}
 				}
 
-		});
-		
+			});
+
 		glfwSetScrollCallback(m_Window, [](GLFWwindow* window, double Xoffset, double Yoffset)
 			{
+
+
+
+
 				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 				MouseScrolledEvent event((float)Xoffset, (float)Yoffset);
 				data.EventCallback(event);
@@ -131,7 +157,7 @@ namespace Shunya {
 			});
 
 
-			
+
 
 
 
@@ -143,33 +169,33 @@ namespace Shunya {
 
 
 
-		void WindowMaker::Shutdown()
-		{
-			glfwDestroyWindow(m_Window);
-		}
-		void WindowMaker::OnUpdate()
-		{
-			glfwPollEvents();
-			glfwSwapBuffers(m_Window);
-		}
-		void WindowMaker::SetVSync(bool Enabled)
-		{
-			if (Enabled)
-				glfwSwapInterval(1);
-			else
-				glfwSwapInterval(0);
+	void WindowMaker::Shutdown()
+	{
+		glfwDestroyWindow(m_Window);
+	}
+	void WindowMaker::OnUpdate()
+	{
+		glfwPollEvents();
+		glfwSwapBuffers(m_Window);
+	}
+	void WindowMaker::SetVSync(bool Enabled)
+	{
+		if (Enabled)
+			glfwSwapInterval(1);
+		else
+			glfwSwapInterval(0);
 
-			m_Data.VSync = Enabled;
-		}
+		m_Data.VSync = Enabled;
+	}
 
-		bool WindowMaker::IsVSync() const
-		{
-			return m_Data.VSync;
-		}
+	bool WindowMaker::IsVSync() const
+	{
+		return m_Data.VSync;
+	}
 
 
-	
-	
 
-	
+
+
+
 }

@@ -10,3 +10,6 @@
 [submodule "Shunya-Core/third_party/iamGUI"]
 	path = Shunya-Core/third_party/iamGUI
 	url = https://github.com/Abhimanyu254a/imgui
+[submodule "Shunya-Core/third_party/imGUI"]
+	path = Shunya-Core/third_party/imGUI
+	url = https://github.com/Abhimanyu254a/imgui.git

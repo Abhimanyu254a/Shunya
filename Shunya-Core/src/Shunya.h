@@ -7,7 +7,11 @@
 #include "Core/Log.h"
 #include <Windows.h>
 #include "Core/Layer.h"
-#include "Core/imguiLayer.h"
+#include "Core/imGui/imguiLayer.h"
+
+#include "Core/input.h"
+#include "Core/MouseKeyCode.h"
+#include "Core/KeyCode.h"
 
 #pragma execution_character_set("utf-8")
 

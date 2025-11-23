@@ -9,6 +9,8 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include "input.h"
+
 namespace Shunya
 {
 #define BIND_FUN(x) std::bind(&Application::x,this,std::placeholders::_1)
@@ -16,17 +18,21 @@ namespace Shunya
 
 	Application::Application()
 	{
-		SHUNYA_CORE_ASSERT(s_Instance, "Applicational ready exists!");
+		SHUNYA_CORE_ASSERT(!s_Instance, "Applicational ready exists!");
 		s_Instance = this;
 		m_Window = std::unique_ptr<Window>(Window::Create());
-		m_Window->SetEventCallback(BIND_FUN(OnEvent)) ;
-  
+		m_Window->SetEventCallback(BIND_FUN(OnEvent));
+
+
+		m_ImGuiLayer = new imGUILayer();
+		PushOverlay(m_ImGuiLayer);
+
 	}
 	Application::~Application()
 	{
-	} 
+	}
 
-	 
+
 	void Application::PushLayer(Layer* layer)
 	{
 		m_LayerStack.PushLayer(layer);
@@ -44,8 +50,8 @@ namespace Shunya
 		dispatcher.Dispatch<WindowClosedEvent>(BIND_FUN(OnWindowClose));
 
 		SHUNYA_CORE_TRACE("{0}", e.ToString());
-		
-		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();)
+
+		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin(); )
 		{
 			(*--it)->OnEvent(e);
 			if (e.Handled)
@@ -58,11 +64,24 @@ namespace Shunya
 	{
 		while (m_Running)
 		{
+			glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+			glClear(GL_COLOR_BUFFER_BIT);
 
 			for (Layer* layer : m_LayerStack)
 			{
 				layer->OnUpdate();
+
 			}
+
+			m_ImGuiLayer->Begin();
+			for (Layer* layer : m_LayerStack)
+			{
+				layer->OnImGuiRender();
+			}
+			m_ImGuiLayer->End();
+
+
+
 
 			m_Window->OnUpdate();
 		}
@@ -74,5 +93,5 @@ namespace Shunya
 
 		return true;
 	}
-	
+
 }
