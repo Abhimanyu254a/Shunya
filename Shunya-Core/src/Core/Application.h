@@ -29,6 +29,8 @@ namespace Shunya
 
 		inline static Application& Get() { return *s_Instance; }
 		inline Window& GetWindow() { return *m_Window; }
+
+		unsigned int m_VertexArray, m_VertexBuffer, m_IndexBuffer;
 	private:
 		bool OnWindowClose(WindowClosedEvent& e);
 
