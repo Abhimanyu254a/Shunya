@@ -2,6 +2,8 @@
 
 #include "Core/Window.h"
 
+#include "Core/Rendered/GraphicsContext.h"
+
 #include <GLFW/glfw3.h>
 
 namespace Shunya {
@@ -38,6 +40,7 @@ namespace Shunya {
 
 	protected:
 		GLFWwindow* m_Window;
+		GraphicsContext* m_Context;
 
 
 
