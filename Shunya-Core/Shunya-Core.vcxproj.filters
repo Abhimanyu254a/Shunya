@@ -34,6 +34,12 @@
     <Filter Include="third_party\glm\glm\gtx">
       <UniqueIdentifier>{0FCE1E58-7B05-67EF-840F-CB12F0C58DE8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="third_party\imGUI">
+      <UniqueIdentifier>{59814323-C597-41B9-0E0F-CDDA7A641241}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="third_party\imGUI\examples">
+      <UniqueIdentifier>{2763C7D1-1373-73A2-7C2C-D8C0685B623B}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Core\All_Event.h">
@@ -1185,6 +1191,12 @@
     <ClInclude Include="third_party\glm\glm\vector_relational.hpp">
       <Filter>third_party\glm\glm</Filter>
     </ClInclude>
+    <ClInclude Include="third_party\imGUI\examples\imgui_impl_glfw.h">
+      <Filter>third_party\imGUI\examples</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\imGUI\examples\imgui_impl_opengl3.h">
+      <Filter>third_party\imGUI\examples</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Application.cpp">
@@ -1210,6 +1222,12 @@
     </ClCompile>
     <ClCompile Include="src\SNY-PCH.cpp">
       <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="third_party\imGUI\examples\imgui_impl_glfw.cpp">
+      <Filter>third_party\imGUI\examples</Filter>
+    </ClCompile>
+    <ClCompile Include="third_party\imGUI\examples\imgui_impl_opengl3.cpp">
+      <Filter>third_party\imGUI\examples</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
