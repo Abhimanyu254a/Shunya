@@ -91,9 +91,6 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
-    <PostBuildEvent>
-      <Command>IF EXIST "$(SolutionDir)\bin\Debug-windows-x86_64\Shunya-Core\Shunya-Core.dll"\ (xcopy /Q /E /Y /I "$(SolutionDir)\bin\Debug-windows-x86_64\Shunya-Core\Shunya-Core.dll" "..\bin\Debug-windows-x86_64\PlayGround" &gt; nul) ELSE (xcopy /Q /Y /I "$(SolutionDir)\bin\Debug-windows-x86_64\Shunya-Core\Shunya-Core.dll" "..\bin\Debug-windows-x86_64\PlayGround" &gt; nul)</Command>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -116,9 +113,6 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
-    <PostBuildEvent>
-      <Command>IF EXIST "$(SolutionDir)\bin\Release-windows-x86_64\Shunya-Core\Shunya-Core.dll"\ (xcopy /Q /E /Y /I "$(SolutionDir)\bin\Release-windows-x86_64\Shunya-Core\Shunya-Core.dll" "..\bin\Release-windows-x86_64\PlayGround" &gt; nul) ELSE (xcopy /Q /Y /I "$(SolutionDir)\bin\Release-windows-x86_64\Shunya-Core\Shunya-Core.dll" "..\bin\Release-windows-x86_64\PlayGround" &gt; nul)</Command>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='dist|x64'">
     <ClCompile>
@@ -141,9 +135,6 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
-    <PostBuildEvent>
-      <Command>IF EXIST "$(SolutionDir)\bin\dist-windows-x86_64\Shunya-Core\Shunya-Core.dll"\ (xcopy /Q /E /Y /I "$(SolutionDir)\bin\dist-windows-x86_64\Shunya-Core\Shunya-Core.dll" "..\bin\dist-windows-x86_64\PlayGround" &gt; nul) ELSE (xcopy /Q /Y /I "$(SolutionDir)\bin\dist-windows-x86_64\Shunya-Core\Shunya-Core.dll" "..\bin\dist-windows-x86_64\PlayGround" &gt; nul)</Command>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\PlayGround.cpp" />

@@ -1,6 +1,7 @@
 workspace "Shunya"
 
     architecture "x64"
+    startproject "PlayGround"
     configurations {"Debug","Release","dist"}
     filter "system:windows"
         buildoptions { "/utf-8" }
@@ -22,8 +23,10 @@ include "Shunya-Core\\third_party\\imGUI"
 
 project "Shunya-Core"
     location "Shunya-Core"
-    kind "SharedLib"
+    kind "StaticLib"
     language "C++"
+    cppdialect "C++latest"
+    staticruntime "on"
 
     targetdir ("bin/" .. outputdir.. "/%{prj.name}")
     objdir ("bin/" .. outputdir.. "/%{prj.name}")
@@ -35,7 +38,11 @@ project "Shunya-Core"
         "%{prj.name}/src/**.h",
         "%{prj.name}/src/**.cpp",
         "%{prj.name}/third_party/glm/glm/**.hpp",
-        "%{prj.name}/third_party/glm/glm/**.inl"
+        "%{prj.name}/third_party/glm/glm/**.inl",
+        "%{prj.name}/third_party/imGUI/examples/imgui_impl_glfw.h",
+        "%{prj.name}/third_party/imGUI/examples/imgui_impl_glfw.cpp",
+        "%{prj.name}/third_party/imGUI/examples/imgui_impl_opengl3.cpp",
+        "%{prj.name}/third_party/imGUI/examples/imgui_impl_opengl3.h"
 
     }
     includedirs{
@@ -56,7 +63,7 @@ project "Shunya-Core"
     }
 
     filter "system:windows"
-        cppdialect "C++latest"
+
         staticruntime "On"
         systemversion "latest"
 
@@ -67,11 +74,11 @@ project "Shunya-Core"
             "GLFW_INCLUDE_NONE"
         }
 
-        postbuildcommands{
-            ("{COPYFILE} %{cfg.buildtarget.relpath} ../bin/" .. outputdir.. "/PlayGround")
-            --("copy /B /Y ..\\bin\\" .. outputdir .. "\\Shunya-Core\\Shunya-Core.dll ..\\bin\\" .. outputdir .. "\\PlayGround\\ > nul")
-            --("{COPYDIR} \"%{wks.location}/bin/%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}/Shunya-Core/Shunya-Core.dll\" \"%{cfg.targetdir}\"")
-        }
+        -- postbuildcommands{
+        --     ("{COPYFILE} %{cfg.buildtarget.relpath} ../bin/" .. outputdir.. "/PlayGround")
+        --     --("copy /B /Y ..\\bin\\" .. outputdir .. "\\Shunya-Core\\Shunya-Core.dll ..\\bin\\" .. outputdir .. "\\PlayGround\\ > nul")
+        --     --("{COPYDIR} \"%{wks.location}/bin/%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}/Shunya-Core/Shunya-Core.dll\" \"%{cfg.targetdir}\"")
+        -- }
     
     filter "configurations:Debug" 
         defines {"Shunya_DEBUG"}
@@ -121,10 +128,7 @@ project "PlayGround"
         }
         dependson { "Shunya-Core" } -- Ensure this dependency is set
 
-        postbuildcommands{
-        -- Use {COPY} for single files, which generates the 'copy' command
-            ("{COPY} \"%{wks.location}/bin/%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}/Shunya-Core/Shunya-Core.dll\" \"%{cfg.targetdir}\"")
-        }
+
 
         -- Old code bro --
         -- postbuildcommands{
