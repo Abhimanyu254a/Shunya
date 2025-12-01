@@ -15,6 +15,9 @@
 #include "Layer.h"
 #include "imGui/imguiLayer.h"
 
+
+#include "Core/Rendered/Shader.h"
+
 namespace Shunya
 {
 	class SHUNYA_API Application
@@ -39,6 +42,7 @@ namespace Shunya
 		LayerStack m_LayerStack;
 		bool m_Running = true;
 		static Application* s_Instance;
+		std::unique_ptr<Shader>m_Shader;
 	};
 
 	Application* CreateApplication();

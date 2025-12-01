@@ -8,7 +8,7 @@ public:
 	}
 	void OnUpdate() override
 	{
-		SHUNYA_INFO("Example  :: Update");
+		//SHUNYA_INFO("Example  :: Update");
 	}
 	void OnEvent(Shunya::Event& event) override
 	{
