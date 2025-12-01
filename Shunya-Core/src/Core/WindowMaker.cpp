@@ -1,9 +1,11 @@
 #include "SNY-PCH.h"
-
+#include "glad/glad.h"
 
 #include "WindowMaker.h"
 #include "Core/All_Event.h"
 #include "Core/openGL/OpenGLContext.h"
+#include "Core/Rendered/Shader.h"
+
 
 
 namespace Shunya {
@@ -33,6 +35,8 @@ namespace Shunya {
 		m_Data.Width = props.Breadth;
 
 		SHUNYA_CORE_INFO("Creating a Window Of properties {0}, {1}, {2}", props.Title, props.Breadth, props.Height);
+		
+
 		if (!is_GLFWInitialized) {
 			int window_start = glfwInit();
 			SHUNYA_CORE_ASSERT(window_start, "Couldn't initalize GLFW")

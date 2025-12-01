@@ -1199,6 +1199,7 @@
     </ClInclude>
     <ClInclude Include="src\Core\Rendered\GraphicsContext.h" />
     <ClInclude Include="src\Core\openGL\OpenGLContext.h" />
+    <ClInclude Include="src\Core\Rendered\Shader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Application.cpp">
@@ -1232,5 +1233,6 @@
       <Filter>third_party\imGUI\examples</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\openGL\OpenGLContext.cpp" />
+    <ClCompile Include="src\Core\Rendered\Shader.cpp" />
   </ItemGroup>
 </Project>
