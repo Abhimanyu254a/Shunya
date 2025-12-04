@@ -30,49 +30,66 @@ namespace Shunya
 		glGenVertexArrays(1, &m_VertexArray);
 		glBindVertexArray(m_VertexArray);
 
-		glGenBuffers(1, &m_VertexBuffer);
-		glBindBuffer(GL_ARRAY_BUFFER,m_VertexBuffer);
+
 
 		float vertices[3 * 3] = {
-			-.3,-.3,0.0,
-			.3f,-.5f,0,
-			0,.5f,0
-
+			// X      Y      Z
+			-0.5f, -0.5f, 0.0f, // Bottom Left
+			 0.5f, -0.5f, 0.0f, // Bottom Right
+			 0.0f,  0.5f, 0.0f  // Top Center
 		};
+		m_VertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
+
 		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 		
 		glEnableVertexAttribArray(0);
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
 
-		glGenBuffers(1, &m_IndexBuffer);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IndexBuffer);
+		uint32_t indices[3] = { 0,1,2 };
+		m_IndexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices)/sizeof(uint32_t)));
 
-		unsigned int indices[3] = { 0,1,2 };
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+        std::string vertexSrc = R"(
+            #version 410 core
+            
+            layout(location = 0) in vec3 a_Position;
 
-		std::string vertexSrc = R"(
-		#version 410 core
+            // Define an output variable to send data to the Fragment Shader
+            out vec3 v_Position;
 
-		layout(location = 0) in vec3 a_Position;
-		void main()
-		{
-			gl_Position = vec4(a_Position,1.0);
-		
-		}
-)";
-		std::string fragementSrc = R"(
-		#version 410 core
+            void main()
+            {
+                // Pass the raw position data to the next stage
+                v_Position = a_Position;
+                
+                gl_Position = vec4(a_Position, 1.0);
+            }
+        )";
 
-		layout(location = 0) out vec4 color;
-		void main()
-		{
-			color = vec4(0.4,0.2,0.3,1.0);
-		
-		}
-)";
+ 
+        std::string fragmentSrc = R"(
+            #version 410 core
+            
+            layout(location = 0) out vec4 color;
+
+            // This 'in' variable must match the 'out' variable from the Vertex Shader exactly
+            in vec3 v_Position;
+
+            void main()
+            {
+                // MATHEMATICAL MAGIC:
+                // v_Position values range from approx -0.5 to 0.5.
+                // Colors need to be 0.0 to 1.0.
+                // (v_Position * 0.5) + 0.5 shifts the range perfectly.
+                
+                // X controls Red, Y controls Green, Z controls Blue
+                color = vec4(v_Position * 0.5 + 0.5, 1.0);
+            }
+        )";
 
 
-		m_Shader.reset(new Shader(vertexSrc, fragementSrc));
+
+
+		m_Shader.reset(new Shader(vertexSrc, fragmentSrc));
 
 
 	}

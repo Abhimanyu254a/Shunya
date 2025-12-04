@@ -17,6 +17,7 @@
 
 
 #include "Core/Rendered/Shader.h"
+#include "Core/Rendered/Buffer.h"
 
 namespace Shunya
 {
@@ -33,7 +34,6 @@ namespace Shunya
 		inline static Application& Get() { return *s_Instance; }
 		inline Window& GetWindow() { return *m_Window; }
 
-		unsigned int m_VertexArray, m_VertexBuffer, m_IndexBuffer;
 	private:
 		bool OnWindowClose(WindowClosedEvent& e);
 
@@ -41,8 +41,11 @@ namespace Shunya
 		imGUILayer* m_ImGuiLayer;
 		LayerStack m_LayerStack;
 		bool m_Running = true;
+		unsigned int m_VertexArray;
 		static Application* s_Instance;
 		std::unique_ptr<Shader>m_Shader;
+		std::unique_ptr<VertexBuffer>m_VertexBuffer;
+		std::unique_ptr<IndexBuffer>m_IndexBuffer;
 	};
 
 	Application* CreateApplication();
