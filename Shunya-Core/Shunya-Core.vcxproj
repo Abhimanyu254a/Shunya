@@ -160,7 +160,10 @@
     <ClInclude Include="src\Core\Log.h" />
     <ClInclude Include="src\Core\MouseKeyCode.h" />
     <ClInclude Include="src\Core\openGL\OpenGLContext.h" />
+    <ClInclude Include="src\Core\Rendered\Buffer.h" />
     <ClInclude Include="src\Core\Rendered\GraphicsContext.h" />
+    <ClInclude Include="src\Core\openGL\OpenglBuffer.h" />
+    <ClInclude Include="src\Core\Rendered\Renderer.h" />
     <ClInclude Include="src\Core\Rendered\Shader.h" />
     <ClInclude Include="src\Core\Window.h" />
     <ClInclude Include="src\Core\WindowMaker.h" />
@@ -540,7 +543,10 @@
     <ClCompile Include="src\Core\Layer.cpp" />
     <ClCompile Include="src\Core\LayerStack.cpp" />
     <ClCompile Include="src\Core\Log.cpp" />
+    <ClCompile Include="src\Core\openGL\OpenglBuffer.cpp" />
     <ClCompile Include="src\Core\openGL\OpenGLContext.cpp" />
+    <ClCompile Include="src\Core\Rendered\Buffer.cpp" />
+    <ClCompile Include="src\Core\Rendered\Renderer.cpp" />
     <ClCompile Include="src\Core\Rendered\Shader.cpp" />
     <ClCompile Include="src\Core\WindowMaker.cpp" />
     <ClCompile Include="src\Core\WindowsInput.cpp" />
