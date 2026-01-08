@@ -18,6 +18,7 @@
 
 #include "Core/Rendered/Shader.h"
 #include "Core/Rendered/Buffer.h"
+#include "Core/openGL/OpenGLVertexArray.h"
 
 namespace Shunya
 {
@@ -41,11 +42,17 @@ namespace Shunya
 		imGUILayer* m_ImGuiLayer;
 		LayerStack m_LayerStack;
 		bool m_Running = true;
-		unsigned int m_VertexArray;
+		
+
+		//unsigned int m_VertexArray;
 		static Application* s_Instance;
-		std::unique_ptr<Shader>m_Shader;
-		std::unique_ptr<VertexBuffer>m_VertexBuffer;
-		std::unique_ptr<IndexBuffer>m_IndexBuffer;
+		std::shared_ptr<Shader>m_Shader;
+		std::shared_ptr<VertexArray>m_VertexArray;
+		std::shared_ptr<VertexBuffer>m_VertexBuffer;
+		std::shared_ptr<IndexBuffer>m_IndexBuffer;
+
+		std::shared_ptr<Shader>m_BlueShader;
+		std::shared_ptr<VertexArray>m_SquareVA;
 	};
 
 	Application* CreateApplication();
