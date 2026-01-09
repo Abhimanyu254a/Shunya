@@ -5,6 +5,7 @@
 
 namespace Shunya
 {
+	
 	OpenglVertexBuffer::OpenglVertexBuffer(float* vertices, uint32_t size)
 	{
 		glCreateBuffers(1, &m_RendererID);
