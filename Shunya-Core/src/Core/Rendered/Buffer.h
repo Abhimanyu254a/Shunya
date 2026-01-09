@@ -37,7 +37,7 @@ namespace Shunya
 		uint32_t Size;
 		bool Normalized;
 
-		BufferElement() {};
+
 
 		BufferElement( ShaderDataType Type, const std::string& name,bool normalized = false)
 			:Name(name), Type(Type), Size(0), Offset(0),Normalized(normalized)
@@ -61,6 +61,9 @@ namespace Shunya
 			case ShaderDataType::Int3:  return  3;
 			case ShaderDataType::Int4:  return 4 ;
 			case ShaderDataType::None:  return 1;
+			default:
+				SHUNYA_CORE_ASSERT(false, "Unknown ShaderDataType!");
+				return 0;
 			}
 		}
 
@@ -93,6 +96,7 @@ namespace Shunya
 				element.Size = ShaderDataTypeSize(element.Type);
 				element.Offset = offset;
 				offset += element.Size;
+				m_Stride += element.Size;
 			}
 		}
 

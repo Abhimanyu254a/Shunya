@@ -14,7 +14,6 @@ namespace Shunya
 		void Bind() const;
 		void UnBind() const;
 	private:
-		uint32_t  m_RendererID;
-		
+	    uint32_t m_RendererID = 0;
 	};
 }

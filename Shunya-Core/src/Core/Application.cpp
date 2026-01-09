@@ -180,7 +180,7 @@ Application::Application()
 	// -------------------------------------------------------------
 	m_SquareVA.reset(VertexArray::Create());
 
-	float squareVertices[3 * 7] = {
+	float squareVertices[3*4] = {
 		-0.75f, -0.75f, 0.0f,
 		 0.75f, -0.75f, 0.0f,
 		 0.75f,  0.75f, 0.0f,
@@ -211,55 +211,35 @@ Application::Application()
 
 
 
+	std::string vertexSrc = R"(
+    #version 330 core
+    layout(location = 0) in vec3 a_Position;
+    layout(location = 1) in vec4 a_Color;
+    out vec3 v_Position;
+    out vec4 v_Color;
+    void main()
+    {
+        v_Position = a_Position;
+        v_Color = a_Color;
+        gl_Position = vec4(a_Position, 1.0);    
+    }
+)";
 
- std::string vertexSrc = R"(
- #version 410 core
- 
- layout(location = 0) in vec3 a_Position;
-	layout(location = 1) in vec4 a_Color;
-
-
- // Define an output variable to send data to the Fragment Shader
- out vec3 v_Position;
-	out vec4 v_Color;
-
- void main()
- {
- // Pass the raw position data to the next stage
- v_Position = a_Position;
- v_Color = a_Color;
- gl_Position = vec4(a_Position, 1.0);
-
- }
- )";
-
- //////
- std::string fragmentSrc = R"(
- #version 410 core
- 
- layout(location = 0) out vec4 color;
-
- // This 'in' variable must match the 'out' variable from the Vertex Shader exactly
- in vec3 v_Position;
-in vec4 v_Color;
-
- void main()
- {
- // MATHEMATICAL MAGIC:
- // v_Position values range from approx -0.5 to 0.5.
- // Colors need to be 0.0 to 1.0.
- // (v_Position * 0.5) + 0.5 shifts the range perfectly.
- 
- // X controls Red, Y controls Green, Z controls Blue
- color = vec4(v_Position * 0.5 + 0.5, 1.0);
-	color = v_Color;	
- }
- )";
-
-
-
+	std::string fragmentSrc = R"(
+    #version 330 core
+    layout(location = 0) out vec4 color;
+    in vec3 v_Position;
+    in vec4 v_Color;
+    void main()
+    {
+        color =  vec4(v_Position * 0.5 + 0.5, 1.0);
+		color = v_Color;
+    }
+)";
 
 	m_Shader.reset(new Shader(vertexSrc, fragmentSrc));
+
+
 
 
 
@@ -465,20 +445,49 @@ in vec4 v_Color;
 	{
 		while (m_Running)
 		{
+
 			glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT);
 
 			// --- RENDER SQUARE ---
 			m_BlueShader->Bind();
 			m_SquareVA->Bind();
+			auto count = m_SquareVA->GetIndexBuffer()->GetCount();
 			// Robustness fix: Get count from the bound VAO, not a null member variable
-			glDrawElements(GL_TRIANGLES, m_SquareVA->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+			glDrawElements(GL_TRIANGLES,count, GL_UNSIGNED_INT, nullptr);
+			/*SHUNYA_CORE_INFO("rendering square");*/
 
 			// --- RENDER TRIANGLE ---
 			m_Shader->Bind();
 			m_VertexArray->Bind();
+			auto count1 = m_VertexArray->GetIndexBuffer()->GetCount();
 			// Robustness fix: Get count from the bound VAO
-			glDrawElements(GL_TRIANGLES, m_VertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+			glDrawElements(GL_TRIANGLES, count1, GL_UNSIGNED_INT, nullptr);
+
+			//glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+			//glClear(GL_COLOR_BUFFER_BIT);
+
+			//static const float verts[] = {
+			//	-0.5f, -0.5f,
+			//	 0.5f, -0.5f,
+			//	 0.0f,  0.5f
+			//};
+
+			//GLuint vao, vbo;
+			//glGenVertexArrays(1, &vao);
+			//glGenBuffers(1, &vbo);
+
+			//glBindVertexArray(vao);
+			//glBindBuffer(GL_ARRAY_BUFFER, vbo);
+			//glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
+
+			//glEnableVertexAttribArray(0);
+			//glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
+
+			//m_Shader->Bind();
+			//glDrawArrays(GL_TRIANGLES, 0, 3);
+
+			//SHUNYA_CORE_INFO("rendering Triangle");
 
 			for (Layer* layer : m_LayerStack)
 			{
