@@ -20,6 +20,8 @@
 #include "Core/Rendered/Buffer.h"
 #include "Core/openGL/OpenGLVertexArray.h"
 
+#include "Rendered/OrthographicCamera.h"
+
 namespace Shunya
 {
 	class SHUNYA_API Application
@@ -51,6 +53,8 @@ namespace Shunya
 
 		std::shared_ptr<Shader>m_BlueShader;
 		std::shared_ptr<VertexArray>m_SquareVA;
+
+		OrthographicCamera m_Camera;
 	};
 
 	Application* CreateApplication();
