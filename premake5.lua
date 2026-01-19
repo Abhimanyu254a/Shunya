@@ -18,6 +18,7 @@ IncludeDir["glm"] = "Shunya-Core/third_party/glm"
 include "Shunya-Core\\third_party\\GLFW"
 include "Shunya-Core\\third_party\\Glad"
 include "Shunya-Core\\third_party\\imGUI"
+include "Shunya-Core\\third_party\\glm"
 
 
 
