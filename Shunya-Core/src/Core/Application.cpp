@@ -22,7 +22,7 @@ namespace Shunya
 
 
 Application::Application()
-	: m_Camera(1.0f, -1.0f, -1.0f, 1.0f)
+	: m_Camera (-1.6f, 1.6f, -0.9f, 0.9f)
 {
 	SHUNYA_CORE_ASSERT(!s_Instance, "Application already exists!");
 	s_Instance = this;
@@ -186,8 +186,10 @@ Application::Application()
 			
 			RendererCommand::SetClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f));
 			RendererCommand::Clear();
-			m_Camera.SetPosition({ Input::GetMouseX() / 100.0f, Input::GetMouseY() / 100.0f, 0.0f });
+			
 			Renderer::BeginScene(m_Camera);
+
+			m_Camera.SetRotation(45.0f);
 
 			// --- RENDER SQUARE ---
 			Renderer::Submit(m_BlueShader, m_SquareVA);

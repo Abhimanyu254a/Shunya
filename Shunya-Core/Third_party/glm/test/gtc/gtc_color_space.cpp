@@ -4,7 +4,7 @@
 
 namespace srgb
 {
-	int test()
+	static int test()
 	{
 		int Error(0);
 
@@ -36,13 +36,21 @@ namespace srgb
 			Error += glm::all(glm::epsilonEqual(ColorSourceRGBA, ColorRGB, 0.00001f)) ? 0 : 1;
 		}
 
+		glm::vec4 const ColorSourceGNI = glm::vec4(107, 107, 104, 131) / glm::vec4(255);
+
+		{
+			glm::vec4 const ColorSRGB = glm::convertLinearToSRGB(ColorSourceGNI);
+			glm::vec4 const ColorRGB = glm::convertSRGBToLinear(ColorSRGB);
+			Error += glm::all(glm::epsilonEqual(ColorSourceGNI, ColorRGB, 0.00001f)) ? 0 : 1;
+		}
+
 		return Error;
 	}
 }//namespace srgb
 
 namespace srgb_lowp
 {
-	int test()
+	static int test()
 	{
 		int Error(0);
 
