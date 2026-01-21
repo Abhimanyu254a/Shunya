@@ -1419,6 +1419,7 @@
     <ClInclude Include="third_party\imGUI\examples\imgui_impl_opengl3.h">
       <Filter>third_party\imGUI\examples</Filter>
     </ClInclude>
+    <ClInclude Include="src\Core\Kernal\TimeStep.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Application.cpp">

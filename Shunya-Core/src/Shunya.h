@@ -9,6 +9,8 @@
 #include "Core/Layer.h"
 #include "Core/imGui/imguiLayer.h"
 
+#include "Core/Kernal/TimeStep.h"
+
 #include "Core/input.h"
 #include "Core/MouseKeyCode.h"
 #include "Core/KeyCode.h"

@@ -29,6 +29,7 @@ Application::Application()
 
 	m_Window = std::unique_ptr<Window>(Window::Create());
 	m_Window->SetEventCallback(BIND_FUN(OnEvent));
+	/*m_Window->SetVSync(false);*/  // to set up the frame rate with the respect of the Screen
 
 	m_ImGuiLayer = new imGUILayer();
 	PushOverlay(m_ImGuiLayer);
@@ -70,10 +71,16 @@ Application::Application()
 	{
 		while (m_Running)
 		{
+
+			float time = (float)glfwGetTime();
+			Timestamp timestep = time - m_LastTimeFrame;
+			m_LastTimeFrame = time;
+
+
 			 
 			for (Layer* layer : m_LayerStack)
 			{
-				layer->OnUpdate();
+				layer->OnUpdate(timestep);
 			}
 
 			m_ImGuiLayer->Begin();
