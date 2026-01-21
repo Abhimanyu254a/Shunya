@@ -22,6 +22,8 @@
 
 #include "Rendered/OrthographicCamera.h"
 
+#include "Core/Kernal/TimeStep.h"
+
 namespace Shunya
 {
 	class SHUNYA_API Application
@@ -40,14 +42,13 @@ namespace Shunya
 	private:
 		bool OnWindowClose(WindowClosedEvent& e);
 
+	private:
 		std::unique_ptr<Window> m_Window;
 		imGUILayer* m_ImGuiLayer;
 		LayerStack m_LayerStack;
 		bool m_Running = true;
-		
-
-		//unsigned int m_VertexArray;
 		static Application* s_Instance;
+		float m_LastTimeFrame = 0.0f;
 
 	};
 

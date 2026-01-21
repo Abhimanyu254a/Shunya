@@ -1,12 +1,14 @@
 #pragma once
 
 #include "Core/Core.h"
-
+#include "Core/Kernal/TimeStep.h"
 #include "Core/Events/Event.h"
 
 
 namespace Shunya
 {
+
+
 	class SHUNYA_API Layer
 	{
 	public:
@@ -15,7 +17,7 @@ namespace Shunya
 
 		virtual void OnAttach() {};
 		virtual void OnDetch() {};
-		virtual void OnUpdate() {};
+		virtual void OnUpdate(Timestamp ts) {};
 		virtual void OnImGuiRender() {};
 		virtual void OnEvent(Event& event) {};
 

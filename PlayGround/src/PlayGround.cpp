@@ -117,18 +117,19 @@ public:
 		m_BlueShader.reset(new Shunya::Shader(blueShaderVertexSrc, blueShaderFragmentSrc));
 
 	}
-	void OnUpdate() override
+	void OnUpdate(Shunya::Timestamp ts) override
 	{
+		SHUNYA_INFO( "second {0}s , {1}ms", ts.GetSeconds(),ts.GetMilliSec() );
 
 		if (Shunya::Input::IsKeyPressed(SHUNYA_KEY_LEFT))
-			m_CameraPosition.x -= m_CameraSpeed;
+			m_CameraPosition.x += m_CameraSpeed  ;
 		else if (Shunya::Input::IsKeyPressed(SHUNYA_KEY_RIGHT))
-			m_CameraPosition.x += m_CameraSpeed;
+			m_CameraPosition.x -= m_CameraSpeed;
 
 		if (Shunya::Input::IsKeyPressed(SHUNYA_KEY_UP))
-			m_CameraPosition.y += m_CameraSpeed;
-		else if (Shunya::Input::IsKeyPressed(SHUNYA_KEY_DOWN))
 			m_CameraPosition.y -= m_CameraSpeed;
+		else if (Shunya::Input::IsKeyPressed(SHUNYA_KEY_DOWN))
+			m_CameraPosition.y += m_CameraSpeed;
 
 		if (Shunya::Input::IsKeyPressed(SHUNYA_KEY_A))
 			m_CameraRotation -= m_CameraRotationSpeed;
