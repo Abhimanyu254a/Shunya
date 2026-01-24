@@ -1420,6 +1420,7 @@
       <Filter>third_party\imGUI\examples</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\Kernal\TimeStep.h" />
+    <ClInclude Include="src\Core\openGL\OpenGLShader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Application.cpp">
@@ -1485,5 +1486,6 @@
     <ClCompile Include="third_party\imGUI\examples\imgui_impl_opengl3.cpp">
       <Filter>third_party\imGUI\examples</Filter>
     </ClCompile>
+    <ClCompile Include="src\Core\openGL\OpenGLShader.cpp" />
   </ItemGroup>
 </Project>
