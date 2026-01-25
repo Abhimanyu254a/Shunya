@@ -23,6 +23,7 @@
 #include "Core/Rendered/RendererAPI.h"
 #include "Core/Rendered/RendererCommand.h"
 #include "Core/Rendered/Shader.h"
+#include "Core/Rendered/Texture.h"
 #include "Core/Rendered/VertexArray.h"
 
 #pragma execution_character_set("utf-8")

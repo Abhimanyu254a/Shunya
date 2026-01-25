@@ -14,11 +14,14 @@ IncludeDir["GLFW"] = "Shunya-Core/third_party/GLFW/include"
 IncludeDir["Glad"] = "Shunya-Core/third_party/Glad/include"
 IncludeDir["imGUI"] = "Shunya-Core/third_party/imGUI"
 IncludeDir["glm"] = "Shunya-Core/third_party/glm"
+IncludeDir["stb_image"] = "Shunya-Core/third_party/stb_image"
 
 include "Shunya-Core\\third_party\\GLFW"
 include "Shunya-Core\\third_party\\Glad"
 include "Shunya-Core\\third_party\\imGUI"
 include "Shunya-Core\\third_party\\glm"
+include "Shunya-Core\\third_party\\stb_image"
+
 
 
 
@@ -38,8 +41,10 @@ project "Shunya-Core"
     files{
         "%{prj.name}/src/**.h",
         "%{prj.name}/src/**.cpp",
-        "%{prj.name}/third_party/glm/glm/**.hpp",
-        "%{prj.name}/third_party/glm/glm/**.inl",
+        "%{prj.name}/third_party/glm/**.hpp",
+        "%{prj.name}/third_party/glm/**.inl",
+        "%{prj.name}/third_party/stb_image/**.cpp",
+        "%{prj.name}/third_party/stb_image/**.h",
         "%{prj.name}/third_party/imGUI/examples/imgui_impl_glfw.h",
         "%{prj.name}/third_party/imGUI/examples/imgui_impl_glfw.cpp",
         "%{prj.name}/third_party/imGUI/examples/imgui_impl_opengl3.cpp",
@@ -52,7 +57,8 @@ project "Shunya-Core"
         "%{IncludeDir.GLFW}",
         "%{IncludeDir.Glad}",
         "%{IncludeDir.imGUI}",
-        "%{IncludeDir.glm}"
+        "%{IncludeDir.glm}",
+        "%{IncludeDir.stb_image}"
 
     }
 

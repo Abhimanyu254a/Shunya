@@ -10,14 +10,14 @@
     <Filter Include="src\Core\Events">
       <UniqueIdentifier>{E953F58B-55DF-6250-5EF0-E544CAFABE50}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Core\Kernal">
+      <UniqueIdentifier>{91C5C798-FD50-355D-0662-B851726C915D}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Core\Rendered">
       <UniqueIdentifier>{DD009555-4917-93EB-928E-1E0DFEE36373}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\Core\imGui">
       <UniqueIdentifier>{AFC0C306-9B8E-B70C-8422-2833708F9371}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\Core\math">
-      <UniqueIdentifier>{BED38B55-2A94-078C-F3CE-50095F4E4C68}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\Core\openGL">
       <UniqueIdentifier>{596581ED-C5F0-EEB1-CE01-72A63A0C4BB2}</UniqueIdentifier>
@@ -49,6 +49,9 @@
     <Filter Include="third_party\imGUI\examples">
       <UniqueIdentifier>{2763C7D1-1373-73A2-7C2C-D8C0685B623B}</UniqueIdentifier>
     </Filter>
+    <Filter Include="third_party\stb_image">
+      <UniqueIdentifier>{6940486C-D5AC-0367-9EA0-9BC40ACC25CF}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Core\All_Event.h">
@@ -74,6 +77,9 @@
     </ClInclude>
     <ClInclude Include="src\Core\Events\MouseEvent.h">
       <Filter>src\Core\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Kernal\TimeStep.h">
+      <Filter>src\Core\Kernal</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\KeyCode.h">
       <Filter>src\Core</Filter>
@@ -111,6 +117,9 @@
     <ClInclude Include="src\Core\Rendered\Shader.h">
       <Filter>src\Core\Rendered</Filter>
     </ClInclude>
+    <ClInclude Include="src\Core\Rendered\Texture.h">
+      <Filter>src\Core\Rendered</Filter>
+    </ClInclude>
     <ClInclude Include="src\Core\Rendered\VertexArray.h">
       <Filter>src\Core\Rendered</Filter>
     </ClInclude>
@@ -132,10 +141,13 @@
     <ClInclude Include="src\Core\input.h">
       <Filter>src\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\math\math.h">
-      <Filter>src\Core\math</Filter>
-    </ClInclude>
     <ClInclude Include="src\Core\openGL\OpenGLContext.h">
+      <Filter>src\Core\openGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\openGL\OpenGLShader.h">
+      <Filter>src\Core\openGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\openGL\OpenGLTexture.h">
       <Filter>src\Core\openGL</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\openGL\OpenGLVertexArray.h">
@@ -1419,8 +1431,9 @@
     <ClInclude Include="third_party\imGUI\examples\imgui_impl_opengl3.h">
       <Filter>third_party\imGUI\examples</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\Kernal\TimeStep.h" />
-    <ClInclude Include="src\Core\openGL\OpenGLShader.h" />
+    <ClInclude Include="third_party\stb_image\stb_image.h">
+      <Filter>third_party\stb_image</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Application.cpp">
@@ -1453,6 +1466,9 @@
     <ClCompile Include="src\Core\Rendered\Shader.cpp">
       <Filter>src\Core\Rendered</Filter>
     </ClCompile>
+    <ClCompile Include="src\Core\Rendered\Texture.cpp">
+      <Filter>src\Core\Rendered</Filter>
+    </ClCompile>
     <ClCompile Include="src\Core\Rendered\VertexArray.cpp">
       <Filter>src\Core\Rendered</Filter>
     </ClCompile>
@@ -1466,6 +1482,12 @@
       <Filter>src\Core\imGui</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\openGL\OpenGLContext.cpp">
+      <Filter>src\Core\openGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\openGL\OpenGLShader.cpp">
+      <Filter>src\Core\openGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\openGL\OpenGLTexture.cpp">
       <Filter>src\Core\openGL</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\openGL\OpenGLVertexArray.cpp">
@@ -1486,6 +1508,8 @@
     <ClCompile Include="third_party\imGUI\examples\imgui_impl_opengl3.cpp">
       <Filter>third_party\imGUI\examples</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\openGL\OpenGLShader.cpp" />
+    <ClCompile Include="third_party\stb_image\stb_image.cpp">
+      <Filter>third_party\stb_image</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

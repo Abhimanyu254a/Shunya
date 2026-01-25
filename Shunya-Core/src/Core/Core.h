@@ -1,5 +1,8 @@
 #pragma once
 
+
+#include<memory>
+
 #ifdef SHUNYA_CORE_EXPORTS
 #if SHUNYA_DYNLIB
 #ifdef	SHUNYA_BUILD_DLL	
@@ -29,3 +32,15 @@
 
 #define BIT(x) (1 << x)
 #define SHUNYA_BIND(fn) std::bind(&fn, this, std::placeholders::_1)
+
+
+
+namespace Shunya
+{
+	template<typename T>
+	using Scope = std::unique_ptr<T>;
+
+
+	template<typename T>
+	using Ref = std::shared_ptr<T>;
+}
