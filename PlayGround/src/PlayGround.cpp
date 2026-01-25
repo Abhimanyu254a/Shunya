@@ -1,6 +1,8 @@
 #include <Shunya.h>
 #include "Core/openGL/OpenGLShader.h"
 #include <imgui.h>
+#include "Core/Core.h"
+
 #include "Core/imGui/imguiLayer.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -43,17 +45,18 @@ public:
         // -------------------------------------------------------------
         m_SquareVA.reset(Shunya::VertexArray::Create());
 
-        float squareVertices[3 * 4] = {
-            -0.5f, -0.5f, 0.0f,
-             0.5f, -0.5f, 0.0f,
-             0.5f,  0.5f, 0.0f,
-            -0.5f,  0.5f, 0.0f
+        float squareVertices[5 * 4] = {
+            -0.5f, -0.5f, 0.0f, 0.0f,0.0f,
+             0.5f, -0.5f, 0.0f,1.0f,0.0f,
+             0.5f,  0.5f, 0.0f,1.0f,1.0f,
+            -0.5f,  0.5f, 0.0f,0.0f,1.0f
         };
         std::shared_ptr<Shunya::VertexBuffer> squareVB;
         squareVB.reset(Shunya::VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
 
         squareVB->SetLayout({
-            { Shunya::ShaderDataType::Float3, "a_Position" }
+            { Shunya::ShaderDataType::Float3, "a_Position" },
+            { Shunya::ShaderDataType::Float2, "a_TexCoord" }
             });
 
         m_SquareVA->AddVertexBuffer(squareVB);
@@ -98,7 +101,7 @@ public:
 
         m_Shader.reset(Shunya::OpenGLShader::Create(vertexSrc, fragmentSrc));
 
-        
+
         std::string blueShaderVertexSrc = R"(
             #version 330 core
             layout(location = 0) in vec3 a_Position;
@@ -130,8 +133,52 @@ public:
         )";
 
         m_FlatColorShader.reset(Shunya::OpenGLShader::Create(blueShaderVertexSrc, blueShaderFragmentSrc));
-    }
+       
+        std::string TextureShaderVertexSrc = R"(
+            #version 330 core
+    
+    
+            layout(location = 0) in vec3 a_Position;
 
+            layout(location = 1) in vec2 a_TexCoord; 
+
+            uniform mat4 u_ViewProjection;
+            uniform mat4 u_Transform; 
+
+            out vec2 v_TexCoord; 
+
+            void main()
+            {
+                v_TexCoord = a_TexCoord;
+                gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);    
+            }
+        )";
+
+        std::string TextureShaderFragmentSrc = R"(
+            #version 330 core
+            layout(location = 0) out vec4 color;
+            
+            // FIX 1: Must match Vertex Shader output EXACTLY (Case Sensitive!)
+            in vec2 v_TexCoord; 
+            
+            // FIX 2: It is 'sampler2D', not 'sample2D'
+            uniform sampler2D u_Texture; 
+
+            void main()
+            {
+                color = texture(u_Texture, v_TexCoord); 
+            }
+        )";
+
+        m_TextureShader.reset(Shunya::OpenGLShader::Create(TextureShaderVertexSrc, TextureShaderFragmentSrc));
+        
+
+        m_Texture = Shunya::Texture2D::Create("assets/textures/Me.jpg");
+
+        std::dynamic_pointer_cast<Shunya::OpenGLShader>(m_TextureShader)->Bind();
+        std::dynamic_pointer_cast<Shunya::OpenGLShader>(m_TextureShader)->UploadUniformInt("u_Texture", 0);
+
+    }
     void OnUpdate(Shunya::Timestamp ts) override
     {
         // FPS
@@ -177,11 +224,13 @@ public:
                 Shunya::Renderer::Submit(m_FlatColorShader, m_SquareVA, transform);
             }
         }
+        m_Texture->Bind();
+        Shunya::Renderer::Submit(m_TextureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
 
         // RENDER TRIANGLE
         // Note: Explicitly passing Identity Matrix to avoid garbage transform
         auto textureShader = m_Shader;
-        Shunya::Renderer::Submit(textureShader, m_VertexArray, glm::mat4(1.0f));
+        //Shunya::Renderer::Submit(textureShader, m_VertexArray, glm::mat4(1.0f));
 
         Shunya::Renderer::EndScene();
     }
@@ -200,11 +249,13 @@ public:
     }
 
 private:
-    std::shared_ptr<Shunya::Shader> m_Shader;
-    std::shared_ptr<Shunya::VertexArray> m_VertexArray;
+    Shunya::Ref<Shunya::Shader> m_Shader;
+    Shunya::Ref<Shunya::VertexArray> m_VertexArray;
 
-    std::shared_ptr<Shunya::Shader> m_FlatColorShader;
-    std::shared_ptr<Shunya::VertexArray> m_SquareVA;
+    Shunya::Ref<Shunya::Shader> m_FlatColorShader,m_TextureShader;
+    Shunya::Ref<Shunya::VertexArray> m_SquareVA;
+
+    Shunya::Ref<Shunya::Texture2D> m_Texture;
 
     Shunya::OrthographicCamera m_Camera;
     glm::vec3 m_CameraPosition;

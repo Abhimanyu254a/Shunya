@@ -77,7 +77,7 @@
       <PrecompiledHeaderFile>SNY-PCH.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>SHUNYA_CORE_EXPORTS;SHUNYA_BUILD_DLL;IMGUI_DISABLE_WIN32_FUNCTIONS;GLFW_INCLUDE_NONE;Shunya_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;third_party\spdlog\include;third_party\GLFW\include;third_party\Glad\include;third_party\imGUI;third_party\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;third_party\spdlog\include;third_party\GLFW\include;third_party\Glad\include;third_party\imGUI;third_party\glm;third_party\stb_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -99,7 +99,7 @@
       <PrecompiledHeaderFile>SNY-PCH.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>SHUNYA_CORE_EXPORTS;SHUNYA_BUILD_DLL;IMGUI_DISABLE_WIN32_FUNCTIONS;GLFW_INCLUDE_NONE;Shunya_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;third_party\spdlog\include;third_party\GLFW\include;third_party\Glad\include;third_party\imGUI;third_party\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;third_party\spdlog\include;third_party\GLFW\include;third_party\Glad\include;third_party\imGUI;third_party\glm;third_party\stb_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -125,7 +125,7 @@
       <PrecompiledHeaderFile>SNY-PCH.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>SHUNYA_CORE_EXPORTS;SHUNYA_BUILD_DLL;IMGUI_DISABLE_WIN32_FUNCTIONS;GLFW_INCLUDE_NONE;Shunya_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;third_party\spdlog\include;third_party\GLFW\include;third_party\Glad\include;third_party\imGUI;third_party\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;third_party\spdlog\include;third_party\GLFW\include;third_party\Glad\include;third_party\imGUI;third_party\glm;third_party\stb_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -160,7 +160,6 @@
     <ClInclude Include="src\Core\LayerStack.h" />
     <ClInclude Include="src\Core\Log.h" />
     <ClInclude Include="src\Core\MouseKeyCode.h" />
-    <ClInclude Include="src\Core\openGL\OpenGLShader.h" />
     <ClInclude Include="src\Core\Rendered\Buffer.h" />
     <ClInclude Include="src\Core\Rendered\GraphicsContext.h" />
     <ClInclude Include="src\Core\Rendered\OrthographicCamera.h" />
@@ -168,6 +167,7 @@
     <ClInclude Include="src\Core\Rendered\RendererAPI.h" />
     <ClInclude Include="src\Core\Rendered\RendererCommand.h" />
     <ClInclude Include="src\Core\Rendered\Shader.h" />
+    <ClInclude Include="src\Core\Rendered\Texture.h" />
     <ClInclude Include="src\Core\Rendered\VertexArray.h" />
     <ClInclude Include="src\Core\Window.h" />
     <ClInclude Include="src\Core\WindowMaker.h" />
@@ -175,8 +175,9 @@
     <ClInclude Include="src\Core\imGui\imGuiBuild.h" />
     <ClInclude Include="src\Core\imGui\imguiLayer.h" />
     <ClInclude Include="src\Core\input.h" />
-    <ClInclude Include="src\Core\math\math.h" />
     <ClInclude Include="src\Core\openGL\OpenGLContext.h" />
+    <ClInclude Include="src\Core\openGL\OpenGLShader.h" />
+    <ClInclude Include="src\Core\openGL\OpenGLTexture.h" />
     <ClInclude Include="src\Core\openGL\OpenGLVertexArray.h" />
     <ClInclude Include="src\Core\openGL\OpenglBuffer.h" />
     <ClInclude Include="src\Core\openGL\OpenglRendererAPI.h" />
@@ -604,24 +605,27 @@
     <ClInclude Include="third_party\glm\glm\vector_relational.hpp" />
     <ClInclude Include="third_party\imGUI\examples\imgui_impl_glfw.h" />
     <ClInclude Include="third_party\imGUI\examples\imgui_impl_opengl3.h" />
+    <ClInclude Include="third_party\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Application.cpp" />
     <ClCompile Include="src\Core\Layer.cpp" />
     <ClCompile Include="src\Core\LayerStack.cpp" />
     <ClCompile Include="src\Core\Log.cpp" />
-    <ClCompile Include="src\Core\openGL\OpenGLShader.cpp" />
     <ClCompile Include="src\Core\Rendered\Buffer.cpp" />
     <ClCompile Include="src\Core\Rendered\OrthographicCamera.cpp" />
     <ClCompile Include="src\Core\Rendered\Renderer.cpp" />
     <ClCompile Include="src\Core\Rendered\RendererAPI.cpp" />
     <ClCompile Include="src\Core\Rendered\RendererCommand.cpp" />
     <ClCompile Include="src\Core\Rendered\Shader.cpp" />
+    <ClCompile Include="src\Core\Rendered\Texture.cpp" />
     <ClCompile Include="src\Core\Rendered\VertexArray.cpp" />
     <ClCompile Include="src\Core\WindowMaker.cpp" />
     <ClCompile Include="src\Core\WindowsInput.cpp" />
     <ClCompile Include="src\Core\imGui\imguiLayer.cpp" />
     <ClCompile Include="src\Core\openGL\OpenGLContext.cpp" />
+    <ClCompile Include="src\Core\openGL\OpenGLShader.cpp" />
+    <ClCompile Include="src\Core\openGL\OpenGLTexture.cpp" />
     <ClCompile Include="src\Core\openGL\OpenGLVertexArray.cpp" />
     <ClCompile Include="src\Core\openGL\OpenglBuffer.cpp" />
     <ClCompile Include="src\Core\openGL\OpenglRendererAPI.cpp" />
@@ -630,6 +634,7 @@
     </ClCompile>
     <ClCompile Include="third_party\imGUI\examples\imgui_impl_glfw.cpp" />
     <ClCompile Include="third_party\imGUI\examples\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="third_party\stb_image\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="third_party\GLFW\GLFW.vcxproj">
