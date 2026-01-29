@@ -17,13 +17,29 @@ namespace Shunya {
 		SHUNYA_CORE_ASSERT(data, "Failed to load image");
 		m_Width = width;
 		m_Height = height;
+
+		GLenum internalFormate = 0, dataFormate = 0;
+		if (channels == 4)
+		{
+			internalFormate = GL_RGBA8;
+			dataFormate = GL_RGBA;
+		}
+		if (channels == 3)
+		{
+			internalFormate = GL_RGB8;
+			dataFormate = GL_RGB;
+		}
+
+
+
 		glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
-		glTextureStorage2D(m_RendererID, 1, GL_RG8, m_Width, m_Height);
+		glTextureStorage2D(m_RendererID, 1, internalFormate, m_Width, m_Height);
 
 		glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	
-		glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Width, m_Height, GL_RGB, GL_UNSIGNED_BYTE, data);
+		
+		glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Width, m_Height, dataFormate, GL_UNSIGNED_BYTE, data);
 
 		stbi_image_free(data);
 

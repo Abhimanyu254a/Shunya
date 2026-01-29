@@ -31,6 +31,8 @@ Application::Application()
 	m_Window->SetEventCallback(BIND_FUN(OnEvent));
 	/*m_Window->SetVSync(false);*/  // to set up the frame rate with the respect of the Screen
 
+	Renderer::Init();
+
 	m_ImGuiLayer = new imGUILayer();
 	PushOverlay(m_ImGuiLayer);
 
