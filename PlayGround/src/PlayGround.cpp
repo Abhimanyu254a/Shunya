@@ -165,7 +165,7 @@ public:
             uniform sampler2D u_Texture; 
 
             void main()
-            {
+            { 
                 color = texture(u_Texture, v_TexCoord); 
             }
         )";
@@ -173,7 +173,7 @@ public:
         m_TextureShader.reset(Shunya::OpenGLShader::Create(TextureShaderVertexSrc, TextureShaderFragmentSrc));
         
 
-        m_Texture = Shunya::Texture2D::Create("assets/textures/Me.jpg");
+        m_Texture = Shunya::Texture2D::Create("assets/textures/cp2.jpg");
 
         std::dynamic_pointer_cast<Shunya::OpenGLShader>(m_TextureShader)->Bind();
         std::dynamic_pointer_cast<Shunya::OpenGLShader>(m_TextureShader)->UploadUniformInt("u_Texture", 0);

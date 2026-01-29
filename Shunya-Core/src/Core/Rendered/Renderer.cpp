@@ -5,6 +5,10 @@
 
 namespace Shunya
 {
+	void Renderer::Init()
+	{
+		RendererCommand::Init();
+	}
 	Renderer::SceneData* Renderer::m_SceneData = new Renderer::SceneData;
 	void Renderer::BeginScene(OrthographicCamera& camera)
 	{
