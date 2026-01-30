@@ -141,6 +141,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Shunya-Core\third_party\glm" />
+    <None Include="assets\Shaders\Texture.glsl" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Shunya-Core\Shunya-Core.vcxproj">
