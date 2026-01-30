@@ -20,5 +20,6 @@
     <None Include="..\Shunya-Core\third_party\glm">
       <Filter>Shunya-Core\third_party</Filter>
     </None>
+    <None Include="assets\Shaders\Texture.glsl" />
   </ItemGroup>
 </Project>
