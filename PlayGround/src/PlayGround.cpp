@@ -11,7 +11,7 @@ class ExampleLayer : public Shunya::Layer
 {
 public:
     ExampleLayer()
-        : Layer("Example"), m_Camera(-1.6f, 1.6f, -0.9f, 0.9f), m_CameraPosition(0.0f)
+        : Layer("Example"), m_CameraController(1280.0f / 720.0f, true)
     {
         // -------------------------------------------------------------
         // 1. TRIANGLE RENDERING SETUP
@@ -99,7 +99,7 @@ public:
             }
         )";
 
-        m_Shader.reset(Shunya::OpenGLShader::Create(vertexSrc, fragmentSrc));
+        m_Shader = Shunya::OpenGLShader::Create("Triangle vertex point",vertexSrc, fragmentSrc);
 
 
         std::string blueShaderVertexSrc = R"(
@@ -132,15 +132,15 @@ public:
             }
         )";
 
-        m_FlatColorShader.reset(Shunya::OpenGLShader::Create(blueShaderVertexSrc, blueShaderFragmentSrc));
+        m_FlatColorShader =Shunya::OpenGLShader::Create("blue Shader",blueShaderVertexSrc, blueShaderFragmentSrc);
        
-        m_TextureShader.reset(Shunya::Shader::Create("assets/Shaders/Texture.glsl"));
+        auto textureShader = m_ShaderLibrary.Load("assets/Shaders/Texture.glsl");
         
 
         m_Texture = Shunya::Texture2D::Create("assets/textures/cp.png");
 
-        std::dynamic_pointer_cast<Shunya::OpenGLShader>(m_TextureShader)->Bind();
-        std::dynamic_pointer_cast<Shunya::OpenGLShader>(m_TextureShader)->UploadUniformInt("u_Texture", 0);
+        std::dynamic_pointer_cast<Shunya::OpenGLShader>(textureShader)->Bind();
+        std::dynamic_pointer_cast<Shunya::OpenGLShader>(textureShader)->UploadUniformInt("u_Texture", 0);
 
     }
     void OnUpdate(Shunya::Timestamp ts) override
@@ -148,28 +148,15 @@ public:
         // FPS
         SHUNYA_INFO("Timestep: {0}s ({1}ms)", ts.GetSeconds(), ts.GetMilliSec());
 
-        if (Shunya::Input::IsKeyPressed(SHUNYA_KEY_LEFT))
-            m_CameraPosition.x -= m_CameraSpeed ; 
-        else if (Shunya::Input::IsKeyPressed(SHUNYA_KEY_RIGHT))
-            m_CameraPosition.x += m_CameraSpeed ; 
+        //OnUpdate
+        m_CameraController.OnUpdate(ts);
 
-        if (Shunya::Input::IsKeyPressed(SHUNYA_KEY_UP))
-            m_CameraPosition.y += m_CameraSpeed ; 
-        else if (Shunya::Input::IsKeyPressed(SHUNYA_KEY_DOWN))
-            m_CameraPosition.y -= m_CameraSpeed ; 
-
-        if (Shunya::Input::IsKeyPressed(SHUNYA_KEY_A))
-            m_CameraRotation += m_CameraRotationSpeed ; 
-        else if (Shunya::Input::IsKeyPressed(SHUNYA_KEY_D))
-            m_CameraRotation -= m_CameraRotationSpeed ; 
-
+        //
         Shunya::RendererCommand::SetClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f));
         Shunya::RendererCommand::Clear();
 
-        m_Camera.SetPosition(m_CameraPosition);
-        m_Camera.SetRotation(m_CameraRotation);
 
-        Shunya::Renderer::BeginScene(m_Camera);
+        Shunya::Renderer::BeginScene(m_CameraController.GetCamera());
 
         glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
 
@@ -188,12 +175,15 @@ public:
                 Shunya::Renderer::Submit(m_FlatColorShader, m_SquareVA, transform);
             }
         }
+
+        auto textureShader = m_ShaderLibrary.Get("Texture");
+
         m_Texture->Bind();
-        Shunya::Renderer::Submit(m_TextureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+        Shunya::Renderer::Submit(textureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
 
         // RENDER TRIANGLE
         // Note: Explicitly passing Identity Matrix to avoid garbage transform
-        auto textureShader = m_Shader;
+        
         //Shunya::Renderer::Submit(textureShader, m_VertexArray, glm::mat4(1.0f));
 
         Shunya::Renderer::EndScene();
@@ -207,12 +197,14 @@ public:
         ImGui::End();
     }
 
-    void OnEvent(Shunya::Event& event) override
+    void OnEvent(Shunya::Event& e) override
     {
+        m_CameraController.OnEvent(e);
         
     }
 
 private:
+    Shunya::ShaderLibrary m_ShaderLibrary;
     Shunya::Ref<Shunya::Shader> m_Shader;
     Shunya::Ref<Shunya::VertexArray> m_VertexArray;
 
@@ -221,14 +213,7 @@ private:
 
     Shunya::Ref<Shunya::Texture2D> m_Texture;
 
-    Shunya::OrthographicCamera m_Camera;
-    glm::vec3 m_CameraPosition;
-
-
-    float m_CameraSpeed = 0.1f;
-    float m_CameraRotation = 0.0f;
-    float m_CameraRotationSpeed = 45.0f;
-
+    Shunya::OrthographicCameraController m_CameraController;
     glm::vec3 m_SquareColor = { 0.2f, 0.3f, 0.8f };
 };
 
