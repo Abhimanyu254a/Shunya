@@ -18,10 +18,6 @@ namespace Shunya {
 
 	void OrthographicCameraController::OnUpdate(Timestamp ts)
 	{
-
-		
-
-
 		if (Input::IsKeyPressed( SHUNYA_KEY_D))
 			m_CameraPosition.x -= m_CameraTranslationSpeed * ts.GetSeconds();
 		else if (Input::IsKeyPressed(SHUNYA_KEY_A))
@@ -71,7 +67,7 @@ namespace Shunya {
 	}
 	bool OrthographicCameraController::OnWindowResized(WindowResizeEvent& e) 
 	{
-		m_AspectRatio = (float)e.GetBreadth()/(float)e.GetLength();
+		m_AspectRatio = (float)e.GetLength() /(float)e.GetBreadth();
 		m_Camera.SetProjection(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
 
 		return false;

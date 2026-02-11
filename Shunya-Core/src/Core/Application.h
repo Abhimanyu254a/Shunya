@@ -41,12 +41,15 @@ namespace Shunya
 
 	private:
 		bool OnWindowClose(WindowClosedEvent& e);
+		bool OnWindowResize(WindowResizeEvent& e);
+
 
 	private:
 		std::unique_ptr<Window> m_Window;
 		imGUILayer* m_ImGuiLayer;
 		LayerStack m_LayerStack;
 		bool m_Running = true;
+		bool m_Minimized = false;	
 		static Application* s_Instance;
 		float m_LastTimeFrame = 0.0f;
 

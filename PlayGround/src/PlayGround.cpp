@@ -11,7 +11,7 @@ class ExampleLayer : public Shunya::Layer
 {
 public:
     ExampleLayer()
-        : Layer("Example"), m_CameraController(1280.0f / 720.0f, true)
+        : Layer("Example"), m_CameraController(1280.0f / 720.0f,true)
     {
         // -------------------------------------------------------------
         // 1. TRIANGLE RENDERING SETUP
@@ -200,6 +200,20 @@ public:
     void OnEvent(Shunya::Event& e) override
     {
         m_CameraController.OnEvent(e);
+        /////////////////////////////////////////////////////////////
+        // 2. Update the Renderer (Sets the new Pixel Size)
+        if (e.GetEventType() == Shunya::EventType::WindowResize)
+        {
+            auto& resize = (Shunya::WindowResizeEvent&)e;
+
+            // Safety Check: Don't resize to 0
+            if (resize.GetLength() > 0 && resize.GetBreadth() > 0)
+            {
+                // Call the function we just fixed in Renderer.cpp
+                Shunya::Renderer::OnWindowResize(resize.GetLength(), resize.GetBreadth());
+            }
+        }
+        /////////////////////////////////////////////////////////////
         
     }
 
