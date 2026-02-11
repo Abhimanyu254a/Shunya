@@ -5,11 +5,17 @@
 
 namespace Shunya
 {
+	Renderer::SceneData* Renderer::m_SceneData = new Renderer::SceneData;
 	void Renderer::Init()
 	{
 		RendererCommand::Init();
 	}
-	Renderer::SceneData* Renderer::m_SceneData = new Renderer::SceneData;
+	void Renderer::OnWindowResize(uint32_t breadth, uint32_t length)
+	{
+		if (breadth == 0 || length == 0) return;
+		RendererCommand::SetViewport(0, 0, breadth, length);
+
+	}
 	void Renderer::BeginScene(OrthographicCamera& camera)
 	{
 		m_SceneData->ViewProjectionMatrix = camera.GetViewProjectionMatrix();

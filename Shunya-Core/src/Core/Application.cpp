@@ -57,6 +57,7 @@ Application::Application()
 	{
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<WindowClosedEvent>(BIND_FUN(OnWindowClose));
+		dispatcher.Dispatch<WindowResizeEvent>(BIND_FUN(OnWindowResize));
 
 		SHUNYA_CORE_TRACE("{0}", e.ToString());
 
@@ -78,11 +79,12 @@ Application::Application()
 			Timestamp timestep = time - m_LastTimeFrame;
 			m_LastTimeFrame = time;
 
-
-			 
-			for (Layer* layer : m_LayerStack)
-			{
-				layer->OnUpdate(timestep);
+			if(!m_Minimized)
+			{ 
+				for (Layer* layer : m_LayerStack)
+				{
+					layer->OnUpdate(timestep);
+				}
 			}
 
 			m_ImGuiLayer->Begin();
@@ -104,5 +106,16 @@ Application::Application()
 
 		return true;
 	}
-
+	bool Application::OnWindowResize(WindowResizeEvent& e)
+	{
+		if (e.GetBreadth() == 0 || e.GetLength() == 0)
+		{
+			m_Minimized = true;
+			return false;
+		}
+		m_Minimized = false;
+		Renderer::OnWindowResize(e.GetBreadth(), e.GetLength());
+		return true;
+		 
+	}
 }
