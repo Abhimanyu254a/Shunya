@@ -32,6 +32,15 @@ namespace Shunya
 		SHUNYA_CORE_INFO("GPU Vendor   : {0}", vendor ? reinterpret_cast<const char*>(vendor) : "NULL");
 		SHUNYA_CORE_INFO("GPU Renderer : {0}", renderer ? reinterpret_cast<const char*>(renderer) : "NULL");
 		
+#ifdef HZ_ENABLE_ASSERTS
+		int versionMajor;
+		int versionMinor;
+		glGetIntegerv(GL_MAJOR_VERSION, &versionMajor);
+		glGetIntegerv(GL_MINOR_VERSION, &versionMinor);
+
+		HZ_CORE_ASSERT(versionMajor > 4 || (versionMajor == 4 && versionMinor >= 5), "Hazel requires at least OpenGL version 4.5!");
+#endif
+			
 	}
 	void OpenGLContext::SwapBuffers()
 	{

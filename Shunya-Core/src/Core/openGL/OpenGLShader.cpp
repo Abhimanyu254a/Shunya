@@ -95,8 +95,7 @@ namespace Shunya
 
 			size_t nextLinePos = source.find_first_of("\r\n", eol);
 			pos = source.find(typeToken, nextLinePos);
-			shaderSources[ShaderTypeFromString(type)] = source.substr(nextLinePos, pos- (nextLinePos == std::string::npos ? source.size()-1 : nextLinePos));
-
+			shaderSources[ShaderTypeFromString(type)] = (pos == std::string::npos) ? source.substr(nextLinePos) : source.substr(nextLinePos, pos - nextLinePos);
 		}
 		return shaderSources;
 
@@ -182,8 +181,10 @@ namespace Shunya
 			return;
 
 		}
-		for (auto id : glshaderIDs)
+		for (auto id : glshaderIDs) {
 			glDetachShader(program, id);
+			glDeleteShader(id);
+		}
 
 		m_RendererID = program;
 	}

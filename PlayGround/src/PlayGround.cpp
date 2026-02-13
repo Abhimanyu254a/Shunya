@@ -1,4 +1,5 @@
 #include <Shunya.h>
+#include <Core/EntryPoint.h>
 #include "Core/openGL/OpenGLShader.h"
 #include <imgui.h>
 #include "Core/Core.h"
@@ -6,6 +7,8 @@
 #include "Core/imGui/imguiLayer.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+
+#include "Sandbox2D.h"
 
 class ExampleLayer : public Shunya::Layer
 {
@@ -17,7 +20,7 @@ public:
         // 1. TRIANGLE RENDERING SETUP
         // -------------------------------------------------------------
 
-        m_VertexArray.reset(Shunya::VertexArray::Create());
+        m_VertexArray = Shunya::VertexArray::Create();
 
         float vertices[3 * 7] = {
             -0.5f, -0.5f, 0.0f, 0.8f, 0.2f, 0.8f, 1.0f,
@@ -43,7 +46,7 @@ public:
         // -------------------------------------------------------------
         // 2. SQUARE RENDERING SETUP
         // -------------------------------------------------------------
-        m_SquareVA.reset(Shunya::VertexArray::Create());
+        m_SquareVA = Shunya::VertexArray::Create();
 
         float squareVertices[5 * 4] = {
             -0.5f, -0.5f, 0.0f, 0.0f,0.0f,
@@ -236,7 +239,8 @@ class PlayGround : public Shunya::Application
 public:
     PlayGround()
     {
-        PushLayer(new ExampleLayer());
+        //PushLayer(new ExampleLayer());
+        PushLayer(new Sandbox2D());
     }
     ~PlayGround()
     {
