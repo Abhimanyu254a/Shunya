@@ -10,8 +10,10 @@ namespace Shunya
 	}
 	LayerStack::~LayerStack()
 	{
-		for (Layer* layer : m_Layers)
+		for (Layer* layer : m_Layers) {
+			layer->OnDetch();
 			delete layer;
+		}
 	}
 	void LayerStack::PushLayer(Layer* layer)
 	{

@@ -1435,6 +1435,7 @@
       <Filter>third_party\stb_image</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\OrthographicCameraController.h" />
+    <ClInclude Include="src\Core\Rendered\Renderer2D.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Application.cpp">
@@ -1513,5 +1514,6 @@
       <Filter>third_party\stb_image</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\OrthographicCameraController.cpp" />
+    <ClCompile Include="src\Core\Rendered\Renderer2D.cpp" />
   </ItemGroup>
 </Project>

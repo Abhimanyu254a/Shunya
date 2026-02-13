@@ -30,4 +30,4 @@
 #pragma execution_character_set("utf-8")
 
 // ----------- EntryPoint-------
-#include "Core/EntryPoint.h"
+//#include "Core/EntryPoint.h"  // it is the main function 
