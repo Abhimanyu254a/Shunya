@@ -1,5 +1,3 @@
-// assets/shaders/FlatColor.glsl
-
 #type vertex
 #version 330 core
 
@@ -18,9 +16,11 @@ void main()
 
 layout(location = 0) out vec4 color;
 
-uniform vec3 u_Color;
+// Ensure this is vec4!
+uniform vec4 u_Color;
 
 void main()
 {
-    color = vec4(u_Color, 1.0);
+    // Pass the color exactly as received from C++
+    color = u_Color;
 }

@@ -5,8 +5,9 @@
 #include "VertexArray.h"
 #include "Shader.h"
 #include "RendererCommand.h"
+#include <glm/gtc/matrix_transform.hpp>
 
-#include "Core/openGL/OpenGLShader.h"
+#include "Core/openGL/OpenGLShader.h" //
 
 namespace Shunya {
 
@@ -27,7 +28,7 @@ namespace Shunya {
 		s_Data = new Renderer2DStorage();
 		s_Data->QuadVertexArray = VertexArray::Create();
 
-        float squareVertices[5 * 4] = {
+        float squareVertices[3 * 4] = {
             -0.5f, -0.5f, 0.0f,
              0.5f, -0.5f, 0.0f,
              0.5f,  0.5f, 0.0f,
@@ -59,11 +60,9 @@ namespace Shunya {
 	void Renderer2D::BeginScene(const OrthographicCamera& camera) 
 	{
 
-		auto glShader = std::dynamic_pointer_cast<Shunya::OpenGLShader>(s_Data->FlatColorShader);
-		SHUNYA_CORE_ASSERT(glShader, "FlatColorShader is NOT an OpenGLShader!");
-		glShader->Bind();
-		glShader->UploadUniformMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
-		glShader->UploadUniformMat4("u_Transform",glm::mat4(1.0f));
+		
+		s_Data->FlatColorShader->Bind();
+		s_Data->FlatColorShader->SetMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
 
 
 	}
@@ -75,10 +74,14 @@ namespace Shunya {
 	{
 		DrawQuad({ position.x,position.y,0.0f }, size, color);
 	}
-	void Renderer2D::DrawQuad	(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color) 
+	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color) 
 	{
-		std::dynamic_pointer_cast<Shunya::OpenGLShader>(s_Data->FlatColorShader)->Bind();
-		std::dynamic_pointer_cast<Shunya::OpenGLShader>(s_Data->FlatColorShader)->UploadUniformFloat3("u_Color", color);
+		s_Data->FlatColorShader->Bind();
+		s_Data->FlatColorShader->SetFloat4("u_Color", color);
+
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) *
+			glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+		s_Data->FlatColorShader-> SetMat4("u_Transform",transform);
 
 		s_Data->QuadVertexArray->Bind();
 		RendererCommand::DrawIndexed(s_Data->QuadVertexArray);
