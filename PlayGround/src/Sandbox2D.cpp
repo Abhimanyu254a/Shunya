@@ -1,7 +1,6 @@
 #include "Sandbox2D.h"
 #include <imgui.h>
 
-#include "Core/openGL/OpenGLShader.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -33,6 +32,10 @@ void Sandbox2D::OnUpdate(Shunya::Timestamp ts)
 
 
     Shunya::Renderer2D::BeginScene(m_CameraController.GetCamera());
+    // Change 0.1f -> 1.0f (Fully Opaque)
+    Shunya::Renderer2D::DrawQuad({ -1.0f, 0.0f }, { 0.8f, 0.8f }, { 0.8f, 0.2f, 0.3f, 1.0f });
+    Shunya::Renderer2D::DrawQuad({ 0.5f,-0.5f }, { 0.5f, 0.75f }, { 0.2f, 0.3f, 0.8f, 1.0f });
+    Shunya::Renderer2D::EndScene();   
 
 
     // UPLOAD COLOR: We bind the shader and send the color from ImGui
@@ -40,9 +43,6 @@ void Sandbox2D::OnUpdate(Shunya::Timestamp ts)
     // RENDER TRIANGLE
     // Note: Explicitly passing Identity Matrix to avoid garbage transform
     //Shunya::Renderer::Submit(textureShader, m_VertexArray, glm::mat4(1.0f));
-    Shunya::Renderer2D::DrawQuad({0.0f,0.0f},{1.0f,1.0f},{0.0f,0.2f,0.3f,0.1f});
-
-    Shunya::Renderer2D::EndScene();   
     
     //std::dynamic_pointer_cast<Shunya::OpenGLShader>(m_FlatColorShader)->Bind();
     //std::dynamic_pointer_cast<Shunya::OpenGLShader>(m_FlatColorShader)->UploadUniformFloat3("u_Color", m_SquareColor);
