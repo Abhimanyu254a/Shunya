@@ -2,6 +2,7 @@
 #include "Renderer.h"
 
 #include "Core/openGL/OpenGLShader.h"
+#include "Renderer2D.h"
 
 namespace Shunya
 {
@@ -9,6 +10,7 @@ namespace Shunya
 	void Renderer::Init()
 	{
 		RendererCommand::Init();
+		Renderer2D::Init();
 	}
 	void Renderer::OnWindowResize(uint32_t breadth, uint32_t length)
 	{

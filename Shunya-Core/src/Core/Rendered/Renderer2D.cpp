@@ -1,30 +1,87 @@
 #include "SNY-PCH.h"
 #include "Renderer2D.h"
 
+#include "Core/Core.h"
+#include "VertexArray.h"
+#include "Shader.h"
+#include "RendererCommand.h"
 
+#include "Core/openGL/OpenGLShader.h"
 
 namespace Shunya {
 
+	struct Renderer2DStorage
+	{
+	Ref<VertexArray> QuadVertexArray;
+	Ref<Shader>FlatColorShader;
+	
+	};
+
+	static Renderer2DStorage* s_Data;
+
 	void Renderer2D::Init()
 	{
+// -------------------------------------------------------------
+//  SQUARE RENDERING SETUP
+// -------------------------------------------------------------
+		s_Data = new Renderer2DStorage();
+		s_Data->QuadVertexArray = VertexArray::Create();
+
+        float squareVertices[5 * 4] = {
+            -0.5f, -0.5f, 0.0f,
+             0.5f, -0.5f, 0.0f,
+             0.5f,  0.5f, 0.0f,
+            -0.5f,  0.5f, 0.0f
+        };
+        std::shared_ptr<VertexBuffer> squareVB;
+        squareVB.reset(VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
+
+        squareVB->SetLayout({
+                { ShaderDataType::Float3, "a_Position" },
+            });
+
+		s_Data->QuadVertexArray->AddVertexBuffer(squareVB);
+
+        uint32_t squareIndices[6] = { 0, 1, 2, 2, 3, 0 };
+        std::shared_ptr<IndexBuffer> squareIB;
+        squareIB.reset(IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t)));
+		s_Data->QuadVertexArray->SetIndexBuffer(squareIB);
+
+        s_Data->FlatColorShader = Shader::Create("assets/Shaders/FlatColor.glsl");
 	
 	}
 	void Renderer2D::Shutdown()
 	{
+		delete(s_Data);
 
 	}
 
-	void Renderer2D::Begine(const OrthographicCamera& camera) {
+	void Renderer2D::BeginScene(const OrthographicCamera& camera) 
+	{
+
+		auto glShader = std::dynamic_pointer_cast<Shunya::OpenGLShader>(s_Data->FlatColorShader);
+		SHUNYA_CORE_ASSERT(glShader, "FlatColorShader is NOT an OpenGLShader!");
+		glShader->Bind();
+		glShader->UploadUniformMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
+		glShader->UploadUniformMat4("u_Transform",glm::mat4(1.0f));
+
 
 	}
 	void Renderer2D::EndScene() {
 
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec3& size, const glm::vec4& color) {
-
+	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color) 
+	{
+		DrawQuad({ position.x,position.y,0.0f }, size, color);
 	}
-	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec3& size, const glm::vec4& color) {
+	void Renderer2D::DrawQuad	(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color) 
+	{
+		std::dynamic_pointer_cast<Shunya::OpenGLShader>(s_Data->FlatColorShader)->Bind();
+		std::dynamic_pointer_cast<Shunya::OpenGLShader>(s_Data->FlatColorShader)->UploadUniformFloat3("u_Color", color);
+
+		s_Data->QuadVertexArray->Bind();
+		RendererCommand::DrawIndexed(s_Data->QuadVertexArray);
 
 	}
 

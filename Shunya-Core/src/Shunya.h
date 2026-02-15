@@ -18,10 +18,11 @@
 
 //-------------Renderer-------------------------
 #include "Core/Rendered/Buffer.h"
+#include "Core/Rendered/Renderer2D.h"
+#include "Core/Rendered/RendererAPI.h"
 #include "Core/Rendered/GraphicsContext.h"
 #include "Core/Rendered/OrthographicCamera.h"
 #include "Core/Rendered/Renderer.h"
-#include "Core/Rendered/RendererAPI.h"
 #include "Core/Rendered/RendererCommand.h"
 #include "Core/Rendered/Shader.h"
 #include "Core/Rendered/Texture.h"
