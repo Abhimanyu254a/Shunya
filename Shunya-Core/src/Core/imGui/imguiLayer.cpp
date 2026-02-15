@@ -11,10 +11,6 @@
 #include <glad/glad.h>
 
 
-
-
-
-
 namespace Shunya
 {
 
