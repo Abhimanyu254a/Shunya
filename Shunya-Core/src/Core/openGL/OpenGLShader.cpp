@@ -17,7 +17,7 @@ namespace Shunya
 			return GL_FRAGMENT_SHADER;
 
 		SHUNYA_CORE_ASSERT(false, "Unkown shader type!");
-		
+
 		return 0;
 	}
 
@@ -35,7 +35,7 @@ namespace Shunya
 
 	}
 
-	OpenGLShader::OpenGLShader(const std::string& name,const std::string& vertexSrc, const std::string& fragmentSrc)
+	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc)
 		:m_Name(name)
 	{
 		std::unordered_map<GLenum, std::string> sources;
@@ -58,7 +58,7 @@ namespace Shunya
 	std::string OpenGLShader::ReadFile(const std::string& filepath)
 	{
 		std::string result;
-		std::ifstream in(filepath, std::ios::in , std::ios::binary);
+		std::ifstream in(filepath, std::ios::in, std::ios::binary);
 
 		if (in)
 		{
@@ -103,22 +103,22 @@ namespace Shunya
 	}
 	void OpenGLShader::Compile(const std::unordered_map<GLenum, std::string >& shaderSources)
 	{
-		GLuint program= glCreateProgram();
+		GLuint program = glCreateProgram();
 
-		std::array<GLenum,2> glshaderIDs; // for now we are only supporting 2 shaders
+		std::array<GLenum, 2> glshaderIDs; // for now we are only supporting 2 shaders
 		int glShaderIDIndex = 0;
-		
+
 		for (auto& kv : shaderSources)
 		{
 			GLenum type = kv.first;
 			const std::string& source = kv.second;
 
 			GLuint shader = glCreateShader(type);
-		
+
 			const GLchar* sourceCStr = source.c_str();
 			glShaderSource(shader, 1, &sourceCStr, 0);
 
-			
+
 			glCompileShader(shader);
 
 			GLint isCompiled = 0;
@@ -142,7 +142,7 @@ namespace Shunya
 			}
 
 			glAttachShader(program, shader);
-			glshaderIDs[glShaderIDIndex++] = shader ;
+			glshaderIDs[glShaderIDIndex++] = shader;
 
 		}
 		//--------------------------------------
@@ -198,6 +198,11 @@ namespace Shunya
 	void OpenGLShader::UnBind() const
 	{
 		glUseProgram(0);
+
+	}
+	void OpenGLShader::SetInt(const std::string& name, int value)
+	{
+		UploadUniformInt(name, value);
 
 	}
 	void OpenGLShader::SetFloat3(const std::string& name ,const glm::vec3& value) {
