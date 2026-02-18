@@ -14,6 +14,7 @@ Sandbox2D::~Sandbox2D()
 
 void Sandbox2D::OnAttach() 
 {
+    m_Texture = Shunya::Texture2D::Create("assets/textures/cp.png");
 
     
 }
@@ -35,6 +36,7 @@ void Sandbox2D::OnUpdate(Shunya::Timestamp ts)
     // Change 0.1f -> 1.0f (Fully Opaque)
     Shunya::Renderer2D::DrawQuad({ -1.0f, 0.0f }, { 0.8f, 0.8f }, { 0.8f, 0.2f, 0.3f, 1.0f });
     Shunya::Renderer2D::DrawQuad({ 0.5f,-0.5f }, { 0.5f, 0.75f }, { 0.2f, 0.3f, 0.8f, 1.0f });
+    Shunya::Renderer2D::DrawQuad({ 0.0f,0.0f ,-0.1f}, { 10.f, 10.0f }, m_Texture);
     Shunya::Renderer2D::EndScene();   
 
 
