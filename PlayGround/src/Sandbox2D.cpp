@@ -46,9 +46,6 @@ void Sandbox2D::OnUpdate(Shunya::Timestamp ts)
     // Note: Explicitly passing Identity Matrix to avoid garbage transform
     //Shunya::Renderer::Submit(textureShader, m_VertexArray, glm::mat4(1.0f));
     
-    //std::dynamic_pointer_cast<Shunya::OpenGLShader>(m_FlatColorShader)->Bind();
-    //std::dynamic_pointer_cast<Shunya::OpenGLShader>(m_FlatColorShader)->UploadUniformFloat3("u_Color", m_SquareColor);
-
 }
 void Sandbox2D::OnImGuiRender()
 {

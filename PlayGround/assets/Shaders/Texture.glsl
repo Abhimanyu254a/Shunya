@@ -1,7 +1,3 @@
-// ------------------------------------
-// COPY THIS EXACTLY INTO Texture.glsl
-// ------------------------------------
-
 #type vertex
 #version 330 core
 
@@ -26,10 +22,10 @@ layout(location = 0) out vec4 color;
 
 in vec2 v_TexCoord;
 
-// IMPORTANT: must be sampler2D, not sample2D
+uniform vec4 u_Color;
 uniform sampler2D u_Texture; 
 
 void main()
 {
-    color = texture(u_Texture, v_TexCoord * 10.0);
+    color = texture(u_Texture, v_TexCoord * 10.0) * u_Color;
 }
