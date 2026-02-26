@@ -20,6 +20,9 @@
 #include<functional>
 #include<memory>
 
+//Debug
+#include "Core/Debug/Instrumentor.h" 
+
 #ifdef SHUNYA_CORE_EXPORTS
 	#include<Windows.h>
 #endif

@@ -26,7 +26,6 @@ private:
 	Shunya::Ref<Shunya::VertexArray> m_SquareVA;
 	Shunya::Ref<Shunya::Shader> m_FlatColorShader;
 	Shunya::Ref<Shunya::Texture2D> m_Texture;
-	std::vector<ProfileResult> m_ProfileResults;
 
 	glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f,1.0f};
 };
