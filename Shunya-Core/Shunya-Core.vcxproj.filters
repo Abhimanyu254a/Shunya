@@ -1436,6 +1436,7 @@
     </ClInclude>
     <ClInclude Include="src\Core\OrthographicCameraController.h" />
     <ClInclude Include="src\Core\Rendered\Renderer2D.h" />
+    <ClInclude Include="src\Core\Debug\Instrumentor.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Application.cpp">
