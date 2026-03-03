@@ -11,7 +11,10 @@ namespace Shunya {
 	OpenGLTexture2D::OpenGLTexture2D(const std::string& path)
 		:m_Path(path)
 	{
+		SHUNYA_PROFILE_FUNCTION();
+
 		int width, height, channels;
+
 		stbi_set_flip_vertically_on_load(1);
 		stbi_uc* data = stbi_load(path.c_str(),&width,&height,&channels,0);
 		SHUNYA_CORE_ASSERT(data, "Failed to load image");
@@ -52,6 +55,8 @@ namespace Shunya {
 	OpenGLTexture2D::OpenGLTexture2D(uint32_t breadth, uint32_t length)
 		:m_Width(breadth), m_Height(length)
 	{
+		SHUNYA_PROFILE_FUNCTION();
+
 		m_InternalFormat= GL_RGB8;
 		m_DataFormat = GL_RGBA;
 
@@ -68,12 +73,14 @@ namespace Shunya {
 	}
 	OpenGLTexture2D::~OpenGLTexture2D()
 	{
-
+		SHUNYA_PROFILE_FUNCTION();
 		glDeleteTextures(1, &m_RendererID);
 
 	}
 	void OpenGLTexture2D::SetData(void* data, uint32_t size)
 	{
+		SHUNYA_PROFILE_FUNCTION();
+
 		uint32_t bpp = m_DataFormat == GL_RGBA ? 4 : 3;
 		SHUNYA_CORE_ASSERT(size == m_Width * m_Height * bpp, "location: OpenglTexture Data must be entire Texture! ");
 		glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Width, m_Height, m_DataFormat, GL_UNSIGNED_BYTE, data);
@@ -81,6 +88,7 @@ namespace Shunya {
 	}
 	void OpenGLTexture2D::Bind(uint32_t slot) const
 	{
+		SHUNYA_PROFILE_FUNCTION();
 		glBindTextureUnit(slot, m_RendererID);
 
 	}

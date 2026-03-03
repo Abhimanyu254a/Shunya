@@ -18,11 +18,13 @@ namespace Shunya {
 
 	Window* Window::Create(const WindowProps& props)
 	{
+
 		return new WindowMaker(props);
 	}
 
 	WindowMaker::WindowMaker(const WindowProps& props)
 	{
+		SHUNYA_PROFILE_FUNCTION();
 		Init(props);
 	}
 
@@ -30,6 +32,7 @@ namespace Shunya {
 
 	void WindowMaker::Init(const WindowProps& props)
 	{
+		SHUNYA_PROFILE_FUNCTION();
 		m_Data.Title = props.Title;
 		m_Data.Length = props.Height;
 		m_Data.Width = props.Breadth;
@@ -43,7 +46,10 @@ namespace Shunya {
 				glfwSetErrorCallback(GLFWErrorCallBack);
 			is_GLFWInitialized = true;
 		}
-		m_Window = glfwCreateWindow((int)props.Breadth, (int)props.Height, m_Data.Title.c_str(), nullptr, nullptr);
+		{
+			SHUNYA_PROFILE_SCOPE("Window creating");
+			m_Window = glfwCreateWindow((int)props.Breadth, (int)props.Height, m_Data.Title.c_str(), nullptr, nullptr);
+		}
 		
 		m_Context = new OpenGLContext(m_Window);
 		m_Context->Init();
@@ -169,16 +175,19 @@ namespace Shunya {
 
 	void WindowMaker::Shutdown()
 	{
+		SHUNYA_PROFILE_FUNCTION();
 		glfwDestroyWindow(m_Window);
 	}
 	void WindowMaker::OnUpdate()
 	{
+		SHUNYA_PROFILE_FUNCTION();
 		glfwPollEvents();
 		m_Context->SwapBuffers();
 
 	}
 	void WindowMaker::SetVSync(bool Enabled)
 	{
+		SHUNYA_PROFILE_FUNCTION();	
 		if (Enabled)
 			glfwSwapInterval(1);
 		else

@@ -24,6 +24,7 @@ namespace Shunya
 Application::Application()
 	
 {
+	SHUNYA_PROFILE_FUNCTION();
 	SHUNYA_CORE_ASSERT(!s_Instance, "Application already exists!");
 	s_Instance = this;
 
@@ -44,17 +45,20 @@ Application::Application()
 
 	void Application::PushLayer(Layer* layer)
 	{
+		SHUNYA_PROFILE_FUNCTION();
 		m_LayerStack.PushLayer(layer);
 		layer->OnAttach();
 	}
 	void Application::PushOverlay(Layer* Overlay)
 	{
+		SHUNYA_PROFILE_FUNCTION();
 		m_LayerStack.PushOverlay(Overlay);
 		Overlay->OnAttach();
 	}
 
 	void Application::OnEvent(Event& e)
 	{
+		SHUNYA_PROFILE_FUNCTION();
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<WindowClosedEvent>(BIND_FUN(OnWindowClose));
 		dispatcher.Dispatch<WindowResizeEvent>(BIND_FUN(OnWindowResize));
@@ -72,6 +76,7 @@ Application::Application()
 
 	void Application::Run()
 	{
+		SHUNYA_PROFILE_FUNCTION();
 		while (m_Running)
 		{
 
@@ -81,18 +86,26 @@ Application::Application()
 
 			if(!m_Minimized)
 			{ 
-				for (Layer* layer : m_LayerStack)
 				{
-					layer->OnUpdate(timestep);
+					SHUNYA_PROFILE_SCOPE("Layer Stack Profiling");
+					for (Layer* layer : m_LayerStack)
+					{
+						layer->OnUpdate(timestep);
+					}
 				}
-			}
+
 
 			m_ImGuiLayer->Begin();
-			for (Layer* layer : m_LayerStack)
 			{
-				layer->OnImGuiRender();
+				SHUNYA_PROFILE_SCOPE("Imgui Layer Profiling");
+					for (Layer* layer : m_LayerStack)
+					{
+						layer->OnImGuiRender();
+					}
 			}
 			m_ImGuiLayer->End();
+			}
+
 
 			m_Window->OnUpdate();
 		}
@@ -101,6 +114,7 @@ Application::Application()
 
 	bool Application::OnWindowClose(WindowClosedEvent& e)
 	{
+		
 		m_Running = false;
 
 
