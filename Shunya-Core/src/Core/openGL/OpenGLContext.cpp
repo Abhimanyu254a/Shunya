@@ -43,6 +43,7 @@ namespace Shunya
 	}
 	void OpenGLContext::SwapBuffers()
 	{
+		SHUNYA_PROFILE_FUNCTION();
 		glfwSwapBuffers(m_WindowHandle);
 	}
 	

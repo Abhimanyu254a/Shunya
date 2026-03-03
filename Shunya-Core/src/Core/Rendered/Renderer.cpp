@@ -9,6 +9,7 @@ namespace Shunya
 	Renderer::SceneData* Renderer::m_SceneData = new Renderer::SceneData;
 	void Renderer::Init()
 	{
+		SHUNYA_PROFILE_FUNCTION();
 		RendererCommand::Init();
 		Renderer2D::Init();
 	}

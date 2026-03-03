@@ -1,56 +1,199 @@
+//#pragma once
+//#pragma 
+//#include <string>
+//#include <chrono>
+//#include <algorithm>
+//#include <fstream>
+//#include <mutex>
+//
+//#include <thread>
+//namespace Shunya
+//{
+//
+//    struct ProfileResult
+//    {
+//        std::string Name;
+//        long long Start, End;
+//        uint32_t ThreadID;
+//    };
+//
+//    struct InstrumentationSession
+//    {
+//        std::string Name;
+//    };
+//
+//    class Instrumentor
+//    {
+//    private:
+//        InstrumentationSession* m_CurrentSession;
+//        std::ofstream m_OutputStream;
+//        int m_ProfileCount;
+//    public:
+//        Instrumentor()
+//            : m_CurrentSession(nullptr), m_ProfileCount(0)
+//        {
+//        }
+//
+//        void BeginSession(const std::string& name, const std::string& filepath = "results.json")
+//        {
+//            m_OutputStream.open(filepath);
+//            WriteHeader();
+//            m_CurrentSession = new InstrumentationSession{ name };
+//        }
+//
+//        void EndSession()
+//        {
+//            WriteFooter();
+//            m_OutputStream.close();
+//            delete m_CurrentSession;
+//            m_CurrentSession = nullptr;
+//            m_ProfileCount = 0;
+//        }
+//
+//        void WriteProfile(const ProfileResult& result)
+//        {
+//            if (m_ProfileCount++ > 0)
+//                m_OutputStream << ",";
+//
+//            std::string name = result.Name;
+//            std::replace(name.begin(), name.end(), '"', '\'');
+//
+//            m_OutputStream << "{";
+//            m_OutputStream << "\"cat\":\"function\",";
+//            m_OutputStream << "\"dur\":" << (result.End - result.Start) << ',';
+//            m_OutputStream << "\"name\":\"" << name << "\",";
+//            m_OutputStream << "\"ph\":\"X\",";
+//            m_OutputStream << "\"pid\":0,";
+//            m_OutputStream << "\"tid\":" << result.ThreadID << ",";
+//            m_OutputStream << "\"ts\":" << result.Start;
+//            m_OutputStream << "}";
+//
+//            m_OutputStream.flush();
+//        }
+//
+//        void WriteHeader()
+//        {
+//            m_OutputStream << "{\"otherData\": {},\"traceEvents\":[";
+//            m_OutputStream.flush();
+//        }
+//
+//        void WriteFooter()
+//        {
+//            m_OutputStream << "]}";
+//            m_OutputStream.flush();
+//        }
+//
+//        static Instrumentor& Get()
+//        {
+//            static Instrumentor instance;
+//            return instance;
+//        }
+//    };
+//
+//    class InstrumentationTimer
+//    {
+//    public:
+//        InstrumentationTimer(const char* name)
+//            : m_Name(name), m_Stopped(false)
+//        {
+//            m_StartTimepoint = std::chrono::high_resolution_clock::now();
+//        }
+//
+//        ~InstrumentationTimer()
+//        {
+//            if (!m_Stopped)
+//                Stop();
+//        }
+//
+//        void Stop()
+//        {
+//            auto endTimepoint = std::chrono::high_resolution_clock::now();
+//
+//            long long start = std::chrono::time_point_cast<std::chrono::microseconds>(m_StartTimepoint).time_since_epoch().count();
+//            long long end = std::chrono::time_point_cast<std::chrono::microseconds>(endTimepoint).time_since_epoch().count();
+//
+//            uint32_t threadID = std::hash<std::thread::id>{}(std::this_thread::get_id());
+//            Instrumentor::Get().WriteProfile({ m_Name, start, end, threadID });
+//
+//            m_Stopped = true;
+//        }
+//    private:
+//        const char* m_Name;
+//        std::chrono::time_point<std::chrono::high_resolution_clock> m_StartTimepoint;
+//        bool m_Stopped;
+//    };
+//}
+//
+//
+//
+//#define SHUNYA_PROFILE 1
+//#if SHUNYA_PROFILE
+//    #define SHUNYA_PROFILE_BEGIN_SESSION(name, filepath) Shunya::Instrumentor::Get().BeginSession(name, filepath)
+//    #define SHUNYA_PROFILE_END_SESSION() Shunya::Instrumentor::Get().EndSession()
+//    #define SHUNYA_PROFILE_SCOPE(name) Shunya::InstrumentationTimer timer##__LINE__(name)
+//    #define SHUNYA_PROFILE_FUNCTION() SHUNYA_PROFILE_SCOPE(__FUNCTION__)
+//#else
+//    #define SHUNYA_PROFILE_BEGIN_SESSION(name,filepath)
+//    #define SHUNYA_PROFILE_END_SESSION()
+//    #define SHUNYA_PROFILE_SCOPE(name)
+//    #define SHUNYA_PROFILE_FUNCTION()
+//#endif
+
+
+
+
+
+
 #pragma once
-#pragma 
+
 #include <string>
 #include <chrono>
 #include <algorithm>
 #include <fstream>
-
 #include <thread>
-namespace Shunya
-{
+#include <mutex>
 
-    struct ProfileResult
-    {
+namespace Shunya {
+
+    struct ProfileResult {
         std::string Name;
         long long Start, End;
         uint32_t ThreadID;
     };
 
-    struct InstrumentationSession
-    {
+    struct InstrumentationSession {
         std::string Name;
     };
 
-    class Instrumentor
-    {
+    class Instrumentor {
     private:
         InstrumentationSession* m_CurrentSession;
         std::ofstream m_OutputStream;
         int m_ProfileCount;
+        std::mutex m_Mutex;
     public:
         Instrumentor()
-            : m_CurrentSession(nullptr), m_ProfileCount(0)
-        {
+            : m_CurrentSession(nullptr), m_ProfileCount(0) {
         }
 
-        void BeginSession(const std::string& name, const std::string& filepath = "results.json")
-        {
+        void BeginSession(const std::string& name, const std::string& filepath = "results.json") {
+            std::lock_guard<std::mutex> lock(m_Mutex);
+            if (m_CurrentSession) {
+                InternalEndSession();
+            }
             m_OutputStream.open(filepath);
             WriteHeader();
             m_CurrentSession = new InstrumentationSession{ name };
         }
 
-        void EndSession()
-        {
-            WriteFooter();
-            m_OutputStream.close();
-            delete m_CurrentSession;
-            m_CurrentSession = nullptr;
-            m_ProfileCount = 0;
+        void EndSession() {
+            std::lock_guard<std::mutex> lock(m_Mutex);
+            InternalEndSession();
         }
 
-        void WriteProfile(const ProfileResult& result)
-        {
+        void WriteProfile(const ProfileResult& result) {
+            std::lock_guard<std::mutex> lock(m_Mutex);
+
             if (m_ProfileCount++ > 0)
                 m_OutputStream << ",";
 
@@ -70,48 +213,51 @@ namespace Shunya
             m_OutputStream.flush();
         }
 
-        void WriteHeader()
-        {
+        static Instrumentor& Get() {
+            static Instrumentor instance;
+            return instance;
+        }
+
+    private:
+        void WriteHeader() {
             m_OutputStream << "{\"otherData\": {},\"traceEvents\":[";
             m_OutputStream.flush();
         }
 
-        void WriteFooter()
-        {
+        void WriteFooter() {
             m_OutputStream << "]}";
             m_OutputStream.flush();
         }
 
-        static Instrumentor& Get()
-        {
-            static Instrumentor instance;
-            return instance;
+        void InternalEndSession() {
+            if (m_CurrentSession) {
+                WriteFooter();
+                m_OutputStream.close();
+                delete m_CurrentSession;
+                m_CurrentSession = nullptr;
+                m_ProfileCount = 0;
+            }
         }
     };
 
-    class InstrumentationTimer
-    {
+    class InstrumentationTimer {
     public:
         InstrumentationTimer(const char* name)
-            : m_Name(name), m_Stopped(false)
-        {
+            : m_Name(name), m_Stopped(false) {
             m_StartTimepoint = std::chrono::high_resolution_clock::now();
         }
 
-        ~InstrumentationTimer()
-        {
-            if (!m_Stopped)
-                Stop();
+        ~InstrumentationTimer() {
+            if (!m_Stopped) Stop();
         }
 
-        void Stop()
-        {
+        void Stop() {
             auto endTimepoint = std::chrono::high_resolution_clock::now();
 
             long long start = std::chrono::time_point_cast<std::chrono::microseconds>(m_StartTimepoint).time_since_epoch().count();
             long long end = std::chrono::time_point_cast<std::chrono::microseconds>(endTimepoint).time_since_epoch().count();
 
-            uint32_t threadID = std::hash<std::thread::id>{}(std::this_thread::get_id());
+            uint32_t threadID = (uint32_t)std::hash<std::thread::id>{}(std::this_thread::get_id());
             Instrumentor::Get().WriteProfile({ m_Name, start, end, threadID });
 
             m_Stopped = true;
@@ -123,17 +269,15 @@ namespace Shunya
     };
 }
 
-
-
 #define SHUNYA_PROFILE 1
 #if SHUNYA_PROFILE
-    #define SHUNYA_PROFILE_BEGIN_SESSION(name, filepath) Shunya::Instrumentor::Get().BeginSession(name, filepath)
-    #define SHUNYA_PROFILE_END_SESSION() Shunya::Instrumentor::Get().EndSession()
-    #define SHUNYA_PROFILE_SCOPE(name) Shunya::InstrumentationTimer timer##__LINE__(name)
-    #define SHUNYA_PROFILE_FUNCTION() SHUNYA_PROFILE_SCOPE(__FUNCTION__)
+#define SHUNYA_PROFILE_BEGIN_SESSION(name, filepath) ::Shunya::Instrumentor::Get().BeginSession(name, filepath)
+#define SHUNYA_PROFILE_END_SESSION() ::Shunya::Instrumentor::Get().EndSession()
+#define SHUNYA_PROFILE_SCOPE(name) ::Shunya::InstrumentationTimer timer##__LINE__(name)
+#define SHUNYA_PROFILE_FUNCTION() SHUNYA_PROFILE_SCOPE(__FUNCTION__)
 #else
-    #define SHUNYA_PROFILE_BEGIN_SESSION(name,filepath)
-    #define SHUNYA_PROFILE_END_SESSION()
-    #define SHUNYA_PROFILE_SCOPE(name)
-    #define SHUNYA_PROFILE_FUNCTION()
+#define SHUNYA_PROFILE_BEGIN_SESSION(name, filepath)
+#define SHUNYA_PROFILE_END_SESSION()
+#define SHUNYA_PROFILE_SCOPE(name)
+#define SHUNYA_PROFILE_FUNCTION()
 #endif

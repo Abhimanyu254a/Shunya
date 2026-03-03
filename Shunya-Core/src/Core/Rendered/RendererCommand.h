@@ -9,6 +9,7 @@ namespace Shunya
 	public:
 		inline static void Init()
 		{
+			SHUNYA_PROFILE_FUNCTION();
 			s_RendererAPI->Init();
 		}
 		inline static void SetViewport(uint32_t x, uint32_t y, uint32_t breadth, uint32_t lenght)

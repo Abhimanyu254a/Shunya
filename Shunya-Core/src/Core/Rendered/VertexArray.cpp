@@ -7,6 +7,8 @@ namespace Shunya
 {
 	Ref<VertexArray> VertexArray::Create() {
 
+		
+
 		switch (Renderer::GetAPI())
 		{
 		case RendererAPI::API::None: 			SHUNYA_CORE_ASSERT(false, "RendererAPI is not found or not Implemented Right now"); return nullptr;
