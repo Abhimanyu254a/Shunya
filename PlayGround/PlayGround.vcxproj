@@ -79,7 +79,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>SHUNYA_CORE_EXPORTS;Shunya_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\Shunya-Core\third_party\spdlog\include;..\Shunya-Core\src;$(SolutionDir)Shunya-Core\third_party\glm;$(SolutionDir)Shunya-Core\third_party\ImGui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Shunya-Core\third_party\spdlog\include;..\Shunya-Core\src;..\Shunya-Core\third_party\glm;..\Shunya-Core\third_party\imGUI;..\Shunya-Core\third_party\GLFW\include;..\Shunya-Core\third_party\Glad\include;..\Shunya-Core\third_party\stb_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -97,7 +97,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>SHUNYA_CORE_EXPORTS;Shunya_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\Shunya-Core\third_party\spdlog\include;..\Shunya-Core\src;$(SolutionDir)Shunya-Core\third_party\glm;$(SolutionDir)Shunya-Core\third_party\ImGui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Shunya-Core\third_party\spdlog\include;..\Shunya-Core\src;..\Shunya-Core\third_party\glm;..\Shunya-Core\third_party\imGUI;..\Shunya-Core\third_party\GLFW\include;..\Shunya-Core\third_party\Glad\include;..\Shunya-Core\third_party\stb_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -119,7 +119,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>SHUNYA_CORE_EXPORTS;Shunya_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\Shunya-Core\third_party\spdlog\include;..\Shunya-Core\src;$(SolutionDir)Shunya-Core\third_party\glm;$(SolutionDir)Shunya-Core\third_party\ImGui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Shunya-Core\third_party\spdlog\include;..\Shunya-Core\src;..\Shunya-Core\third_party\glm;..\Shunya-Core\third_party\imGUI;..\Shunya-Core\third_party\GLFW\include;..\Shunya-Core\third_party\Glad\include;..\Shunya-Core\third_party\stb_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -137,21 +137,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Sandbox2D.h" />
+  </ItemGroup>
+  <ItemGroup>
     <ClCompile Include="src\PlayGround.cpp" />
     <ClCompile Include="src\Sandbox2D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Shunya-Core\third_party\glm" />
-    <None Include="assets\Shaders\FlatColor.glsl" />
-    <None Include="assets\Shaders\Texture.glsl" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Shunya-Core\Shunya-Core.vcxproj">
       <Project>{13AFCCD5-7F64-45CB-0859-3FA2740D3CCF}</Project>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="src\Sandbox2D.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
