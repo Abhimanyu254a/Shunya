@@ -7,6 +7,9 @@
     <Filter Include="src\Core">
       <UniqueIdentifier>{A5D31CCF-91A0-77DA-BAB9-6582A6E5AC68}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Core\Debug">
+      <UniqueIdentifier>{DB452204-C713-160A-B0A7-86309C14F26E}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Core\Events">
       <UniqueIdentifier>{E953F58B-55DF-6250-5EF0-E544CAFABE50}</UniqueIdentifier>
     </Filter>
@@ -63,6 +66,9 @@
     <ClInclude Include="src\Core\Core.h">
       <Filter>src\Core</Filter>
     </ClInclude>
+    <ClInclude Include="src\Core\Debug\Instrumentor.h">
+      <Filter>src\Core\Debug</Filter>
+    </ClInclude>
     <ClInclude Include="src\Core\EntryPoint.h">
       <Filter>src\Core</Filter>
     </ClInclude>
@@ -96,6 +102,9 @@
     <ClInclude Include="src\Core\MouseKeyCode.h">
       <Filter>src\Core</Filter>
     </ClInclude>
+    <ClInclude Include="src\Core\OrthographicCameraController.h">
+      <Filter>src\Core</Filter>
+    </ClInclude>
     <ClInclude Include="src\Core\Rendered\Buffer.h">
       <Filter>src\Core\Rendered</Filter>
     </ClInclude>
@@ -106,6 +115,9 @@
       <Filter>src\Core\Rendered</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\Rendered\Renderer.h">
+      <Filter>src\Core\Rendered</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Rendered\Renderer2D.h">
       <Filter>src\Core\Rendered</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\Rendered\RendererAPI.h">
@@ -1434,9 +1446,6 @@
     <ClInclude Include="third_party\stb_image\stb_image.h">
       <Filter>third_party\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\OrthographicCameraController.h" />
-    <ClInclude Include="src\Core\Rendered\Renderer2D.h" />
-    <ClInclude Include="src\Core\Debug\Instrumentor.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Application.cpp">
@@ -1451,6 +1460,9 @@
     <ClCompile Include="src\Core\Log.cpp">
       <Filter>src\Core</Filter>
     </ClCompile>
+    <ClCompile Include="src\Core\OrthographicCameraController.cpp">
+      <Filter>src\Core</Filter>
+    </ClCompile>
     <ClCompile Include="src\Core\Rendered\Buffer.cpp">
       <Filter>src\Core\Rendered</Filter>
     </ClCompile>
@@ -1458,6 +1470,9 @@
       <Filter>src\Core\Rendered</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\Rendered\Renderer.cpp">
+      <Filter>src\Core\Rendered</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Rendered\Renderer2D.cpp">
       <Filter>src\Core\Rendered</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\Rendered\RendererAPI.cpp">
@@ -1514,7 +1529,5 @@
     <ClCompile Include="third_party\stb_image\stb_image.cpp">
       <Filter>third_party\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\OrthographicCameraController.cpp" />
-    <ClCompile Include="src\Core\Rendered\Renderer2D.cpp" />
   </ItemGroup>
 </Project>

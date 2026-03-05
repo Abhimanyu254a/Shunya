@@ -77,7 +77,7 @@
       <PrecompiledHeaderFile>SNY-PCH.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>SHUNYA_CORE_EXPORTS;SHUNYA_BUILD_DLL;IMGUI_DISABLE_WIN32_FUNCTIONS;GLFW_INCLUDE_NONE;Shunya_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;third_party\spdlog\include;third_party\GLFW\include;third_party\Glad\include;third_party\imGUI;third_party\glm;third_party\stb_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;third_party\spdlog\include;third_party\GLFW\include;third_party\Glad\include;third_party\imGUI;third_party\stb_image;third_party\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -99,7 +99,7 @@
       <PrecompiledHeaderFile>SNY-PCH.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>SHUNYA_CORE_EXPORTS;SHUNYA_BUILD_DLL;IMGUI_DISABLE_WIN32_FUNCTIONS;GLFW_INCLUDE_NONE;Shunya_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;third_party\spdlog\include;third_party\GLFW\include;third_party\Glad\include;third_party\imGUI;third_party\glm;third_party\stb_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;third_party\spdlog\include;third_party\GLFW\include;third_party\Glad\include;third_party\imGUI;third_party\stb_image;third_party\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -125,7 +125,7 @@
       <PrecompiledHeaderFile>SNY-PCH.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>SHUNYA_CORE_EXPORTS;SHUNYA_BUILD_DLL;IMGUI_DISABLE_WIN32_FUNCTIONS;GLFW_INCLUDE_NONE;Shunya_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;third_party\spdlog\include;third_party\GLFW\include;third_party\Glad\include;third_party\imGUI;third_party\glm;third_party\stb_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;third_party\spdlog\include;third_party\GLFW\include;third_party\Glad\include;third_party\imGUI;third_party\stb_image;third_party\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -161,12 +161,12 @@
     <ClInclude Include="src\Core\LayerStack.h" />
     <ClInclude Include="src\Core\Log.h" />
     <ClInclude Include="src\Core\MouseKeyCode.h" />
-    <ClInclude Include="src\Core\Rendered\Renderer2D.h" />
     <ClInclude Include="src\Core\OrthographicCameraController.h" />
     <ClInclude Include="src\Core\Rendered\Buffer.h" />
     <ClInclude Include="src\Core\Rendered\GraphicsContext.h" />
     <ClInclude Include="src\Core\Rendered\OrthographicCamera.h" />
     <ClInclude Include="src\Core\Rendered\Renderer.h" />
+    <ClInclude Include="src\Core\Rendered\Renderer2D.h" />
     <ClInclude Include="src\Core\Rendered\RendererAPI.h" />
     <ClInclude Include="src\Core\Rendered\RendererCommand.h" />
     <ClInclude Include="src\Core\Rendered\Shader.h" />

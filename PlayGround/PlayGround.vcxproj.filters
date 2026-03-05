@@ -12,19 +12,21 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Sandbox2D.h">
+      <Filter>src</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
     <ClCompile Include="src\PlayGround.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Sandbox2D.cpp" />
+    <ClCompile Include="src\Sandbox2D.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Shunya-Core\third_party\glm">
       <Filter>Shunya-Core\third_party</Filter>
     </None>
-    <None Include="assets\Shaders\Texture.glsl" />
-    <None Include="assets\Shaders\FlatColor.glsl" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="src\Sandbox2D.h" />
   </ItemGroup>
 </Project>

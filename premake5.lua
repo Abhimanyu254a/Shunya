@@ -19,8 +19,7 @@ IncludeDir["stb_image"] = "Shunya-Core/third_party/stb_image"
 include "Shunya-Core\\third_party\\GLFW"
 include "Shunya-Core\\third_party\\Glad"
 include "Shunya-Core\\third_party\\imGUI"
-include "Shunya-Core\\third_party\\glm"
-include "Shunya-Core\\third_party\\stb_image"
+
 
 
 
@@ -58,7 +57,8 @@ project "Shunya-Core"
         "%{IncludeDir.Glad}",
         "%{IncludeDir.imGUI}",
         "%{IncludeDir.glm}",
-        "%{IncludeDir.stb_image}"
+        "%{IncludeDir.stb_image}",
+        "%{IncludeDir.glm}"
 
     }
 
@@ -113,11 +113,16 @@ project "PlayGround"
     files{
         "%{prj.name}/src/**.h",
         "%{prj.name}/src/**.cpp",
-        "%{IncludeDir.glm}"
+        "%{IncludeDir.glm}",
     }
     includedirs{
         "%{wks.location}/Shunya-Core/third_party/spdlog/include",
-        "Shunya-Core/src"
+        "Shunya-Core/src",
+        "%{IncludeDir.glm}",
+        "%{IncludeDir.imGUI}",
+        "%{IncludeDir.GLFW}",
+        "%{IncludeDir.Glad}",
+        "%{IncludeDir.stb_image}"
     }
     
     links{
