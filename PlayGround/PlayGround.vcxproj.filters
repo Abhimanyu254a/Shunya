@@ -28,5 +28,15 @@
     <None Include="..\Shunya-Core\third_party\glm">
       <Filter>Shunya-Core\third_party</Filter>
     </None>
+    <None Include="assets\Shaders\Texture.glsl" />
+    <None Include="assets\Shaders\FlatColor.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="assets\textures\cp.png" />
+    <Image Include="assets\textures\cp1.jpg" />
+    <Image Include="assets\textures\cp2.jpg" />
+    <Image Include="assets\textures\Me.jpg" />
+    <Image Include="assets\textures\Ship.png" />
+    <Image Include="assets\textures\Triangle.png" />
   </ItemGroup>
 </Project>
