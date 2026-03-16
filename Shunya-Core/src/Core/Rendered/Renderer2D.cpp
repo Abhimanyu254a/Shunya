@@ -16,6 +16,8 @@ namespace Shunya {
 		glm::vec3 Position;
 		glm::vec2 TexCoord;
 		glm::vec4 Color;
+		float TexIndex;
+		float TilingFactor;
 
 	};
 
@@ -24,6 +26,7 @@ namespace Shunya {
 		static constexpr uint32_t MaxQuads = 10000;
 		static constexpr uint32_t MaxVertices = MaxQuads * 4;
 		static constexpr uint32_t MaxIndices = MaxQuads * 6;
+		static constexpr const uint32_t MaxTextureSlots = 32;
 
 		Ref<VertexArray> QuadVertexArray;
 		Ref<VertexBuffer> QuadVertexBuffer;
@@ -33,6 +36,10 @@ namespace Shunya {
 		uint32_t QuadIndexCount = 0;
 		QuadVertex* QuadVertexBufferBase = nullptr;
 		QuadVertex* QuadVertexBufferPtr = nullptr;
+
+		std::array<Ref<Texture2D>, MaxTextureSlots> TextureSlots;
+		uint32_t textureSlotindex = 1;
+
 
 	};
 
@@ -50,8 +57,10 @@ namespace Shunya {
 
 		s_Data.QuadVertexBuffer->SetLayout({
 				{ ShaderDataType::Float3, "a_Position" },
-				{ ShaderDataType::Float4, "a_Color" },
 				{ ShaderDataType::Float2, "a_TexCoord" },
+				{ ShaderDataType::Float4, "a_Color" },
+				{ ShaderDataType::Float, "a_TexIndex" },
+				{ ShaderDataType::Float, "a_TilingFactor" }
 			});
 
 		s_Data.QuadVertexArray->AddVertexBuffer(s_Data.QuadVertexBuffer);
@@ -81,10 +90,19 @@ namespace Shunya {
 		uint32_t whiteTextureData = 0xffffffff;
 		s_Data.WhiteTexture->SetData(&whiteTextureData, sizeof(uint32_t));
 
+		int samplers[32]; // todo :- Make this dynamic in nature
+		for (uint32_t i = 0; i < s_Data.MaxTextureSlots; i++)
+		{
+			samplers[i] = i;
+		}
+
 		s_Data.TextureShader = Shader::Create("assets/Shaders/Texture.glsl");
 
 		s_Data.TextureShader->Bind();
-		s_Data.TextureShader->SetInt("u_Texture", 0);
+		s_Data.TextureShader->SetIntArray("u_Texture", samplers, s_Data.MaxTextureSlots);
+
+		s_Data.TextureSlots[0] = s_Data.WhiteTexture;
+
 
 	}
 	void Renderer2D::Shutdown()
@@ -105,18 +123,41 @@ namespace Shunya {
 
 		s_Data.QuadIndexCount = 0;
 		s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
+
+		s_Data.textureSlotindex = 1;
+
 	}
+	//void Renderer2D::EndScene() {
+	//	SHUNYA_PROFILE_FUNCTION();
+	//	uint32_t datasize = (uint8_t*)s_Data.QuadVertexBufferPtr - (uint8_t*)s_Data.QuadVertexBufferBase;
+
+	//	s_Data.QuadVertexBuffer->SetData(s_Data.QuadVertexBufferBase, datasize);
+
+	//	Flush();
+	//}
+
 	void Renderer2D::EndScene() {
 		SHUNYA_PROFILE_FUNCTION();
-		uint32_t datasize = (uint8_t*)s_Data.QuadVertexBufferPtr - (uint8_t*)s_Data.QuadVertexBufferBase;
 
-		s_Data.QuadVertexBuffer->SetData(s_Data.QuadVertexBufferBase, datasize);
+		// Use size_t for the difference (pointer arithmetic yields ptrdiff_t/size_t on platforms)
+		size_t datasize = (uint8_t*)s_Data.QuadVertexBufferPtr - (uint8_t*)s_Data.QuadVertexBufferBase;
+
+		// Ensure the size fits into uint32_t to avoid truncation
+		SHUNYA_CORE_ASSERT(datasize <= (size_t)UINT32_MAX, "Quad vertex buffer data size exceeds 32-bit limit");
+
+		// Explicit cast to uint32_t to match VertexBuffer::SetData signature and avoid C4244
+		s_Data.QuadVertexBuffer->SetData(s_Data.QuadVertexBufferBase, static_cast<uint32_t>(datasize));
 
 		Flush();
 	}
 
 	void Renderer2D::Flush()
 	{
+		for (uint32_t i = 0; i < s_Data.textureSlotindex; i++)
+		{
+			s_Data.TextureSlots[i]->Bind(i);
+		}
+
 		RendererCommand::DrawIndexed(s_Data.QuadVertexArray,s_Data.QuadIndexCount);
 	}
 
@@ -128,24 +169,36 @@ namespace Shunya {
 	{
 		SHUNYA_PROFILE_FUNCTION();
 
+		const float texIndex = 0.0f;
+		const float tilingFactor = 1.0f;
+
 		s_Data.QuadVertexBufferPtr->Position = position;
 		s_Data.QuadVertexBufferPtr->Color = color;
 		s_Data.QuadVertexBufferPtr->TexCoord = { 0.0f,0.0f };
+		s_Data.QuadVertexBufferPtr->TexIndex = texIndex;
+		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
 		s_Data.QuadVertexBufferPtr++;
 
 		s_Data.QuadVertexBufferPtr->Position = {position.x + size.x , position.y, 0.0f};
 		s_Data.QuadVertexBufferPtr->Color = color;
 		s_Data.QuadVertexBufferPtr->TexCoord = { 1.0f,0.0f };
+		s_Data.QuadVertexBufferPtr->TexIndex = texIndex;
+		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
 		s_Data.QuadVertexBufferPtr++;
 
 		s_Data.QuadVertexBufferPtr->Position = { position.x + size.x , position.y + size.y, 0.0f };
 		s_Data.QuadVertexBufferPtr->Color = color;
 		s_Data.QuadVertexBufferPtr->TexCoord = { 1.0f,1.0f };
+		s_Data.QuadVertexBufferPtr->TexIndex = texIndex;
+		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
 		s_Data.QuadVertexBufferPtr++;
+
 
 		s_Data.QuadVertexBufferPtr->Position = { position.x  , position.y + size.y, 0.0f };
 		s_Data.QuadVertexBufferPtr->Color = color;
 		s_Data.QuadVertexBufferPtr->TexCoord = { 0.0f,1.0f };
+		s_Data.QuadVertexBufferPtr->TexIndex = texIndex;
+		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
 		s_Data.QuadVertexBufferPtr++;
 
 		s_Data.QuadIndexCount += 6;
@@ -170,18 +223,65 @@ namespace Shunya {
 	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture, float tilingFactor, const glm::vec4& tintColor)
 	{
 		SHUNYA_PROFILE_FUNCTION();
+		constexpr glm::vec4 color = { 1.0f,1.0f,1.0f,1.0f };
 
-		s_Data.TextureShader->SetFloat4("u_Color" , tintColor);
-		s_Data.TextureShader->SetFloat("u_TilingFactor" , tilingFactor);
-		texture->Bind();
-		
-		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) *
-			glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
-		s_Data.TextureShader->SetMat4("u_Transform", transform);
+		float textureIndex = 0.0f;
+
+		for (uint32_t i = 1; i < s_Data.textureSlotindex; i++) {
+			if (*s_Data.TextureSlots[i].get() == *texture.get()) {
+				textureIndex = (float)i; 
+				break;
+			}
+		}
+
+		if (textureIndex == 0.0f)
+		{
+			textureIndex = (float)s_Data.textureSlotindex;
+			s_Data.TextureSlots[s_Data.textureSlotindex] = texture;
+			s_Data.textureSlotindex++;
+		}
+
+		s_Data.QuadVertexBufferPtr->Position = position;
+		s_Data.QuadVertexBufferPtr->Color = color;
+		s_Data.QuadVertexBufferPtr->TexCoord = { 0.0f,0.0f };
+		s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
+		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
+		s_Data.QuadVertexBufferPtr++;
+
+		s_Data.QuadVertexBufferPtr->Position = { position.x + size.x , position.y, 0.0f };
+		s_Data.QuadVertexBufferPtr->Color = color;
+		s_Data.QuadVertexBufferPtr->TexCoord = { 1.0f,0.0f };
+		s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
+		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
+		s_Data.QuadVertexBufferPtr++;
+
+		s_Data.QuadVertexBufferPtr->Position = { position.x + size.x , position.y + size.y, 0.0f };
+		s_Data.QuadVertexBufferPtr->Color = color;
+		s_Data.QuadVertexBufferPtr->TexCoord = { 1.0f,1.0f };
+		s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
+		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
+		s_Data.QuadVertexBufferPtr++;
+
+		s_Data.QuadVertexBufferPtr->Position = { position.x  , position.y + size.y, 0.0f };
+		s_Data.QuadVertexBufferPtr->Color = color;
+		s_Data.QuadVertexBufferPtr->TexCoord = { 0.0f,1.0f };
+		s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;	
+		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
+		s_Data.QuadVertexBufferPtr++;
+
+		s_Data.QuadIndexCount += 6;
+
+		//s_Data.TextureShader->SetFloat4("u_Color" , tintColor);
+		//s_Data.TextureShader->SetFloat("u_TilingFactor" , tilingFactor);
+		//texture->Bind();
+		//
+		//glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) *
+		//	glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+		//s_Data.TextureShader->SetMat4("u_Transform", transform);
 
 
-		s_Data.QuadVertexArray->Bind();
-		RendererCommand::DrawIndexed(s_Data.QuadVertexArray);
+		//s_Data.QuadVertexArray->Bind();
+		//RendererCommand::DrawIndexed(s_Data.QuadVertexArray);
 
 	}
 
@@ -194,18 +294,42 @@ namespace Shunya {
 	void Renderer2D::DrawRotateQuad(const glm::vec3& position, float rotation, const glm::vec2& size, const glm::vec4& color)
 	{
 		SHUNYA_PROFILE_FUNCTION();
+		const float texIndex = 0.0f;
+		const float tilingFactor = 1.0f;
 
-		s_Data.TextureShader->SetFloat4("u_Color", color);
-		s_Data.TextureShader->SetFloat("u_TilingFactor", 1.0f);
-		s_Data.WhiteTexture->Bind();
-
-		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) 
-			* glm::rotate(glm::mat4(1.0f), rotation,{ 0.0f, 0.0f, 1.0f })
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
+			* glm::rotate(glm::mat4(1.0f), rotation, { 0.0f, 0.0f, 1.0f })
 			* glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
-		s_Data.TextureShader->SetMat4("u_Transform", transform);
 
-		s_Data.QuadVertexArray->Bind();
-		RendererCommand::DrawIndexed(s_Data.QuadVertexArray);
+		s_Data.QuadVertexBufferPtr->Position = transform * glm::vec4(-0.5f, -0.5f, 0.0f, 1.0f);
+		s_Data.QuadVertexBufferPtr->Color = color;
+		s_Data.QuadVertexBufferPtr->TexCoord = { 0.0f, 0.0f };
+		s_Data.QuadVertexBufferPtr->TexIndex = texIndex;
+		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
+		s_Data.QuadVertexBufferPtr++;
+
+		s_Data.QuadVertexBufferPtr->Position = transform * glm::vec4(0.5f, -0.5f, 0.0f, 1.0f);
+		s_Data.QuadVertexBufferPtr->Color = color;
+		s_Data.QuadVertexBufferPtr->TexCoord = { 1.0f, 0.0f };
+		s_Data.QuadVertexBufferPtr->TexIndex = texIndex;
+		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
+		s_Data.QuadVertexBufferPtr++;
+
+		s_Data.QuadVertexBufferPtr->Position = transform * glm::vec4(0.5f, 0.5f, 0.0f, 1.0f);
+		s_Data.QuadVertexBufferPtr->Color = color;
+		s_Data.QuadVertexBufferPtr->TexCoord = { 1.0f, 1.0f };
+		s_Data.QuadVertexBufferPtr->TexIndex = texIndex;
+		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
+		s_Data.QuadVertexBufferPtr++;
+
+		s_Data.QuadVertexBufferPtr->Position = transform * glm::vec4(-0.5f, 0.5f, 0.0f, 1.0f);
+		s_Data.QuadVertexBufferPtr->Color = color;
+		s_Data.QuadVertexBufferPtr->TexCoord = { 0.0f, 1.0f };
+		s_Data.QuadVertexBufferPtr->TexIndex = texIndex;
+		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
+		s_Data.QuadVertexBufferPtr++;
+
+		s_Data.QuadIndexCount += 6;
 
 	}
 
