@@ -40,7 +40,8 @@ namespace Shunya {
 
 		std::array<Ref<Texture2D>, MaxTextureSlots> TextureSlots;
 		uint32_t textureSlotindex = 1;
-
+		
+		glm::vec4 QuadVertexPosition[4];
 
 	};
 
@@ -104,6 +105,11 @@ namespace Shunya {
 
 		s_Data.TextureSlots[0] = s_Data.WhiteTexture;
 
+		s_Data.QuadVertexPosition[0] = { -0.5f, -0.5f, 0.0f,1.0f };
+		s_Data.QuadVertexPosition[1] = { 0.5f, -0.5f, 0.0f,1.0f };
+		s_Data.QuadVertexPosition[2] = { 0.5f, 0.5f, 0.0f,1.0f };
+		s_Data.QuadVertexPosition[3] = { -0.5f, 0.5f, 0.0f,1.0f };
+
 
 	}
 	void Renderer2D::Shutdown()
@@ -163,22 +169,25 @@ namespace Shunya {
 		const float texIndex = 0.0f;
 		const float tilingFactor = 1.0f;
 
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
+			* glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
 
-		s_Data.QuadVertexBufferPtr->Position = position;
+
+		s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPosition[0];
 		s_Data.QuadVertexBufferPtr->Color = color;
 		s_Data.QuadVertexBufferPtr->TexCoord = { 0.0f  ,0.0f };
 		s_Data.QuadVertexBufferPtr->TexIndex = texIndex;
 		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
 		s_Data.QuadVertexBufferPtr++;
 
-		s_Data.QuadVertexBufferPtr->Position = {position.x + size.x , position.y, 0.0f};
+		s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPosition[1];
 		s_Data.QuadVertexBufferPtr->Color = color;
 		s_Data.QuadVertexBufferPtr->TexCoord = { 1.0f ,0.0f };
 		s_Data.QuadVertexBufferPtr->TexIndex = texIndex;
 		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
 		s_Data.QuadVertexBufferPtr++;
 
-		s_Data.QuadVertexBufferPtr->Position = { position.x + size.x , position.y + size.y, 0.0f };
+		s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPosition[2];
 		s_Data.QuadVertexBufferPtr->Color = color;
 		s_Data.QuadVertexBufferPtr->TexCoord = { 1.0f ,1.0f };
 		s_Data.QuadVertexBufferPtr->TexIndex = texIndex;
@@ -186,7 +195,7 @@ namespace Shunya {
 		s_Data.QuadVertexBufferPtr++;
 
 
-		s_Data.QuadVertexBufferPtr->Position = { position.x  , position.y + size.y, 0.0f };
+		s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPosition[3];
 		s_Data.QuadVertexBufferPtr->Color = color;
 		s_Data.QuadVertexBufferPtr->TexCoord = { 0.0f ,1.0f };
 		s_Data.QuadVertexBufferPtr->TexIndex = texIndex;
@@ -233,29 +242,32 @@ namespace Shunya {
 			s_Data.TextureSlots[s_Data.textureSlotindex] = texture;
 			s_Data.textureSlotindex++;
 		}
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
+			* glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
 
-		s_Data.QuadVertexBufferPtr->Position = position;
+
+		s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPosition[0];
 		s_Data.QuadVertexBufferPtr->Color = color;
 		s_Data.QuadVertexBufferPtr->TexCoord = { 0.0f,0.0f };
 		s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
 		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
 		s_Data.QuadVertexBufferPtr++;
 
-		s_Data.QuadVertexBufferPtr->Position = { position.x + size.x , position.y, 0.0f };
+		s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPosition[1];
 		s_Data.QuadVertexBufferPtr->Color = color;
 		s_Data.QuadVertexBufferPtr->TexCoord = { 1.0f ,0.0f };
 		s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
 		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
 		s_Data.QuadVertexBufferPtr++;
 
-		s_Data.QuadVertexBufferPtr->Position = { position.x + size.x , position.y + size.y, 0.0f };
+		s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPosition[2];
 		s_Data.QuadVertexBufferPtr->Color = color;
 		s_Data.QuadVertexBufferPtr->TexCoord = { 1.0f ,1.0f };
 		s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
 		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
 		s_Data.QuadVertexBufferPtr++;
 
-		s_Data.QuadVertexBufferPtr->Position = { position.x  , position.y + size.y, 0.0f };
+		s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPosition[3];
 		s_Data.QuadVertexBufferPtr->Color = color;
 		s_Data.QuadVertexBufferPtr->TexCoord = { 0.0f ,1.0f };
 		s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;	
@@ -278,6 +290,8 @@ namespace Shunya {
 
 	}
 
+
+	 
 	void Renderer2D::DrawRotateQuad(const glm::vec2& position, float rotation, const glm::vec2& size, const glm::vec4& color)
 	{
 		DrawRotateQuad({ position.x,position.y,0.0f }, rotation, size, color);
@@ -295,28 +309,28 @@ namespace Shunya {
 			* glm::rotate(glm::mat4(1.0f), rotation, { 0.0f, 0.0f, 1.0f })
 			* glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
 
-		s_Data.QuadVertexBufferPtr->Position = transform * glm::vec4(-0.5f, -0.5f, 0.0f, 1.0f);
+		s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPosition[0];
 		s_Data.QuadVertexBufferPtr->Color = color;
 		s_Data.QuadVertexBufferPtr->TexCoord = { 0.0f , 0.0f };
 		s_Data.QuadVertexBufferPtr->TexIndex = texIndex;
 		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
 		s_Data.QuadVertexBufferPtr++;
 
-		s_Data.QuadVertexBufferPtr->Position = transform * glm::vec4(0.5f, -0.5f, 0.0f, 1.0f);
+		s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPosition[1];
 		s_Data.QuadVertexBufferPtr->Color = color;
 		s_Data.QuadVertexBufferPtr->TexCoord = { 1.0f , 0.0f };
 		s_Data.QuadVertexBufferPtr->TexIndex = texIndex;
 		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
 		s_Data.QuadVertexBufferPtr++;
 
-		s_Data.QuadVertexBufferPtr->Position = transform * glm::vec4(0.5f, 0.5f, 0.0f, 1.0f);
+		s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPosition[2];
 		s_Data.QuadVertexBufferPtr->Color = color;
 		s_Data.QuadVertexBufferPtr->TexCoord = { 1.0f , 1.0f };
 		s_Data.QuadVertexBufferPtr->TexIndex = texIndex;
 		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
 		s_Data.QuadVertexBufferPtr++;
 
-		s_Data.QuadVertexBufferPtr->Position = transform * glm::vec4(-0.5f, 0.5f, 0.0f, 1.0f);
+		s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPosition[3];
 		s_Data.QuadVertexBufferPtr->Color = color;
 		s_Data.QuadVertexBufferPtr->TexCoord = { 0.0f, 1.0f };
 		s_Data.QuadVertexBufferPtr->TexIndex = texIndex;
