@@ -32,6 +32,7 @@ void Sandbox2D::OnUpdate(Shunya::Timestamp ts)
 	SHUNYA_PROFILE_FUNCTION();
     m_CameraController.OnUpdate(ts);
 
+    Shunya::Renderer2D::ResetStats();
     {
         SHUNYA_PROFILE_SCOPE("Renderer Clear");
     
@@ -62,7 +63,6 @@ void Sandbox2D::OnUpdate(Shunya::Timestamp ts)
         { 0.2f, 0.3f, 0.8f, 1.0f }
     );
 
-    // Textured quad (with tiling if your shader supports it)
     Shunya::Renderer2D::DrawQuad(
         { -5.0f, -5.0f, -0.1f },
         { 10.0f, 10.0f },
@@ -82,17 +82,22 @@ void Sandbox2D::OnUpdate(Shunya::Timestamp ts)
     Shunya::Renderer2D::EndScene();   
 
 
-    // UPLOAD COLOR: We bind the shader and send the color from ImGui
 
-    // RENDER TRIANGLE
-    // Note: Explicitly passing Identity Matrix to avoid garbage transform
-    //Shunya::Renderer::Submit(textureShader, m_VertexArray, glm::mat4(1.0f));
     
 }
 void Sandbox2D::OnImGuiRender()
 {
 	SHUNYA_PROFILE_FUNCTION();
 	ImGui::Begin("Settings");
+
+    auto stats = Shunya::Renderer2D::GetStats();
+    ImGui::Text("Renderer2D stats :-");
+    ImGui::Text("Draw Calls %d",stats.DrawCalls);
+    ImGui::Text("Quads %d", stats.QuadCount);
+    ImGui::Text("Vertices %d",  stats.GetTotalVertexCount());
+    ImGui::Text("Index Count %d",stats.GetTotalIndexCount());
+
+
 	ImGui::ColorEdit4("Square Color", glm::value_ptr(m_SquareColor));
 
 	ImGui::End();
