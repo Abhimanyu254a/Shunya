@@ -49,6 +49,12 @@ void Sandbox2D::OnUpdate(Shunya::Timestamp ts)
     
     
     // Rotated colored quad
+    Shunya::Renderer2D::DrawRotateQuad(
+        { -1.0f, 0.0f, 0.0f },
+        glm::radians(-45.0f),
+        { 0.8f, 0.8f },
+        { 0.8f, 0.2f, 0.3f, 1.0f }
+    );
     Shunya::Renderer2D::DrawRotateQuad({ -1.0f, 0.0f, 0.0f },glm::radians(-45.0f),{ 0.8f, 0.8f } ,{ 0.8f, 0.2f, 0.3f, 1.0f });
 
     // Normal colored quad
@@ -58,6 +64,12 @@ void Sandbox2D::OnUpdate(Shunya::Timestamp ts)
         { 0.2f, 0.3f, 0.8f, 1.0f }
     );
 
+    Shunya::Renderer2D::DrawQuad(
+        { -5.0f, -5.0f, -0.1f },
+        { 10.0f, 10.0f },
+        m_Texture,
+        10.0f
+    );
     Shunya::Renderer2D::DrawQuad({ -5.0f, -5.0f, -0.1f },{ 10.0f, 10.0f },m_Texture,10.0f);
 
     // Rotated textured quad
