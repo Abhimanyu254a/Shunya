@@ -4,5 +4,5 @@ bin-int/
 *.user
 Shunya-Core/third_party/imGUI
 PlayGround/Shunya-Runtime.json
-Shunya/PlayGround/Shunya-Startup.json
+PlayGround/Shunya-Startup.json
 PlayGround/Shunya-Delete.json
