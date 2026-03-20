@@ -2,11 +2,7 @@
 bin/
 bin-int/
 *.user
-<<<<<<< HEAD
 Shunya-Core/third_party/imGUI
 PlayGround/Shunya-Runtime.json
-PlayGround/Shunya-Startup.json
+Shunya/PlayGround/Shunya-Startup.json
 PlayGround/Shunya-Delete.json
-=======
-Shunya-Core/third_party/imGUI
->>>>>>> b976cb74f4e1b51866484d1089b461092b7fbc23
