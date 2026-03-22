@@ -3,6 +3,6 @@ bin/
 bin-int/
 *.user
 Shunya-Core/third_party/imGUI
-PlayGround/Shunya-Runtime.json
-PlayGround/Shunya-Startup.json
-PlayGround/Shunya-Delete.json
+/PlayGround/Shunya-Runtime.json
+/PlayGround/Shunya-Startup.json
+/PlayGround/Shunya-Delete.json
