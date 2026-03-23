@@ -35,6 +35,7 @@ namespace Shunya
 		void PushLayer(Layer* layer);
 		void PushOverlay(Layer* Overlay);
 		void Run();
+		void Close();
 
 		inline static Application& Get() { return *s_Instance; }
 		inline Window& GetWindow() { return *m_Window; }

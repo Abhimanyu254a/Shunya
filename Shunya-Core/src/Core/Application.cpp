@@ -110,6 +110,12 @@ Application::Application()
 			m_Window->OnUpdate();
 		}
 	}
+	
+	void Application::Close() 
+	{
+		m_Running = false;
+	}
+
 
 
 	bool Application::OnWindowClose(WindowClosedEvent& e)
