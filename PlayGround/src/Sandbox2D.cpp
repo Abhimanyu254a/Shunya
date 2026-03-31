@@ -19,6 +19,11 @@ void Sandbox2D::OnAttach()
     m_Texture = Shunya::Texture2D::Create("assets/textures/cp.png");
     SHUNYA_INFO("Texture size: {0}x{1}", m_Texture->GetWidth(), m_Texture->GetHeight());
 
+    Shunya::FramebufferSpecification fbspec;
+    fbspec.Width = 1280;
+    fbspec.Height = 720;
+ 
+    m_FrameBuffer = Shunya::FrameBuffer::Create(fbspec);
     
 }
 void Sandbox2D::OnDetch()
@@ -35,6 +40,8 @@ void Sandbox2D::OnUpdate(Shunya::Timestamp ts)
     Shunya::Renderer2D::ResetStats();
     {
         SHUNYA_PROFILE_SCOPE("Renderer Clear");
+
+        m_FrameBuffer->Bind();
     
         Shunya::RendererCommand::SetClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f));
         Shunya::RendererCommand::Clear();
@@ -64,7 +71,6 @@ void Sandbox2D::OnUpdate(Shunya::Timestamp ts)
 
 
 
-    Shunya::Renderer2D::BeginScene(m_CameraController.GetCamera());
     for (float y = -5.0f; y < 5.0f; y += 0.5)
     {
         for (float x = -5.0f; x < 5.0f; x += 0.5f)
@@ -74,6 +80,7 @@ void Sandbox2D::OnUpdate(Shunya::Timestamp ts)
         }
     }
     Shunya::Renderer2D::EndScene();
+    m_FrameBuffer->UnBind() ; 
     
 }
 void Sandbox2D::OnImGuiRender()
@@ -157,6 +164,16 @@ void Sandbox2D::OnImGuiRender()
 	ImGui::ColorEdit4("Square Color", glm::value_ptr(m_SquareColor));
 
 	ImGui::End();
+    //--------------------------------------------------------------
+    // Add this in OnImGuiRender, after your Settings window
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0,0 });
+    ImGui::Begin("Viewport");
+    uint32_t textureID = m_FrameBuffer->GetColorAttachmentRendererID();
+    ImGui::Image((void*)(uint64_t)textureID,
+        ImGui::GetContentRegionAvail(),
+        ImVec2{ 0,1 }, ImVec2{ 1,0 }); // ← flipped UVs for OpenGL
+    ImGui::End();
+    ImGui::PopStyleVar();
 
 }
 void Sandbox2D::OnEvent(Shunya::Event& e)

@@ -99,9 +99,6 @@ namespace Shunya
     void imGUILayer::OnImGuiRender()
     {
         static bool show = true;
-        ImGui::Begin("ImGUI");
-        ImGui::Text("Hello World");
-        ImGui::End();
         ImGui::ShowDemoWindow();
     }
 

@@ -25,6 +25,7 @@
 #include "Core/Rendered/Renderer.h"
 #include "Core/Rendered/RendererCommand.h"
 #include "Core/Rendered/Shader.h"
+#include "Core/Rendered/FrameBuffer.h"
 #include "Core/Rendered/Texture.h"
 #include "Core/Rendered/VertexArray.h"
 

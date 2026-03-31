@@ -1446,6 +1446,8 @@
     <ClInclude Include="third_party\stb_image\stb_image.h">
       <Filter>third_party\stb_image</Filter>
     </ClInclude>
+    <ClInclude Include="src\Core\Rendered\FrameBuffer.h" />
+    <ClInclude Include="src\Core\openGL\OpenGLFrameBuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Application.cpp">
@@ -1529,5 +1531,7 @@
     <ClCompile Include="third_party\stb_image\stb_image.cpp">
       <Filter>third_party\stb_image</Filter>
     </ClCompile>
+    <ClCompile Include="src\Core\Rendered\FrameBuffer.cpp" />
+    <ClCompile Include="src\Core\openGL\OpenGLFrameBuffer.cpp" />
   </ItemGroup>
 </Project>
