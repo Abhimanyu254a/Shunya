@@ -6,6 +6,17 @@ workspace "Shunya"
     filter "system:windows"
         buildoptions { "/utf-8" }
     
+    configurations
+    {
+        "Debug",
+        "Release",
+        "Dist"
+    }
+
+    flags
+    {
+        "MultiProcessorCompile"
+    }
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
@@ -16,12 +27,13 @@ IncludeDir["imGUI"] = "Shunya-Core/third_party/imGUI"
 IncludeDir["glm"] = "Shunya-Core/third_party/glm"
 IncludeDir["stb_image"] = "Shunya-Core/third_party/stb_image"
 
-include "Shunya-Core\\third_party\\GLFW"
-include "Shunya-Core\\third_party\\Glad"
-include "Shunya-Core\\third_party\\imGUI"
+group "Dependencies"
+    include "Shunya-Core\\third_party\\GLFW"
+    include "Shunya-Core\\third_party\\Glad"
+    include "Shunya-Core\\third_party\\imGUI"
 
 
-
+group ""
 
 
 project "Shunya-Core"
@@ -104,6 +116,68 @@ project "Shunya-Core"
 
 project "PlayGround"
     location "PlayGround"
+    kind "ConsoleApp"
+    language "C++"
+
+    targetdir ("bin/" .. outputdir.. "/%{prj.name}")
+    objdir ("bin/" .. outputdir.. "/%{prj.name}")
+
+    files{
+        "%{prj.name}/src/**.h",
+        "%{prj.name}/src/**.cpp",
+        "%{IncludeDir.glm}",
+    }
+    includedirs{
+        "%{wks.location}/Shunya-Core/third_party/spdlog/include",
+        "Shunya-Core/src",
+        "%{IncludeDir.glm}",
+        "%{IncludeDir.imGUI}",
+        "%{IncludeDir.GLFW}",
+        "%{IncludeDir.Glad}",
+        "%{IncludeDir.stb_image}"
+    }
+    
+    links{
+        "Shunya-Core"
+    }
+
+    filter "system:windows"
+        cppdialect "C++latest"
+        staticruntime "On"
+        systemversion "latest"
+
+
+        defines{
+            "SHUNYA_CORE_EXPORTS" 
+        }
+        dependson { "Shunya-Core" } -- Ensure this dependency is set
+
+
+
+        -- Old code bro --
+        -- postbuildcommands{
+        --     ("{COPYFILE} %{cfg.buildtarget.relpath} ../bin/" .. outputdir.. "/PlayGround")
+        -- }
+    
+    filter "configurations:Debug" 
+        defines {"Shunya_DEBUG"}
+        buildoptions "/MDd"
+        symbols "On"
+    
+    filter "configurations:Release" 
+        defines {"Shunya_RELEASE"}
+        buildoptions "/MD"
+        optimize "On"
+    
+    filter "configurations:Dist" 
+        defines {"Shunya_DIST"}
+        buildoptions "/MD"
+        optimize "On"
+
+
+
+project "Shunya-Editor"
+    location "Shunya-Editor"
     kind "ConsoleApp"
     language "C++"
 
