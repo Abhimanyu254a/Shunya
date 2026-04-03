@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 #include "Shunya.h"
+=======
+>>>>>>> 0d5633791fe229059e6e176f1d2bf5ccdb9a4641
 #include "EditorLayer.h"
 #include <imgui.h>
 
@@ -6,17 +9,26 @@
 #include <chrono>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+<<<<<<< HEAD
 
 
 namespace Shunya
 { 
+=======
+namespace Shunya
+{
+>>>>>>> 0d5633791fe229059e6e176f1d2bf5ccdb9a4641
     EditorLayer::EditorLayer()
         : Layer("EditorLayer"), m_CameraController(1280.0f / 720.0f, true)
     {
     }
     EditorLayer::~EditorLayer()
+<<<<<<< HEAD
     {
     }
+=======
+    { }
+>>>>>>> 0d5633791fe229059e6e176f1d2bf5ccdb9a4641
 
     void EditorLayer::OnAttach() 
     {
@@ -185,4 +197,8 @@ namespace Shunya
 	    m_CameraController.OnEvent(e);
     }
 
+<<<<<<< HEAD
 }
+=======
+};
+>>>>>>> 0d5633791fe229059e6e176f1d2bf5ccdb9a4641

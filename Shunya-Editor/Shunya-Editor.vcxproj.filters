@@ -20,7 +20,11 @@
     <ClCompile Include="src\EditorLayer.cpp">
       <Filter>src</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="src\Shunya-Editor.cpp">
+=======
+    <ClCompile Include="src\ShunyaEditor.cpp">
+>>>>>>> 0d5633791fe229059e6e176f1d2bf5ccdb9a4641
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

@@ -2,6 +2,7 @@
 
 #include "Shunya.h"
 
+<<<<<<< HEAD
 struct ProfileResult
 {
 	const char* Name;
@@ -11,6 +12,11 @@ struct ProfileResult
 namespace Shunya{
 
 	class EditorLayer : public Shunya::Layer
+=======
+namespace Shunya
+{
+	class EditorLayer : public Layer
+>>>>>>> 0d5633791fe229059e6e176f1d2bf5ccdb9a4641
 	{
 	public:
 		EditorLayer();
@@ -23,7 +29,11 @@ namespace Shunya{
 		void OnEvent(Event& e) override;
 
 	private:
+<<<<<<< HEAD
 		Shunya::OrthographicCameraController m_CameraController;
+=======
+		OrthographicCameraController m_CameraController;
+>>>>>>> 0d5633791fe229059e6e176f1d2bf5ccdb9a4641
 
 		Ref<VertexArray> m_SquareVA;
 		Ref<Shader> m_FlatColorShader;
@@ -32,5 +42,8 @@ namespace Shunya{
 
 		glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f,1.0f};
 	};
+<<<<<<< HEAD
 
+=======
+>>>>>>> 0d5633791fe229059e6e176f1d2bf5ccdb9a4641
 }

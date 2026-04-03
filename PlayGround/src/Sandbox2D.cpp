@@ -18,8 +18,11 @@ void Sandbox2D::OnAttach()
 {
     m_Texture = Shunya::Texture2D::Create("assets/textures/cp.png");
     SHUNYA_INFO("Texture size: {0}x{1}", m_Texture->GetWidth(), m_Texture->GetHeight());
+<<<<<<< HEAD
 
     
+=======
+>>>>>>> 0d5633791fe229059e6e176f1d2bf5ccdb9a4641
 }
 void Sandbox2D::OnDetch()
 {
@@ -87,8 +90,12 @@ void Sandbox2D::OnImGuiRender()
     ImGui::Text("Quads %d", stats.QuadCount);
     ImGui::Text("Vertices %d",  stats.GetTotalVertexCount());
     ImGui::Text("Index Count %d",stats.GetTotalIndexCount());
+<<<<<<< HEAD
 	ImGui::ColorEdit4("Square Color", glm::value_ptr(m_SquareColor));
 	ImGui::End();
+=======
+
+>>>>>>> 0d5633791fe229059e6e176f1d2bf5ccdb9a4641
 
 }
 void Sandbox2D::OnEvent(Shunya::Event& e)
