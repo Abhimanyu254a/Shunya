@@ -35,8 +35,6 @@ group "Dependencies"
 group ""
 
 
-group ""
-
 
 project "Shunya-Core"
     location "Shunya-Core"
