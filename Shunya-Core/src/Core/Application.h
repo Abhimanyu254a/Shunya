@@ -31,11 +31,7 @@ namespace Shunya
 	class SHUNYA_API Application
 	{
 	public:
-<<<<<<< HEAD
 		Application(const std::string& name = "Shunya app");
-=======
-		Application(const std::string& name = "Shunya Engine"); 
->>>>>>> 0d5633791fe229059e6e176f1d2bf5ccdb9a4641
 		virtual ~Application();
 		void OnEvent(Event& e);
 		void PushLayer(Layer* layer);
