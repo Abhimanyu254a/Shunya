@@ -161,7 +161,6 @@
     <ClInclude Include="src\Core\LayerStack.h" />
     <ClInclude Include="src\Core\Log.h" />
     <ClInclude Include="src\Core\MouseKeyCode.h" />
-    <ClInclude Include="src\Core\openGL\OpenGLFrameBuffer.h" />
     <ClInclude Include="src\Core\OrthographicCameraController.h" />
     <ClInclude Include="src\Core\Rendered\Buffer.h" />
     <ClInclude Include="src\Core\Rendered\FrameBuffer.h" />
@@ -181,6 +180,7 @@
     <ClInclude Include="src\Core\imGui\imguiLayer.h" />
     <ClInclude Include="src\Core\input.h" />
     <ClInclude Include="src\Core\openGL\OpenGLContext.h" />
+    <ClInclude Include="src\Core\openGL\OpenGLFrameBuffer.h" />
     <ClInclude Include="src\Core\openGL\OpenGLShader.h" />
     <ClInclude Include="src\Core\openGL\OpenGLTexture.h" />
     <ClInclude Include="src\Core\openGL\OpenGLVertexArray.h" />
@@ -617,7 +617,6 @@
     <ClCompile Include="src\Core\Layer.cpp" />
     <ClCompile Include="src\Core\LayerStack.cpp" />
     <ClCompile Include="src\Core\Log.cpp" />
-    <ClCompile Include="src\Core\openGL\OpenGLFrameBuffer.cpp" />
     <ClCompile Include="src\Core\OrthographicCameraController.cpp" />
     <ClCompile Include="src\Core\Rendered\Buffer.cpp" />
     <ClCompile Include="src\Core\Rendered\FrameBuffer.cpp" />
@@ -633,6 +632,7 @@
     <ClCompile Include="src\Core\WindowsInput.cpp" />
     <ClCompile Include="src\Core\imGui\imguiLayer.cpp" />
     <ClCompile Include="src\Core\openGL\OpenGLContext.cpp" />
+    <ClCompile Include="src\Core\openGL\OpenGLFrameBuffer.cpp" />
     <ClCompile Include="src\Core\openGL\OpenGLShader.cpp" />
     <ClCompile Include="src\Core\openGL\OpenGLTexture.cpp" />
     <ClCompile Include="src\Core\openGL\OpenGLVertexArray.cpp" />

@@ -6,6 +6,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PlayGround", "PlayGround\Pl
 		{13AFCCD5-7F64-45CB-0859-3FA2740D3CCF} = {13AFCCD5-7F64-45CB-0859-3FA2740D3CCF}
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dependencies", "Dependencies", "{53E47842-3FC8-3998-A828-34EB942B241A}"
+EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GLFW", "Shunya-Core\third_party\GLFW\GLFW.vcxproj", "{154B857C-0182-860D-AA6E-6C109684020F}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Glad", "Shunya-Core\third_party\Glad\Glad.vcxproj", "{BDD6857C-A90D-870D-52FA-6C103E10030F}"
@@ -13,6 +15,11 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ImGui", "Shunya-Core\third_party\imGUI\ImGui.vcxproj", "{C0FF640D-2C14-8DBE-F595-301E616989EF}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Shunya-Core", "Shunya-Core\Shunya-Core.vcxproj", "{13AFCCD5-7F64-45CB-0859-3FA2740D3CCF}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Shunya-Editor", "Shunya-Editor\Shunya-Editor.vcxproj", "{B162937F-1D23-0FB6-E65D-583352DD5392}"
+	ProjectSection(ProjectDependencies) = postProject
+		{13AFCCD5-7F64-45CB-0859-3FA2740D3CCF} = {13AFCCD5-7F64-45CB-0859-3FA2740D3CCF}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,8 +58,19 @@ Global
 		{13AFCCD5-7F64-45CB-0859-3FA2740D3CCF}.dist|x64.Build.0 = dist|x64
 		{13AFCCD5-7F64-45CB-0859-3FA2740D3CCF}.Release|x64.ActiveCfg = Release|x64
 		{13AFCCD5-7F64-45CB-0859-3FA2740D3CCF}.Release|x64.Build.0 = Release|x64
+		{B162937F-1D23-0FB6-E65D-583352DD5392}.Debug|x64.ActiveCfg = Debug|x64
+		{B162937F-1D23-0FB6-E65D-583352DD5392}.Debug|x64.Build.0 = Debug|x64
+		{B162937F-1D23-0FB6-E65D-583352DD5392}.dist|x64.ActiveCfg = dist|x64
+		{B162937F-1D23-0FB6-E65D-583352DD5392}.dist|x64.Build.0 = dist|x64
+		{B162937F-1D23-0FB6-E65D-583352DD5392}.Release|x64.ActiveCfg = Release|x64
+		{B162937F-1D23-0FB6-E65D-583352DD5392}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{154B857C-0182-860D-AA6E-6C109684020F} = {53E47842-3FC8-3998-A828-34EB942B241A}
+		{BDD6857C-A90D-870D-52FA-6C103E10030F} = {53E47842-3FC8-3998-A828-34EB942B241A}
+		{C0FF640D-2C14-8DBE-F595-301E616989EF} = {53E47842-3FC8-3998-A828-34EB942B241A}
 	EndGlobalSection
 EndGlobal

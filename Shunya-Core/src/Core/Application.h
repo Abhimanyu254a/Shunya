@@ -24,12 +24,14 @@
 
 #include "Core/Kernal/TimeStep.h"
 
+int main(int argc, char** argv);
+
 namespace Shunya
 {
 	class SHUNYA_API Application
 	{
 	public:
-		Application();
+		Application(const std::string& name = "Shunya app");
 		virtual ~Application();
 		void OnEvent(Event& e);
 		void PushLayer(Layer* layer);

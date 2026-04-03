@@ -108,6 +108,9 @@
     <ClInclude Include="src\Core\Rendered\Buffer.h">
       <Filter>src\Core\Rendered</Filter>
     </ClInclude>
+    <ClInclude Include="src\Core\Rendered\FrameBuffer.h">
+      <Filter>src\Core\Rendered</Filter>
+    </ClInclude>
     <ClInclude Include="src\Core\Rendered\GraphicsContext.h">
       <Filter>src\Core\Rendered</Filter>
     </ClInclude>
@@ -154,6 +157,9 @@
       <Filter>src\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\openGL\OpenGLContext.h">
+      <Filter>src\Core\openGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\openGL\OpenGLFrameBuffer.h">
       <Filter>src\Core\openGL</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\openGL\OpenGLShader.h">
@@ -1446,8 +1452,6 @@
     <ClInclude Include="third_party\stb_image\stb_image.h">
       <Filter>third_party\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\Rendered\FrameBuffer.h" />
-    <ClInclude Include="src\Core\openGL\OpenGLFrameBuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Application.cpp">
@@ -1466,6 +1470,9 @@
       <Filter>src\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\Rendered\Buffer.cpp">
+      <Filter>src\Core\Rendered</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Rendered\FrameBuffer.cpp">
       <Filter>src\Core\Rendered</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\Rendered\OrthographicCamera.cpp">
@@ -1504,6 +1511,9 @@
     <ClCompile Include="src\Core\openGL\OpenGLContext.cpp">
       <Filter>src\Core\openGL</Filter>
     </ClCompile>
+    <ClCompile Include="src\Core\openGL\OpenGLFrameBuffer.cpp">
+      <Filter>src\Core\openGL</Filter>
+    </ClCompile>
     <ClCompile Include="src\Core\openGL\OpenGLShader.cpp">
       <Filter>src\Core\openGL</Filter>
     </ClCompile>
@@ -1531,7 +1541,5 @@
     <ClCompile Include="third_party\stb_image\stb_image.cpp">
       <Filter>third_party\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\Rendered\FrameBuffer.cpp" />
-    <ClCompile Include="src\Core\openGL\OpenGLFrameBuffer.cpp" />
   </ItemGroup>
 </Project>
