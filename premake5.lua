@@ -31,11 +31,8 @@ group "Dependencies"
     include "Shunya-Core\\third_party\\GLFW"
     include "Shunya-Core\\third_party\\Glad"
     include "Shunya-Core\\third_party\\imGUI"
-<<<<<<< HEAD
 
 group ""
-=======
->>>>>>> 0d5633791fe229059e6e176f1d2bf5ccdb9a4641
 
 
 group ""
