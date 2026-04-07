@@ -73,7 +73,6 @@ namespace Shunya
 void OpenGLVertexArray::AddVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer)
 {
 	SHUNYA_PROFILE_FUNCTION();
-    SHUNYA_CORE_ASSERT(vertexBuffer->GetLayout().GetElements().size(), "Vertex Buffer has no layout!");
 
     glBindVertexArray(m_RendererID);
     vertexBuffer->Bind();

@@ -144,9 +144,6 @@
     <ClInclude Include="src\Core\WindowMaker.h">
       <Filter>src\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\WindowsInput.h">
-      <Filter>src\Core</Filter>
-    </ClInclude>
     <ClInclude Include="src\Core\imGui\imGuiBuild.h">
       <Filter>src\Core\imGui</Filter>
     </ClInclude>

@@ -67,6 +67,18 @@ namespace Shunya
         ImGui::DestroyContext();
     }
 
+    void imGUILayer::OnEvent(Event& e)
+    {
+        if (m_BlockEvents)
+        {
+            ImGuiIO& io = ImGui::GetIO();
+            e.Handled |= e.IsInCategory(EventCategoryMouse) & io.WantCaptureMouse;
+            e.Handled |= e.IsInCategory(EventCategoryKeyboard) & io.WantCaptureKeyboard;
+        }
+    }
+
+
+
     void imGUILayer::Begin()
     {
         ImGui_ImplOpenGL3_NewFrame();

@@ -1,22 +1,10 @@
 workspace "Shunya"
-
     architecture "x64"
-    startproject "PlayGround"
-    configurations {"Debug","Release","dist"}
+    startproject "Shunya-Editor" -- Start with the Editor
+    configurations { "Debug", "Release", "Dist" }
+    
     filter "system:windows"
         buildoptions { "/utf-8" }
-    
-    configurations
-    {
-        "Debug",
-        "Release",
-        "Dist"
-    }
-
-    flags
-    {
-        "MultiProcessorCompile"
-    }
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
@@ -28,28 +16,25 @@ IncludeDir["glm"] = "Shunya-Core/third_party/glm"
 IncludeDir["stb_image"] = "Shunya-Core/third_party/stb_image"
 
 group "Dependencies"
-    include "Shunya-Core\\third_party\\GLFW"
-    include "Shunya-Core\\third_party\\Glad"
-    include "Shunya-Core\\third_party\\imGUI"
-
+    include "Shunya-Core/third_party/GLFW"
+    include "Shunya-Core/third_party/Glad"
+    include "Shunya-Core/third_party/imGUI"
 group ""
-
-
 
 project "Shunya-Core"
     location "Shunya-Core"
     kind "StaticLib"
     language "C++"
     cppdialect "C++latest"
-    staticruntime "on"
+    staticruntime "off" -- Switch to Dynamic to match /MDd
 
-    targetdir ("bin/" .. outputdir.. "/%{prj.name}")
-    objdir ("bin/" .. outputdir.. "/%{prj.name}")
+    targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+    objdir ("bin/" .. outputdir .. "/%{prj.name}")
 
     pchheader "SNY-PCH.h"
     pchsource "Shunya-Core/src/SNY-PCH.cpp"
 
-    files{
+    files {
         "%{prj.name}/src/**.h",
         "%{prj.name}/src/**.cpp",
         "%{prj.name}/third_party/glm/**.hpp",
@@ -60,178 +45,76 @@ project "Shunya-Core"
         "%{prj.name}/third_party/imGUI/examples/imgui_impl_glfw.cpp",
         "%{prj.name}/third_party/imGUI/examples/imgui_impl_opengl3.cpp",
         "%{prj.name}/third_party/imGUI/examples/imgui_impl_opengl3.h"
-
     }
-    includedirs{
+
+    includedirs {
         "%{prj.name}/src",
         "%{prj.name}/third_party/spdlog/include",
         "%{IncludeDir.GLFW}",
         "%{IncludeDir.Glad}",
         "%{IncludeDir.imGUI}",
         "%{IncludeDir.glm}",
-        "%{IncludeDir.stb_image}",
-        "%{IncludeDir.glm}"
-
-    }
-
-    links{
-        "GLFW",
-        "Glad",
-        "imGUI",
-        "opengl32.lib"
-    }
-
-    filter "system:windows"
-
-        staticruntime "On"
-        systemversion "latest"
-
-        defines{
-            "SHUNYA_CORE_EXPORTS", 
-            "SHUNYA_BUILD_DLL",
-            "IMGUI_DISABLE_WIN32_FUNCTIONS",
-            "GLFW_INCLUDE_NONE"
-        }
-
-        -- postbuildcommands{
-        --     ("{COPYFILE} %{cfg.buildtarget.relpath} ../bin/" .. outputdir.. "/PlayGround")
-        --     --("copy /B /Y ..\\bin\\" .. outputdir .. "\\Shunya-Core\\Shunya-Core.dll ..\\bin\\" .. outputdir .. "\\PlayGround\\ > nul")
-        --     --("{COPYDIR} \"%{wks.location}/bin/%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}/Shunya-Core/Shunya-Core.dll\" \"%{cfg.targetdir}\"")
-        -- }
-    
-    filter "configurations:Debug" 
-        defines {"Shunya_DEBUG"}
-        buildoptions "/MDd"
-        symbols "On"
-    
-    filter "configurations:Release" 
-        defines {"Shunya_RELEASE"}
-        buildoptions "/MD"
-        optimize "On"
-    
-    filter "configurations:Dist" 
-        defines {"Shunya_DIST"}
-        buildoptions "/MD"
-        optimize "On"
-
-project "PlayGround"
-    location "PlayGround"
-    kind "ConsoleApp"
-    language "C++"
-
-    targetdir ("bin/" .. outputdir.. "/%{prj.name}")
-    objdir ("bin/" .. outputdir.. "/%{prj.name}")
-
-    files{
-        "%{prj.name}/src/**.h",
-        "%{prj.name}/src/**.cpp",
-        "%{IncludeDir.glm}",
-    }
-    includedirs{
-        "%{wks.location}/Shunya-Core/third_party/spdlog/include",
-        "Shunya-Core/src",
-        "%{IncludeDir.glm}",
-        "%{IncludeDir.imGUI}",
-        "%{IncludeDir.GLFW}",
-        "%{IncludeDir.Glad}",
         "%{IncludeDir.stb_image}"
     }
-    
-    links{
-        "Shunya-Core"
-    }
+
+    links { "GLFW", "Glad", "imGUI", "opengl32.lib" }
 
     filter "system:windows"
-        cppdialect "C++latest"
-        staticruntime "On"
         systemversion "latest"
+        defines { "SHUNYA_CORE_EXPORTS", "IMGUI_DISABLE_WIN32_FUNCTIONS", "GLFW_INCLUDE_NONE" }
 
-
-        defines{
-            "SHUNYA_CORE_EXPORTS" 
-        }
-        dependson { "Shunya-Core" } -- Ensure this dependency is set
-
-
-
-        -- Old code bro --
-        -- postbuildcommands{
-        --     ("{COPYFILE} %{cfg.buildtarget.relpath} ../bin/" .. outputdir.. "/PlayGround")
-        -- }
-    
-    filter "configurations:Debug" 
-        defines {"Shunya_DEBUG"}
-        buildoptions "/MDd"
+    filter "configurations:Debug"
+        defines { "SHUNYA_DEBUG" }
+        runtime "Debug" -- This replaces manual /MDd
         symbols "On"
-    
-    filter "configurations:Release" 
-        defines {"Shunya_RELEASE"}
-        buildoptions "/MD"
-        optimize "On"
-    
-    filter "configurations:Dist" 
-        defines {"Shunya_DIST"}
-        buildoptions "/MD"
+
+    filter "configurations:Release"
+        defines { "SHUNYA_RELEASE" }
+        runtime "Release" -- This replaces manual /MD
         optimize "On"
 
+    filter "configurations:Dist"
+        defines { "SHUNYA_DIST" }
+        runtime "Release"
+        optimize "On"
 
-
-project "Shunya-Editor"
-    location "Shunya-Editor"
-    kind "ConsoleApp"
-    language "C++"
-
-    targetdir ("bin/" .. outputdir.. "/%{prj.name}")
-    objdir ("bin/" .. outputdir.. "/%{prj.name}")
-
-    files{
-        "%{prj.name}/src/**.h",
-        "%{prj.name}/src/**.cpp",
-        "%{IncludeDir.glm}",
-    }
-    includedirs{
-        "%{wks.location}/Shunya-Core/third_party/spdlog/include",
-        "Shunya-Core/src",
-        "%{IncludeDir.glm}",
-        "%{IncludeDir.imGUI}",
-        "%{IncludeDir.GLFW}",
-        "%{IncludeDir.Glad}",
-        "%{IncludeDir.stb_image}"
-    }
-    
-    links{
-        "Shunya-Core"
-    }
-
-    filter "system:windows"
+-- Client Template Function
+function CreateClientProject(name)
+    project (name)
+        location (name)
+        kind "ConsoleApp"
+        language "C++"
         cppdialect "C++latest"
-        staticruntime "On"
-        systemversion "latest"
+        staticruntime "off"
 
+        targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+        objdir ("bin/" .. outputdir .. "/%{prj.name}")
 
-        defines{
-            "SHUNYA_CORE_EXPORTS" 
+        files { "%{prj.name}/src/**.h", "%{prj.name}/src/**.cpp" }
+        includedirs {
+            "Shunya-Core/src",
+            "Shunya-Core/third_party/spdlog/include",
+            "%{IncludeDir.glm}",
+            "%{IncludeDir.imGUI}",
+            "%{IncludeDir.GLFW}",
+            "%{IncludeDir.Glad}",
+            "%{IncludeDir.stb_image}"
         }
-        dependson { "Shunya-Core" } -- Ensure this dependency is set
+        links { "Shunya-Core" }
 
+        filter "system:windows"
+            systemversion "latest"
 
+        filter "configurations:Debug"
+            defines { "SHUNYA_DEBUG" }
+            runtime "Debug"
+            symbols "On"
 
-        -- Old code bro --
-        -- postbuildcommands{
-        --     ("{COPYFILE} %{cfg.buildtarget.relpath} ../bin/" .. outputdir.. "/PlayGround")
-        -- }
-    
-    filter "configurations:Debug" 
-        defines {"Shunya_DEBUG"}
-        buildoptions "/MDd"
-        symbols "On"
-    
-    filter "configurations:Release" 
-        defines {"Shunya_RELEASE"}
-        buildoptions "/MD"
-        optimize "On"
-    
-    filter "configurations:Dist" 
-        defines {"Shunya_DIST"}
-        buildoptions "/MD"
-        optimize "On"
+        filter "configurations:Release"
+            defines { "SHUNYA_RELEASE" }
+            runtime "Release"
+            optimize "On"
+end
+
+CreateClientProject("PlayGround")
+CreateClientProject("Shunya-Editor")

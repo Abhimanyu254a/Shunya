@@ -23,13 +23,5 @@
     <ClCompile Include="src\Shunya-Editor.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\ShunyaEditor.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\Shunya-Core\third_party\glm">
-      <Filter>Shunya-Core\third_party</Filter>
-    </None>
   </ItemGroup>
 </Project>

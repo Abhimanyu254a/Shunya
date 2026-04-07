@@ -40,6 +40,9 @@ namespace Shunya
 		void Close();
 
 		inline static Application& Get() { return *s_Instance; }
+		
+		imGUILayer* GetImGuiLayer() { return m_ImGuiLayer; }
+
 		inline Window& GetWindow() { return *m_Window; }
 
 	private:

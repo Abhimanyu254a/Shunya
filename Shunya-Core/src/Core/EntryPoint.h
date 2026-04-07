@@ -2,7 +2,6 @@
 
 
 
-#ifdef SHUNYA_CORE_EXPORTS
 
 extern Shunya::Application* Shunya::CreateApplication();
 
@@ -24,4 +23,4 @@ int main(int argc, char** argv)
 	SHUNYA_PROFILE_END_SESSION();
 	return 0;
 }
-#endif
+

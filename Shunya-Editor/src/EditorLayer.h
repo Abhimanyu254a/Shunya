@@ -29,6 +29,8 @@ namespace Shunya{
 		Ref<Shader> m_FlatColorShader;
 		Ref<FrameBuffer> m_FrameBuffer;
 		Ref<Texture2D> m_Texture;
+		bool m_ViewportFocused = false;
+		bool m_ViewportHovered = false;
 
 		glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f,1.0f};
 	};

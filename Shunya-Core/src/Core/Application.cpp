@@ -30,7 +30,7 @@ Application::Application(const std::string& name)
 
 	m_Window = std::unique_ptr<Window>(Window::Create(WindowProps(name)));
 	m_Window->SetEventCallback(BIND_FUN(OnEvent));
-	/*m_Window->SetVSync(false);*/  // to set up the frame rate with the respect of the Screen
+	m_Window->SetVSync(false);  // to set up the frame rate with the respect of the Screen
 
 	Renderer::Init();
 

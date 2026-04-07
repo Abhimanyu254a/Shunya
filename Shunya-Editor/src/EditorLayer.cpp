@@ -39,7 +39,7 @@ namespace Shunya
     void EditorLayer::OnUpdate(Shunya::Timestamp ts)
     {
 	    SHUNYA_PROFILE_FUNCTION();
-        m_CameraController.OnUpdate(ts);
+        if(m_ViewportFocused) m_CameraController.OnUpdate(ts);
 
         Shunya::Renderer2D::ResetStats();
         {
@@ -71,7 +71,6 @@ namespace Shunya
 
         // Rotated textured quad
         Shunya::Renderer2D::DrawRotateQuad({ 0.0f, 0.0f, 0.0f },rotation,{ 1.0f, 1.0f },m_Texture,20.0f,glm::vec4(1.0f));
-        Shunya::Renderer2D::EndScene();   
 
 
 
@@ -168,10 +167,12 @@ namespace Shunya
 	    ImGui::ColorEdit4("Square Color", glm::value_ptr(m_SquareColor));
 
 	    ImGui::End();
-        //--------------------------------------------------------------
-        // Add this in OnImGuiRender, after your Settings window
+
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0,0 });
         ImGui::Begin("Viewport");
+        m_ViewportFocused = ImGui::IsWindowFocused();
+        m_ViewportHovered = ImGui::IsWindowHovered();
+		Application::Get().GetImGuiLayer()->SetBlockEvents(!m_ViewportFocused && !m_ViewportHovered);
         uint32_t textureID = m_FrameBuffer->GetColorAttachmentRendererID();
         ImGui::Image((void*)(uint64_t)textureID,
             ImGui::GetContentRegionAvail(),
