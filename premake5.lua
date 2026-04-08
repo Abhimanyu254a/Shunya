@@ -14,6 +14,7 @@ IncludeDir["Glad"] = "Shunya-Core/third_party/Glad/include"
 IncludeDir["imGUI"] = "Shunya-Core/third_party/imGUI"
 IncludeDir["glm"] = "Shunya-Core/third_party/glm"
 IncludeDir["stb_image"] = "Shunya-Core/third_party/stb_image"
+IncludeDir["entt"] = "Shunya-Core/third_party/entt/include"
 
 group "Dependencies"
     include "Shunya-Core/third_party/GLFW"
@@ -54,7 +55,8 @@ project "Shunya-Core"
         "%{IncludeDir.Glad}",
         "%{IncludeDir.imGUI}",
         "%{IncludeDir.glm}",
-        "%{IncludeDir.stb_image}"
+        "%{IncludeDir.stb_image}",
+        "%{IncludeDir.entt}"
     }
 
     links { "GLFW", "Glad", "imGUI", "opengl32.lib" }
@@ -98,7 +100,8 @@ function CreateClientProject(name)
             "%{IncludeDir.imGUI}",
             "%{IncludeDir.GLFW}",
             "%{IncludeDir.Glad}",
-            "%{IncludeDir.stb_image}"
+            "%{IncludeDir.stb_image}",
+            "%{IncludeDir.entt}"
         }
         links { "Shunya-Core" }
 

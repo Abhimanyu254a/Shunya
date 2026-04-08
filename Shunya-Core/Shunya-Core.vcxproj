@@ -77,7 +77,7 @@
       <PrecompiledHeaderFile>SNY-PCH.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>SHUNYA_CORE_EXPORTS;IMGUI_DISABLE_WIN32_FUNCTIONS;GLFW_INCLUDE_NONE;SHUNYA_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;third_party\spdlog\include;third_party\GLFW\include;third_party\Glad\include;third_party\imGUI;third_party\glm;third_party\stb_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;third_party\spdlog\include;third_party\GLFW\include;third_party\Glad\include;third_party\imGUI;third_party\glm;third_party\stb_image;third_party\entt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -99,7 +99,7 @@
       <PrecompiledHeaderFile>SNY-PCH.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>SHUNYA_CORE_EXPORTS;IMGUI_DISABLE_WIN32_FUNCTIONS;GLFW_INCLUDE_NONE;SHUNYA_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;third_party\spdlog\include;third_party\GLFW\include;third_party\Glad\include;third_party\imGUI;third_party\glm;third_party\stb_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;third_party\spdlog\include;third_party\GLFW\include;third_party\Glad\include;third_party\imGUI;third_party\glm;third_party\stb_image;third_party\entt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -125,7 +125,7 @@
       <PrecompiledHeaderFile>SNY-PCH.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>SHUNYA_CORE_EXPORTS;IMGUI_DISABLE_WIN32_FUNCTIONS;GLFW_INCLUDE_NONE;SHUNYA_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;third_party\spdlog\include;third_party\GLFW\include;third_party\Glad\include;third_party\imGUI;third_party\glm;third_party\stb_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;third_party\spdlog\include;third_party\GLFW\include;third_party\Glad\include;third_party\imGUI;third_party\glm;third_party\stb_image;third_party\entt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -173,6 +173,7 @@
     <ClInclude Include="src\Core\Rendered\Shader.h" />
     <ClInclude Include="src\Core\Rendered\Texture.h" />
     <ClInclude Include="src\Core\Rendered\VertexArray.h" />
+    <ClInclude Include="src\Core\Scene\Scene.h" />
     <ClInclude Include="src\Core\Window.h" />
     <ClInclude Include="src\Core\WindowMaker.h" />
     <ClInclude Include="src\Core\imGui\imGuiBuild.h" />
@@ -627,6 +628,7 @@
     <ClCompile Include="src\Core\Rendered\Shader.cpp" />
     <ClCompile Include="src\Core\Rendered\Texture.cpp" />
     <ClCompile Include="src\Core\Rendered\VertexArray.cpp" />
+    <ClCompile Include="src\Core\Scene\Scene.cpp" />
     <ClCompile Include="src\Core\WindowMaker.cpp" />
     <ClCompile Include="src\Core\WindowsInput.cpp" />
     <ClCompile Include="src\Core\imGui\imguiLayer.cpp" />
