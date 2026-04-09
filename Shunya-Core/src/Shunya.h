@@ -16,6 +16,10 @@
 #include "Core/KeyCode.h"
 #include "Core/OrthographicCameraController.h"
 
+#include "Core/Scene/Scene.h"
+#include "Core/Scene/Entity.h"
+#include "Core/Scene/Components.h"
+
 //-------------Renderer-------------------------
 #include "Core/Rendered/Buffer.h"
 #include "Core/Rendered/Renderer2D.h"

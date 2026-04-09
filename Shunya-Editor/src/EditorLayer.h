@@ -28,6 +28,10 @@ namespace Shunya{
 		Ref<VertexArray> m_SquareVA;
 		Ref<Shader> m_FlatColorShader;
 		Ref<FrameBuffer> m_FrameBuffer;
+		
+		Ref<Scene> m_ActiveScene = std::make_shared<Scene>();
+		Entity m_SquareEntity;
+
 		Ref<Texture2D> m_Texture;
 		bool m_ViewportFocused = false;
 		bool m_ViewportHovered = false;

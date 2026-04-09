@@ -6,7 +6,7 @@
 #include <chrono>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-
+#include "Core/Scene/Entity.h"
 
 namespace Shunya
 { 
@@ -28,6 +28,11 @@ namespace Shunya
         fbspec.Height = 720;
  
         m_FrameBuffer = Shunya::FrameBuffer::Create(fbspec);
+
+        m_ActiveScene = std::make_shared<Scene>();
+        Entity square = m_ActiveScene->CreateEntity("Square");
+        square.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.2f, 0.3f, 0.8f, 1.0f });
+        m_SquareEntity = square;
     
     }
     void EditorLayer::OnDetch()
@@ -38,54 +43,25 @@ namespace Shunya
 
     void EditorLayer::OnUpdate(Shunya::Timestamp ts)
     {
-	    SHUNYA_PROFILE_FUNCTION();
-        if(m_ViewportFocused) m_CameraController.OnUpdate(ts);
+        if (m_ViewportFocused) m_CameraController.OnUpdate(ts);
 
-        Shunya::Renderer2D::ResetStats();
-        {
-            SHUNYA_PROFILE_SCOPE("Renderer Clear");
+        // 1. Bind framebuffer FIRST
+        m_FrameBuffer->Bind();
+        RendererCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
+        RendererCommand::Clear();
 
-            m_FrameBuffer->Bind();
-    
-            Shunya::RendererCommand::SetClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f));
-            Shunya::RendererCommand::Clear();
+        // 2. Begin scene
+        Renderer2D::ResetStats();
+        Renderer2D::BeginScene(m_CameraController.GetCamera());
 
-        }
-    
+        // 3. THEN update scene (draws happen here)
+        m_ActiveScene->OnUpdate(ts);
 
-        Shunya::Renderer2D::BeginScene(m_CameraController.GetCamera());
-
-        static float rotation = 0.0f;
-        rotation += ts.GetSeconds() * 1.0f;
-    
-    
-        // Rotated colored quad
-        Shunya::Renderer2D::DrawRotateQuad({ -1.0f, 0.0f, 0.0f },glm::radians(-45.0f),{ 0.8f, 0.8f },{ 0.8f, 0.2f, 0.3f, 1.0f });
-        Shunya::Renderer2D::DrawRotateQuad({ -1.0f, 0.0f, 0.0f },glm::radians(-45.0f),{ 0.8f, 0.8f } ,{ 0.8f, 0.2f, 0.3f, 1.0f });
-
-        // Normal colored quad
-        Shunya::Renderer2D::DrawQuad({ 0.5f, -0.5f, 0.0f },{ 0.5f, 0.75f },{ 0.2f, 0.3f, 0.8f, 1.0f });
-
-        Shunya::Renderer2D::DrawQuad({ -5.0f, -5.0f, -0.1f },{ 10.0f, 10.0f },m_Texture,10.0f);
-        Shunya::Renderer2D::DrawQuad({ -5.0f, -5.0f, -0.1f },{ 10.0f, 10.0f },m_Texture,10.0f);
-
-        // Rotated textured quad
-        Shunya::Renderer2D::DrawRotateQuad({ 0.0f, 0.0f, 0.0f },rotation,{ 1.0f, 1.0f },m_Texture,20.0f,glm::vec4(1.0f));
-
-
-
-        for (float y = -5.0f; y < 5.0f; y += 0.5)
-        {
-            for (float x = -5.0f; x < 5.0f; x += 0.5f)
-            {
-                glm::vec4 color = { (x + 5.0f) / 10.0f,0.4f,(y + 5.0f) / 10.0f,1.0f };
-                Shunya::Renderer2D::DrawQuad({x, y}, { 0.45f,0.45f }, color);
-            }
-        }
-        Shunya::Renderer2D::EndScene();
-        m_FrameBuffer->UnBind() ; 
-    
+        // 4. End scene and unbind
+        Renderer2D::EndScene();
+        m_FrameBuffer->UnBind();
     }
+
     void EditorLayer::OnImGuiRender()
     {
 	    SHUNYA_PROFILE_FUNCTION();
@@ -163,9 +139,9 @@ namespace Shunya
         ImGui::Text("Vertices %d",  stats.GetTotalVertexCount());
         ImGui::Text("Index Count %d",stats.GetTotalIndexCount());
 
-
-	    ImGui::ColorEdit4("Square Color", glm::value_ptr(m_SquareColor));
-
+        auto& squareColor = m_SquareEntity.GetComponent<SpriteRendererComponent>().Color;
+        ImGui::ColorEdit4("Square Color", glm::value_ptr(squareColor));
+	    
 	    ImGui::End();
 
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0,0 });

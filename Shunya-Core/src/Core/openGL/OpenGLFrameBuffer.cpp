@@ -14,28 +14,32 @@ namespace Shunya {
 	{
 		glDeleteFramebuffers(1, &m_RendererID);
 	}
-	void OpenGLFrambuffer::Invalidate()
-	{
-		glCreateFramebuffers(1, &m_RendererID);
-		glBindFramebuffer(GL_FRAMEBUFFER, m_RendererID);
+    void OpenGLFrambuffer::Invalidate()
+    {
+        glCreateFramebuffers(1, &m_RendererID);
 
-		glCreateTextures(GL_TEXTURE_2D, 1, &m_ColorAttachement);
-		glBindTexture(GL_TEXTURE_2D, m_ColorAttachement);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, m_Specification.Width, m_Specification.Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        // ✅ Color attachment — pure DSA
+        glCreateTextures(GL_TEXTURE_2D, 1, &m_ColorAttachement);
+        glTextureStorage2D(m_ColorAttachement, 1, GL_RGBA8,
+            m_Specification.Width, m_Specification.Height);
+        glTextureParameteri(m_ColorAttachement, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTextureParameteri(m_ColorAttachement, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glNamedFramebufferTexture(m_RendererID, GL_COLOR_ATTACHMENT0,
+            m_ColorAttachement, 0);
 
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_ColorAttachement, 0);
+        // ✅ Depth attachment — pure DSA
+        glCreateTextures(GL_TEXTURE_2D, 1, &m_DepthAttachment);
+        glTextureStorage2D(m_DepthAttachment, 1, GL_DEPTH24_STENCIL8,
+            m_Specification.Width, m_Specification.Height);
+        glNamedFramebufferTexture(m_RendererID, GL_DEPTH_STENCIL_ATTACHMENT,
+            m_DepthAttachment, 0);
 
-		glCreateTextures(GL_TEXTURE_2D, 1, &m_DepthAttachment);
-		glBindTexture(GL_TEXTURE_2D, m_DepthAttachment);
-		//glTexStorage2D(GL_TEXTURE_2D, 1, GL_DEPTH24_STENCIL8, m_Specification.Width, m_Specification.Height);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, m_Specification.Width, m_Specification.Height, 0, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, nullptr);
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, m_DepthAttachment, 0);
-
-
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	}
+        // ✅ Verify completeness
+        SHUNYA_CORE_ASSERT(
+            glCheckNamedFramebufferStatus(m_RendererID, GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE,
+            "Framebuffer is incomplete!"
+        );
+    }
 	void OpenGLFrambuffer::Bind()
 	{
 		glBindFramebuffer(GL_FRAMEBUFFER, m_RendererID);

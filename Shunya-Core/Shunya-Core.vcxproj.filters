@@ -1450,6 +1450,8 @@
       <Filter>third_party\stb_image</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\Scene\Scene.h" />
+    <ClInclude Include="src\Core\Scene\Entity.h" />
+    <ClInclude Include="src\Core\Scene\Components.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Application.cpp">
@@ -1540,5 +1542,6 @@
       <Filter>third_party\stb_image</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\Scene\Scene.cpp" />
+    <ClCompile Include="src\Core\Scene\Entity.cpp" />
   </ItemGroup>
 </Project>
