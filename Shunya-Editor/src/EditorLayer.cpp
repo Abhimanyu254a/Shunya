@@ -6,6 +6,7 @@
 #include "Core/Scene/Entity.h"
 #include "Core/Rendered/FrameBuffer.h"
 #include "Core/Scene/SceneCamera.h"
+#include "Panels/ScenePanel.h"
 
 namespace Shunya {
 
@@ -25,7 +26,7 @@ namespace Shunya {
         fbspec.Height = 720;
         m_FrameBuffer = FrameBuffer::Create(fbspec);
 
-        // ✅ Scene setup
+        
         m_ActiveScene = std::make_shared<Scene>();
 
         m_SquareEntity = m_ActiveScene->CreateEntity("Square");
@@ -70,6 +71,9 @@ namespace Shunya {
 
         m_CameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
         m_SecondCamera.AddComponent<NativeScriptComponent>().Bind<CameraController>();
+        
+        m_SceneHierarchyPanel.SetContext(m_ActiveScene);
+    
     }
 
     void EditorLayer::OnDetch() {}
@@ -155,6 +159,7 @@ namespace Shunya {
         }
         ImGui::End(); // DockSpace
 
+        m_SceneHierarchyPanel.OnImGuiRender();
         // ── Settings panel ──────────────────────────────────────
         ImGui::Begin("Settings");
 
