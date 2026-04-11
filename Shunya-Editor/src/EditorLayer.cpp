@@ -49,8 +49,8 @@ namespace Shunya {
 
             virtual void OnCreate() override
             {
-                auto& transform = GetComponent<TransformComponent>().Transform;
-                transform[3][0] = rand() % 10 - 5.0f;
+                auto& translation = GetComponent<TransformComponent>().Translation;
+                translation.x = rand() % 10 - 5.0f;
             }
 
             virtual void OnDestroy() override
@@ -59,17 +59,17 @@ namespace Shunya {
 
             virtual void OnUpdate(Timestamp ts) override
             {
-                auto& transform = GetComponent<TransformComponent>().Transform;
+                auto& transform = GetComponent<TransformComponent>().Translation;
                 float speed = 5.0f;
 
                 if (Input::IsKeyPressed(SHUNYA_KEY_A))
-                    transform[3][0] -= speed * ts.GetSeconds();
+                    transform.x -= speed * ts.GetSeconds();
                 if (Input::IsKeyPressed(SHUNYA_KEY_D))
-                    transform[3][0] += speed * ts.GetSeconds();
+                    transform.x += speed * ts.GetSeconds();
                 if (Input::IsKeyPressed(SHUNYA_KEY_W))
-                    transform[3][1] += speed * ts.GetSeconds();
+                    transform.y += speed * ts.GetSeconds();
                 if (Input::IsKeyPressed(SHUNYA_KEY_S))
-                    transform[3][1] -= speed * ts.GetSeconds();
+                    transform.y -= speed * ts.GetSeconds();
             }
         };
 
