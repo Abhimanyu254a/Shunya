@@ -5,6 +5,7 @@
 #include "glm/glm.hpp"
 #include "Components.h"
 #include "Core/Rendered/Renderer2D.h"
+#include "Core/Rendered/Camera.h"
 
 namespace Shunya
 {
@@ -55,14 +56,39 @@ namespace Shunya
 
 	void Scene::OnUpdate(Timestamp ts)
 	{
-		auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
-		for (auto entity : group)
+		Camera* MainCamera = nullptr;
+		glm::mat4* cameraTrasform = nullptr;
 		{
-			auto&& [transform , sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
-			Renderer2D::DrawQuad(transform, sprite.Color);
+			auto group = m_Registry.view<TransformComponent, CameraComponent>();
+			for (auto entity : group)
+			{
+
+				auto [transform, camera] = group.get<TransformComponent, CameraComponent>(entity);
+				if (camera.Primary)
+				{
+					MainCamera = &camera.Camera;
+					cameraTrasform = &transform.Transform;
+					break;
+
+				}
+			}
 		}
+
+			if (MainCamera)
+			{
+				Renderer2D::BeginScene(MainCamera->GetProjection(), *cameraTrasform);
+
+				auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
+				for (auto entity : group)
+				{
+					auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
+					Renderer2D::DrawQuad(transform, sprite.Color);
+				}
+			Renderer2D::EndScene();
+			}
+		
 	}
 
-
-
 }
+
+

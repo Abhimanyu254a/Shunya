@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <glm/glm.hpp>
+#include "Core/Rendered/Camera.h"
 
 namespace Shunya
 {
@@ -17,7 +18,7 @@ namespace Shunya
 
 	struct TransformComponent
 	{
-		glm::mat4 Transform;
+		glm::mat4 Transform = glm::mat4(1.0f);	
 		TransformComponent() = default;
 		TransformComponent(const TransformComponent&) = default;
 		TransformComponent(const glm::mat4& transform)
@@ -29,7 +30,7 @@ namespace Shunya
 
 	struct SpriteRendererComponent
 	{
-		glm::vec4 Color;
+		glm::vec4 Color = { 1.0f, 1.0f, 1.0f, 1.0f };
 		SpriteRendererComponent() = default;
 		SpriteRendererComponent(const SpriteRendererComponent&) = default;
 		SpriteRendererComponent(const glm::vec4& color)
@@ -37,6 +38,19 @@ namespace Shunya
 		
 		operator glm::vec4&() { return Color; }
 		operator const glm::vec4&()const { return Color; }
+	};
+
+	struct CameraComponent
+	{
+		Shunya::Camera Camera;
+		bool Primary = true;
+
+		CameraComponent() = default;
+		CameraComponent(const CameraComponent&) = default;
+		CameraComponent(const glm::mat4& projection)
+			: Camera(projection) {
+		}
+
 	};
 
 }

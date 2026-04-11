@@ -173,6 +173,7 @@
     <ClInclude Include="src\Core\Rendered\Shader.h" />
     <ClInclude Include="src\Core\Rendered\Texture.h" />
     <ClInclude Include="src\Core\Rendered\VertexArray.h" />
+    <ClInclude Include="src\Core\Rendered\Camera.h" />
     <ClInclude Include="src\Core\Scene\Components.h" />
     <ClInclude Include="src\Core\Scene\Entity.h" />
     <ClInclude Include="src\Core\Scene\Scene.h" />
