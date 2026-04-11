@@ -3,6 +3,7 @@
 #include <glm/glm.hpp>
 #include "Core/Rendered/Camera.h"
 #include "SceneCamera.h"
+#include "ScriptingEntity.h"
 
 namespace Shunya
 {
@@ -48,6 +49,29 @@ namespace Shunya
 
 		CameraComponent() = default;
 		CameraComponent(const CameraComponent&) = default;
+	};
+
+	struct NativeScriptComponent
+	{
+		ScriptingEntity* Instance = nullptr;
+
+		std::function<void()> InstantiateFunction;
+		std::function<void()> DestroyInstanceFunction;
+
+		std::function<void(ScriptingEntity*)> OnCreateFunction;
+		std::function<void(ScriptingEntity*)> OnDestroyFunction;
+		std::function<void(ScriptingEntity*, Timestamp)> OnUpdateFunction;
+
+		template<typename T>
+		void Bind()
+		{
+			InstantiateFunction = [&]() { Instance = new T(); };
+			DestroyInstanceFunction = [&]() { delete (T*)Instance; Instance = nullptr; };
+
+			OnCreateFunction = [](ScriptingEntity* instance) { ((T*)instance)->OnCreate(); };
+			OnDestroyFunction = [](ScriptingEntity* instance) { ((T*)instance)->OnDestroy(); };
+			OnUpdateFunction = [](ScriptingEntity* instance, Timestamp ts) { ((T*)instance)->OnUpdate(ts); };
+		}
 	};
 
 }
