@@ -15,8 +15,8 @@ namespace Shunya {
 
 		WindowProps(
 			const std::string& title = "Shunya",
-			uint32_t breadth = 1280,
-			uint32_t height = 720
+			uint32_t breadth = 1600,
+			uint32_t height = 900
 		) : Title(title), Breadth(breadth), Height(height)
 		{
 		}
