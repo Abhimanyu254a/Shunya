@@ -49,6 +49,18 @@ namespace Shunya {
 		glBindFramebuffer(GL_FRAMEBUFFER, 0); 
 
 	}
+    void OpenGLFrambuffer::Resize(uint32_t width, uint32_t height)
+    {
+        m_Specification.Width = width;
+        m_Specification.Height = height;
+
+        // Delete old textures
+        glDeleteTextures(1, &m_ColorAttachement);
+        glDeleteTextures(1, &m_DepthAttachment);
+        glDeleteFramebuffers(1, &m_RendererID);
+
+        Invalidate(); // recreate with new size
+    }
 
 
 }

@@ -177,6 +177,7 @@
     <ClInclude Include="src\Core\Scene\Components.h" />
     <ClInclude Include="src\Core\Scene\Entity.h" />
     <ClInclude Include="src\Core\Scene\Scene.h" />
+    <ClInclude Include="src\Core\Scene\SceneCamera.h" />
     <ClInclude Include="src\Core\Window.h" />
     <ClInclude Include="src\Core\WindowMaker.h" />
     <ClInclude Include="src\Core\imGui\imGuiBuild.h" />
@@ -633,6 +634,7 @@
     <ClCompile Include="src\Core\Rendered\VertexArray.cpp" />
     <ClCompile Include="src\Core\Scene\Entity.cpp" />
     <ClCompile Include="src\Core\Scene\Scene.cpp" />
+    <ClCompile Include="src\Core\Scene\SceneCamera.cpp" />
     <ClCompile Include="src\Core\WindowMaker.cpp" />
     <ClCompile Include="src\Core\WindowsInput.cpp" />
     <ClCompile Include="src\Core\imGui\imguiLayer.cpp" />

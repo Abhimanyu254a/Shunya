@@ -2,6 +2,7 @@
 #include <string>
 #include <glm/glm.hpp>
 #include "Core/Rendered/Camera.h"
+#include "SceneCamera.h"
 
 namespace Shunya
 {
@@ -40,17 +41,13 @@ namespace Shunya
 		operator const glm::vec4&()const { return Color; }
 	};
 
-	struct CameraComponent
-	{
-		Shunya::Camera Camera;
+	struct CameraComponent {
+		SceneCamera Camera; // THIS MUST BE SceneCamera, not Camera
 		bool Primary = true;
+		bool FixedAspectRatio = false;
 
 		CameraComponent() = default;
 		CameraComponent(const CameraComponent&) = default;
-		CameraComponent(const glm::mat4& projection)
-			: Camera(projection) {
-		}
-
 	};
 
 }
