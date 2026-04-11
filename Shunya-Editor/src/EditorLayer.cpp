@@ -164,7 +164,7 @@ namespace Shunya {
         ImGui::End(); // DockSpace
 
         m_SceneHierarchyPanel.OnImGuiRender();
-        // ── Settings panel ──────────────────────────────────────
+        // ──   s panel ──────────────────────────────────────
         ImGui::Begin("Settings");
 
         auto stats = Renderer2D::GetStats();
@@ -174,26 +174,6 @@ namespace Shunya {
         ImGui::Text("Vertices:   %d", stats.GetTotalVertexCount());
         ImGui::Text("Indices:    %d", stats.GetTotalIndexCount());
         ImGui::Separator();
-
-        auto& squareColor = m_SquareEntity
-            .GetComponent<SpriteRendererComponent>().Color;
-        ImGui::ColorEdit4("Square Color", glm::value_ptr(squareColor));
-        ImGui::Separator();
-
-        ImGui::DragFloat3("Camera Transform",
-            glm::value_ptr(
-                m_CameraEntity.GetComponent<TransformComponent>().Transform[3]));
-
-        if (ImGui::Checkbox("Primary Camera", &m_PrimaryCamera))
-        {
-            m_CameraEntity.GetComponent<CameraComponent>().Primary = m_PrimaryCamera;
-            m_SecondCamera.GetComponent<CameraComponent>().Primary = !m_PrimaryCamera;
-        }
-
-        auto& camera = m_SecondCamera.GetComponent<CameraComponent>().Camera;
-        float orthoSize = camera.GetOrthographicSize();
-        if (ImGui::DragFloat("2nd Camera Ortho Size", &orthoSize))
-            camera.SetOrthographicSize(orthoSize);
 
         ImGui::End(); // Settings
 
