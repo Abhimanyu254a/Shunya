@@ -176,9 +176,10 @@ namespace Shunya {
 		for (auto entity : view)
 		{
 			auto& cameraComp = view.get<CameraComponent>(entity);
-			cameraComp.Camera.SetViewportSize(width, height);
+			if (!cameraComp.FixedAspectRatio)
+				cameraComp.Camera.SetViewportSize(width, height);
 		}
-	} // <-- THE MISSING BRACKET IS RESTORED HERE
+	} 
 
 	Entity Scene::CreateEntity(const std::string& name)
 	{
@@ -196,15 +197,13 @@ namespace Shunya {
 				{
 					if (!nsc.Instance)
 					{
-						nsc.InstantiateFunction();
+						nsc.Instance = nsc.InstantiateScript();
 						nsc.Instance->m_Entity = Entity{ entity, this };
 
-						if (nsc.OnCreateFunction)
-							nsc.OnCreateFunction(nsc.Instance);
+						nsc.Instance->OnCreate();
 					}
 
-					if (nsc.OnUpdateFunction)
-						nsc.OnUpdateFunction(nsc.Instance, ts);
+					nsc.Instance->OnUpdate(ts);
 				});
 		}
 

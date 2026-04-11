@@ -55,22 +55,14 @@ namespace Shunya
 	{
 		ScriptingEntity* Instance = nullptr;
 
-		std::function<void()> InstantiateFunction;
-		std::function<void()> DestroyInstanceFunction;
-
-		std::function<void(ScriptingEntity*)> OnCreateFunction;
-		std::function<void(ScriptingEntity*)> OnDestroyFunction;
-		std::function<void(ScriptingEntity*, Timestamp)> OnUpdateFunction;
+		ScriptingEntity* (*InstantiateScript)();
+		void (*DestroyScript)(NativeScriptComponent*);
 
 		template<typename T>
 		void Bind()
 		{
-			InstantiateFunction = [&]() { Instance = new T(); };
-			DestroyInstanceFunction = [&]() { delete (T*)Instance; Instance = nullptr; };
-
-			OnCreateFunction = [](ScriptingEntity* instance) { ((T*)instance)->OnCreate(); };
-			OnDestroyFunction = [](ScriptingEntity* instance) { ((T*)instance)->OnDestroy(); };
-			OnUpdateFunction = [](ScriptingEntity* instance, Timestamp ts) { ((T*)instance)->OnUpdate(ts); };
+			InstantiateScript = []() { return static_cast<ScriptingEntity*>(new T()); };
+			DestroyScript = [](NativeScriptComponent* nsc) { delete nsc->Instance; nsc->Instance = nullptr; };
 		}
 	};
 
