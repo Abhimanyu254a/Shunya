@@ -7,3 +7,12 @@
 [submodule "Shunya-Core/third_party/imGUI"]
 	path = Shunya-Core/third_party/imGUI
 	url = https://github.com/Abhimanyu254a/imgui.git
+[submodule "Shunya-Core/third_party/yml-cpp"]
+	path = Shunya-Core/third_party/yml-cpp
+	url = https://github.com/Abhimanyu254a/yaml-cpp.git
+[submodule "Shunya-Core/third_party/yml_cpp"]
+	path = Shunya-Core/third_party/yml_cpp
+	url = https://github.com/Abhimanyu254a/yaml-cpp.git
+[submodule "Shunya-Core/third_party/yaml_cpp"]
+	path = Shunya-Core/third_party/yaml_cpp
+	url = https://github.com/Abhimanyu254a/yaml-cpp.git

@@ -7,6 +7,8 @@
 #include "Core/Rendered/FrameBuffer.h"
 #include "Core/Scene/SceneCamera.h"
 #include "Panels/ScenePanel.h"
+#include "Core/Scene/SceneSerializer.h"
+
 
 namespace Shunya {
 
@@ -28,6 +30,7 @@ namespace Shunya {
 
         
         m_ActiveScene = std::make_shared<Scene>();
+#if 0
 
         m_SquareEntity = m_ActiveScene->CreateEntity("Blue Square");
         m_SquareEntity.AddComponent<SpriteRendererComponent>(
@@ -75,6 +78,7 @@ namespace Shunya {
 
         m_CameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
         m_SecondCamera.AddComponent<NativeScriptComponent>().Bind<CameraController>();
+#endif
         
         m_SceneHierarchyPanel.SetContext(m_ActiveScene);
     
@@ -160,6 +164,18 @@ namespace Shunya {
         {
             if (ImGui::BeginMenu("Options"))
             {
+                if (ImGui::MenuItem("Serialize"))
+                {
+                    SceneSerializer serializer(m_ActiveScene);
+                    serializer.Serialize("assets/Scenes/Example.Shunya");
+                }
+
+                if (ImGui::MenuItem("Deserialize"))
+                {
+                    SceneSerializer serializer(m_ActiveScene);
+                    serializer.Deserialize("assets/Scenes/Example.Shunya");
+                }
+
                 if (ImGui::MenuItem("Exit")) Application::Get().Close();
                 ImGui::EndMenu();
             }

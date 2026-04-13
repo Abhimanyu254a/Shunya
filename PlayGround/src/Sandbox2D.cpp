@@ -28,7 +28,7 @@ void Sandbox2D::OnDetch()
 
 void Sandbox2D::OnUpdate(Shunya::Timestamp ts)
 {
-	SHUNYA_PROFILE_FUNCTION();
+	SHUNYA_PROFILE_FUNCTION("Sandbox2D::on Update");
     m_CameraController.OnUpdate(ts);
 
     Shunya::Renderer2D::ResetStats();

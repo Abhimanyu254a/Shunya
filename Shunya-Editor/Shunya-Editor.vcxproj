@@ -143,6 +143,9 @@
       <Project>{13AFCCD5-7F64-45CB-0859-3FA2740D3CCF}</Project>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="assets\Scenes\Example.Shunya" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

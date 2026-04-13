@@ -134,7 +134,7 @@ namespace Shunya {
 	void Renderer2D::BeginScene(const OrthographicCamera& camera)
 	{
 
-		SHUNYA_PROFILE_FUNCTION();
+		SHUNYA_PROFILE_FUNCTION("Renderer2D::begineScene");
 
 
 		s_Data.TextureShader->Bind();
@@ -149,7 +149,7 @@ namespace Shunya {
 
 	void Renderer2D::BeginScene(const Camera& camera, const glm::mat4& transform)
 	{
-		SHUNYA_PROFILE_FUNCTION();
+		SHUNYA_PROFILE_FUNCTION("Renderer2D::begineScene");
 
 		glm::mat4 viewProj = camera.GetProjection() * glm::inverse(transform);
 
@@ -163,7 +163,7 @@ namespace Shunya {
 	}
 
 	void Renderer2D::EndScene() {
-		SHUNYA_PROFILE_FUNCTION();
+		SHUNYA_PROFILE_FUNCTION("Renderer2d::EndScene");
 
 		size_t datasize = (uint8_t*)s_Data.QuadVertexBufferPtr - (uint8_t*)s_Data.QuadVertexBufferBase;
 

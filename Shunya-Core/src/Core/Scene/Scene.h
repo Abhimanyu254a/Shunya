@@ -30,6 +30,7 @@ namespace Shunya
 		uint32_t m_ViewportHeight = 0; // ✅ add this
 
 		friend class Entity;
+		friend class SceneSerializer;
 		friend class SceneHierarchyPanel;
 
 	};

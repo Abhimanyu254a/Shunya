@@ -15,11 +15,13 @@ IncludeDir["imGUI"] = "Shunya-Core/third_party/imGUI"
 IncludeDir["glm"] = "Shunya-Core/third_party/glm"
 IncludeDir["stb_image"] = "Shunya-Core/third_party/stb_image"
 IncludeDir["entt"] = "Shunya-Core/third_party/entt/include"
+IncludeDir["yaml_cpp"] = "Shunya-Core/third_party/yaml_cpp/include"
 
 group "Dependencies"
     include "Shunya-Core/third_party/GLFW"
     include "Shunya-Core/third_party/Glad"
     include "Shunya-Core/third_party/imGUI"
+    include "Shunya-Core/third_party/yaml_cpp"
 group ""
 
 project "Shunya-Core"
@@ -45,7 +47,8 @@ project "Shunya-Core"
         "%{prj.name}/third_party/imGUI/examples/imgui_impl_glfw.h",
         "%{prj.name}/third_party/imGUI/examples/imgui_impl_glfw.cpp",
         "%{prj.name}/third_party/imGUI/examples/imgui_impl_opengl3.cpp",
-        "%{prj.name}/third_party/imGUI/examples/imgui_impl_opengl3.h"
+        "%{prj.name}/third_party/imGUI/examples/imgui_impl_opengl3.h",
+
     }
 
     includedirs {
@@ -56,22 +59,23 @@ project "Shunya-Core"
         "%{IncludeDir.imGUI}",
         "%{IncludeDir.glm}",
         "%{IncludeDir.stb_image}",
-        "%{IncludeDir.entt}"
+        "%{IncludeDir.entt}",
+		"%{IncludeDir.yaml_cpp}"
     }
 
-    links { "GLFW", "Glad", "imGUI", "opengl32.lib" }
+    links { "GLFW", "Glad", "imGUI","yaml_cpp","opengl32.lib" }
 
     filter "system:windows"
         systemversion "latest"
-        defines { "SHUNYA_CORE_EXPORTS", "IMGUI_DISABLE_WIN32_FUNCTIONS", "GLFW_INCLUDE_NONE" }
+        defines { "SHUNYA_CORE_EXPORTS", "IMGUI_DISABLE_WIN32_FUNCTIONS", "GLFW_INCLUDE_NONE","YAML_CPP_STATIC_DEFINE" }
 
     filter "configurations:Debug"
-        defines { "SHUNYA_DEBUG" }
+        defines { "SHUNYA_DEBUG", "YAML_CPP_STATIC_DEFINE" }
         runtime "Debug" -- This replaces manual /MDd
         symbols "On"
 
     filter "configurations:Release"
-        defines { "SHUNYA_RELEASE" }
+        defines { "SHUNYA_RELEASE", "YAML_CPP_STATIC_DEFINE" }
         runtime "Release" -- This replaces manual /MD
         optimize "On"
 

@@ -183,6 +183,7 @@ namespace Shunya {
 
 	Entity Scene::CreateEntity(const std::string& name)
 	{
+		SHUNYA_PROFILE_FUNCTION();
 		Entity entity(m_Registry.create(), this);
 		entity.AddComponent<TransformComponent>();
 		auto& tag = entity.AddComponent<TagComponent>();
@@ -198,6 +199,7 @@ namespace Shunya {
 
 	void Scene::OnUpdate(Timestamp ts)
 	{
+		SHUNYA_PROFILE_FUNCTION("Scene::Onupdate");
 		{
 			m_Registry.view<NativeScriptComponent>().each([=](auto entity, auto& nsc)
 				{

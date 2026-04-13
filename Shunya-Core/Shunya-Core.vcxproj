@@ -76,8 +76,8 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>SNY-PCH.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>SHUNYA_CORE_EXPORTS;IMGUI_DISABLE_WIN32_FUNCTIONS;GLFW_INCLUDE_NONE;SHUNYA_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;third_party\spdlog\include;third_party\GLFW\include;third_party\Glad\include;third_party\imGUI;third_party\glm;third_party\stb_image;third_party\entt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>SHUNYA_CORE_EXPORTS;IMGUI_DISABLE_WIN32_FUNCTIONS;GLFW_INCLUDE_NONE;SHUNYA_DEBUG;YAML_CPP_STATIC_DEFINE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;third_party\spdlog\include;third_party\GLFW\include;third_party\Glad\include;third_party\imGUI;third_party\glm;third_party\stb_image;third_party\entt\include;third_party\yaml_cpp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -98,8 +98,8 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>SNY-PCH.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>SHUNYA_CORE_EXPORTS;IMGUI_DISABLE_WIN32_FUNCTIONS;GLFW_INCLUDE_NONE;SHUNYA_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;third_party\spdlog\include;third_party\GLFW\include;third_party\Glad\include;third_party\imGUI;third_party\glm;third_party\stb_image;third_party\entt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>SHUNYA_CORE_EXPORTS;IMGUI_DISABLE_WIN32_FUNCTIONS;GLFW_INCLUDE_NONE;SHUNYA_RELEASE;YAML_CPP_STATIC_DEFINE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;third_party\spdlog\include;third_party\GLFW\include;third_party\Glad\include;third_party\imGUI;third_party\glm;third_party\stb_image;third_party\entt\include;third_party\yaml_cpp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -124,8 +124,8 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>SNY-PCH.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>SHUNYA_CORE_EXPORTS;IMGUI_DISABLE_WIN32_FUNCTIONS;GLFW_INCLUDE_NONE;SHUNYA_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;third_party\spdlog\include;third_party\GLFW\include;third_party\Glad\include;third_party\imGUI;third_party\glm;third_party\stb_image;third_party\entt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>SHUNYA_CORE_EXPORTS;IMGUI_DISABLE_WIN32_FUNCTIONS;GLFW_INCLUDE_NONE;YAML_CPP_STATIC_DEFINE;SHUNYA_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;third_party\spdlog\include;third_party\GLFW\include;third_party\Glad\include;third_party\imGUI;third_party\glm;third_party\stb_image;third_party\entt\include;third_party\yaml_cpp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -163,6 +163,7 @@
     <ClInclude Include="src\Core\MouseKeyCode.h" />
     <ClInclude Include="src\Core\OrthographicCameraController.h" />
     <ClInclude Include="src\Core\Rendered\Buffer.h" />
+    <ClInclude Include="src\Core\Rendered\Camera.h" />
     <ClInclude Include="src\Core\Rendered\FrameBuffer.h" />
     <ClInclude Include="src\Core\Rendered\GraphicsContext.h" />
     <ClInclude Include="src\Core\Rendered\OrthographicCamera.h" />
@@ -173,11 +174,11 @@
     <ClInclude Include="src\Core\Rendered\Shader.h" />
     <ClInclude Include="src\Core\Rendered\Texture.h" />
     <ClInclude Include="src\Core\Rendered\VertexArray.h" />
-    <ClInclude Include="src\Core\Rendered\Camera.h" />
     <ClInclude Include="src\Core\Scene\Components.h" />
     <ClInclude Include="src\Core\Scene\Entity.h" />
     <ClInclude Include="src\Core\Scene\Scene.h" />
     <ClInclude Include="src\Core\Scene\SceneCamera.h" />
+    <ClInclude Include="src\Core\Scene\SceneSerializer.h" />
     <ClInclude Include="src\Core\Scene\ScriptingEntity.h" />
     <ClInclude Include="src\Core\Window.h" />
     <ClInclude Include="src\Core\WindowMaker.h" />
@@ -636,6 +637,7 @@
     <ClCompile Include="src\Core\Scene\Entity.cpp" />
     <ClCompile Include="src\Core\Scene\Scene.cpp" />
     <ClCompile Include="src\Core\Scene\SceneCamera.cpp" />
+    <ClCompile Include="src\Core\Scene\SceneSerializer.cpp" />
     <ClCompile Include="src\Core\WindowMaker.cpp" />
     <ClCompile Include="src\Core\WindowsInput.cpp" />
     <ClCompile Include="src\Core\imGui\imguiLayer.cpp" />
@@ -662,6 +664,9 @@
     </ProjectReference>
     <ProjectReference Include="third_party\imGUI\ImGui.vcxproj">
       <Project>{C0FF640D-2C14-8DBE-F595-301E616989EF}</Project>
+    </ProjectReference>
+    <ProjectReference Include="third_party\yaml_cpp\yaml_cpp.vcxproj">
+      <Project>{7A5CBC57-6629-1763-8F42-050B7B6E4CF1}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

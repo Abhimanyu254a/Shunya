@@ -19,6 +19,9 @@
     <Filter Include="src\Core\Rendered">
       <UniqueIdentifier>{DD009555-4917-93EB-928E-1E0DFEE36373}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Core\Scene">
+      <UniqueIdentifier>{82A83005-6E76-240B-570A-953143770070}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Core\imGui">
       <UniqueIdentifier>{AFC0C306-9B8E-B70C-8422-2833708F9371}</UniqueIdentifier>
     </Filter>
@@ -108,6 +111,9 @@
     <ClInclude Include="src\Core\Rendered\Buffer.h">
       <Filter>src\Core\Rendered</Filter>
     </ClInclude>
+    <ClInclude Include="src\Core\Rendered\Camera.h">
+      <Filter>src\Core\Rendered</Filter>
+    </ClInclude>
     <ClInclude Include="src\Core\Rendered\FrameBuffer.h">
       <Filter>src\Core\Rendered</Filter>
     </ClInclude>
@@ -137,6 +143,24 @@
     </ClInclude>
     <ClInclude Include="src\Core\Rendered\VertexArray.h">
       <Filter>src\Core\Rendered</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Scene\Components.h">
+      <Filter>src\Core\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Scene\Entity.h">
+      <Filter>src\Core\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Scene\Scene.h">
+      <Filter>src\Core\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Scene\SceneCamera.h">
+      <Filter>src\Core\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Scene\SceneSerializer.h">
+      <Filter>src\Core\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Scene\ScriptingEntity.h">
+      <Filter>src\Core\Scene</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\Window.h">
       <Filter>src\Core</Filter>
@@ -1449,12 +1473,6 @@
     <ClInclude Include="third_party\stb_image\stb_image.h">
       <Filter>third_party\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\Scene\Scene.h" />
-    <ClInclude Include="src\Core\Scene\Entity.h" />
-    <ClInclude Include="src\Core\Scene\Components.h" />
-    <ClInclude Include="src\Core\Rendered\Camera.h" />
-    <ClInclude Include="src\Core\Scene\SceneCamera.h" />
-    <ClInclude Include="src\Core\Scene\ScriptingEntity.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Application.cpp">
@@ -1502,6 +1520,18 @@
     <ClCompile Include="src\Core\Rendered\VertexArray.cpp">
       <Filter>src\Core\Rendered</Filter>
     </ClCompile>
+    <ClCompile Include="src\Core\Scene\Entity.cpp">
+      <Filter>src\Core\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Scene\Scene.cpp">
+      <Filter>src\Core\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Scene\SceneCamera.cpp">
+      <Filter>src\Core\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Scene\SceneSerializer.cpp">
+      <Filter>src\Core\Scene</Filter>
+    </ClCompile>
     <ClCompile Include="src\Core\WindowMaker.cpp">
       <Filter>src\Core</Filter>
     </ClCompile>
@@ -1544,8 +1574,5 @@
     <ClCompile Include="third_party\stb_image\stb_image.cpp">
       <Filter>third_party\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\Scene\Scene.cpp" />
-    <ClCompile Include="src\Core\Scene\Entity.cpp" />
-    <ClCompile Include="src\Core\Scene\SceneCamera.cpp" />
   </ItemGroup>
 </Project>
