@@ -201,8 +201,7 @@ namespace Shunya {
 
         m_ViewportFocused = ImGui::IsWindowFocused();
         m_ViewportHovered = ImGui::IsWindowHovered();
-        Application::Get().GetImGuiLayer()->SetBlockEvents(
-            !m_ViewportFocused && !m_ViewportHovered);
+        Application::Get().GetImGuiLayer()->SetBlockEvents(!m_ViewportHovered);
 
         // ✅ Capture viewport size for resize next frame
         ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
@@ -219,8 +218,9 @@ namespace Shunya {
 
     void EditorLayer::OnEvent(Event& e)
     {
-        m_CameraController.OnEvent(e);
-
+        if (m_ViewportFocused && m_ViewportHovered)
+            m_CameraController.OnEvent(e);
+        ImGuiIO& io = ImGui::GetIO();
         EventDispatcher dispatcher(e);
         dispatcher.Dispatch<KeyPressedEvent>(SHUNYA_BIND(EditorLayer::OnKeyPressed));
     }
@@ -257,6 +257,7 @@ namespace Shunya {
             break;
         }
         }
+        return false;
     }
 
     void EditorLayer::NewScene()
@@ -282,7 +283,7 @@ namespace Shunya {
 
     void EditorLayer::SaveSceneAs()
     {
-        std::string filepath = FileDialogs::SaveFile("Hazel Scene (*.hazel)\0*.hazel\0");
+        std::string filepath = FileDialogs::SaveFile("Shunya Scene (*.shunya)\0*.shunya\0");
         if (!filepath.empty())
         {
             SceneSerializer serializer(m_ActiveScene);

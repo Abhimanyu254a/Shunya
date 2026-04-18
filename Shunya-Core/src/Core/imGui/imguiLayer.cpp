@@ -55,7 +55,7 @@ namespace Shunya
         GLFWwindow* window = static_cast<GLFWwindow*>(app.GetWindow().GetNativeWindow());
 
         // Setup Platform/Renderer bindings
-        ImGui_ImplGlfw_InitForOpenGL(window, false);
+        ImGui_ImplGlfw_InitForOpenGL(window, true);
 
         //--------------------------------------------------------
 
@@ -75,7 +75,11 @@ namespace Shunya
         if (m_BlockEvents)
         {
             ImGuiIO& io = ImGui::GetIO();
+
+            // Block mouse events if ImGui is using the mouse
             e.Handled |= e.IsInCategory(EventCategoryMouse) & io.WantCaptureMouse;
+
+            // Block keyboard events if ImGui is actively using the keyboard (e.g., typing in a text box)
             e.Handled |= e.IsInCategory(EventCategoryKeyboard) & io.WantCaptureKeyboard;
         }
     }
