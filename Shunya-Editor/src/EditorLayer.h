@@ -88,7 +88,14 @@ namespace Shunya {
         bool m_ViewportFocused = false;
         bool m_ViewportHovered = false;
         SceneHierarchyPanel m_SceneHierarchyPanel;
+    private:
+        bool OnKeyPressed(KeyPressedEvent& e);
 
+        void NewScene();
+        void OpenScene();
+        void SaveSceneAs();
+
+    private:
         glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.0f };
     };
 }

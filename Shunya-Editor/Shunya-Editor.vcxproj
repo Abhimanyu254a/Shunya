@@ -144,7 +144,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="assets\Scenes\Example.Shunya" />
+    <None Include="assets\Scenes\3DEample.shunya" />
+    <None Include="assets\Scenes\Example.shunya" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -180,6 +180,7 @@
     <ClInclude Include="src\Core\Scene\SceneCamera.h" />
     <ClInclude Include="src\Core\Scene\SceneSerializer.h" />
     <ClInclude Include="src\Core\Scene\ScriptingEntity.h" />
+    <ClInclude Include="src\Core\Utils\PlatformUtils.h" />
     <ClInclude Include="src\Core\Window.h" />
     <ClInclude Include="src\Core\WindowMaker.h" />
     <ClInclude Include="src\Core\imGui\imGuiBuild.h" />
@@ -648,6 +649,7 @@
     <ClCompile Include="src\Core\openGL\OpenGLVertexArray.cpp" />
     <ClCompile Include="src\Core\openGL\OpenglBuffer.cpp" />
     <ClCompile Include="src\Core\openGL\OpenglRendererAPI.cpp" />
+    <ClCompile Include="src\Core\WindowsUtils.cpp" />
     <ClCompile Include="src\SNY-PCH.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>

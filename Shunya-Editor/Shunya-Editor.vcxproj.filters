@@ -19,6 +19,7 @@
     <ClCompile Include="src\Shunya-Editor.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="assets\Scenes\Example.Shunya" />
+    <None Include="assets\Scenes\Example.shunya" />
+    <None Include="assets\Scenes\3DEample.shunya" />
   </ItemGroup>
 </Project>
