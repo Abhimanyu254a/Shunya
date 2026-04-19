@@ -1,16 +1,16 @@
-Scene: 3D Test Scene
+Scene: Untitled
 Entities:
-  - Entity: 11111111111111
+  - Entity: 12837192831273
     TagComponent:
-      Tag: Main Camera
+      Tag: Camera
     TransformComponent:
-      Translation: [0, 2, 8]
-      Rotation: [-0.2, 0, 0]
+      Translation: [0, 1.70000005, 4]
+      Rotation: [-0.404916406, 0, 0]
       Scale: [1, 1, 1]
     CameraComponent:
       Camera:
         ProjectionType: 0
-        PerspectiveFOV: 0.785398185
+        PerspectiveFOV: 0.52359879
         PerspectiveNear: 0.00999999978
         PerspectiveFar: 1000
         OrthographicSize: 10
@@ -19,74 +19,62 @@ Entities:
       Primary: true
       FixedAspectRatio: false
 
-  - Entity: 22222222222222
+  - Entity: 12837192831274
     TagComponent:
-      Tag: Floor
+      Tag: Front Face
     TransformComponent:
-      Translation: [0, -1, 0]
+      Translation: [0, 0, 0.5]
       Rotation: [0, 0, 0]
-      Scale: [10, 0.2, 10]
-    SpriteRendererComponent:
-      Color: [0.3, 0.3, 0.3, 1]
-
-  - Entity: 33333333333333
-    TagComponent:
-      Tag: Cube Center
-    TransformComponent:
-      Translation: [0, 0.5, 0]
-      Rotation: [0, 0.7853, 0]
       Scale: [1, 1, 1]
     SpriteRendererComponent:
-      Color: [0.2, 0.6, 1, 1]
+      Color: [1, 0, 0, 1] # Red
 
-  - Entity: 44444444444444
+  - Entity: 12837192831275
     TagComponent:
-      Tag: Cube Left
+      Tag: Back Face
     TransformComponent:
-      Translation: [-3, 0.5, -2]
-      Rotation: [0, 0.3, 0]
-      Scale: [1.2, 1.2, 1.2]
+      Translation: [0, 0, -0.5]
+      Rotation: [0, 3.14159265, 0]
+      Scale: [1, 1, 1]
     SpriteRendererComponent:
-      Color: [1, 0.3, 0.2, 1]
+      Color: [0, 1, 1, 1] # Cyan
 
-  - Entity: 55555555555555
+  - Entity: 12837192831276
     TagComponent:
-      Tag: Cube Right
+      Tag: Top Face
     TransformComponent:
-      Translation: [3, 0.5, -2]
-      Rotation: [0, -0.5, 0]
-      Scale: [0.8, 1.5, 0.8]
+      Translation: [0, 0.5, 0]
+      Rotation: [-1.57079633, 0, 0]
+      Scale: [1, 1, 1]
     SpriteRendererComponent:
-      Color: [0.2, 1, 0.4, 1]
+      Color: [0, 1, 0, 1] # Green
 
-  - Entity: 66666666666666
+  - Entity: 12837192831277
     TagComponent:
-      Tag: Tall Pillar
+      Tag: Bottom Face
     TransformComponent:
-      Translation: [0, 2, -5]
-      Rotation: [0, 0, 0]
-      Scale: [0.5, 4, 0.5]
+      Translation: [0, -0.5, 0]
+      Rotation: [1.57079633, 0, 0]
+      Scale: [1, 1, 1]
     SpriteRendererComponent:
-      Color: [1, 0.85, 0.2, 1]
+      Color: [1, 0, 1, 1] # Magenta
 
-  - Entity: 77777777777777
+  - Entity: 12837192831278
     TagComponent:
-      Tag: Back Wall
+      Tag: Right Face
     TransformComponent:
-      Translation: [0, 2, -8]
-      Rotation: [0, 0, 0]
-      Scale: [12, 5, 0.3]
+      Translation: [0.5, 0, 0]
+      Rotation: [0, 1.57079633, 0]
+      Scale: [1, 1, 1]
     SpriteRendererComponent:
-      Color: [0.15, 0.15, 0.2, 1]
+      Color: [0, 0, 1, 1] # Blue
 
-Scene: 2D Pipeline
-Entities:
-  - Entity: 88888888888888
-    TagComponent:
-      Tag: Flat Quad Cube
-    TransformComponent:
-      Translation: [0, 0, 0]
-      Rotation: [0, 0, 0]
-      Scale: [1, 1, 1]
-    SpriteRendererComponent:
-      Color: [0.8, 0.2, 0.3, 1]
+  - Entity: 12837192831279
+    TagComponent:
+      Tag: Left Face
+    TransformComponent:
+      Translation: [-0.5, 0, 0]
+      Rotation: [0, -1.57079633, 0]
+      Scale: [1, 1, 1]
+    SpriteRendererComponent:
+      Color: [1, 1, 0, 1] # Yellow
