@@ -9,7 +9,8 @@
 #include "Panels/ScenePanel.h"
 #include "Core/Scene/SceneSerializer.h"
 #include "Core/Utils/PlatformUtils.h"
-
+#include "ImGuizmo.h"
+#include "Core/Math/Math.h"
 
 namespace Shunya {
 
@@ -212,6 +213,55 @@ namespace Shunya {
             viewportPanelSize,
             ImVec2{ 0, 1 }, ImVec2{ 1, 0 }); // flipped for OpenGL
 
+
+        // Gizmos
+        Entity selectedEntity = m_SceneHierarchyPanel.GetSelectedEntity();
+        if (selectedEntity && m_GizmoType != -1)
+        {
+            ImGuizmo::SetOrthographic(false);
+            ImGuizmo::SetDrawlist();
+
+            float windowWidth = (float)ImGui::GetWindowWidth();
+            float windowHeight = (float)ImGui::GetWindowHeight();
+            ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowWidth, windowHeight);
+
+            // Camera
+            auto cameraEntity = m_ActiveScene->GetPrimaryCameraEntity();
+            const auto& camera = cameraEntity.GetComponent<CameraComponent>().Camera;
+            const glm::mat4& cameraProjection = camera.GetProjection();
+            glm::mat4 cameraView = glm::inverse(cameraEntity.GetComponent<TransformComponent>().GetTransform());
+
+            // Entity transform
+            auto& tc = selectedEntity.GetComponent<TransformComponent>();
+            glm::mat4 transform = tc.GetTransform();
+
+            // Snapping
+            bool snap = Input::IsKeyPressed(SHUNYA_KEY_LEFT_CONTROL);
+            float snapValue = 0.5f; // Snap to 0.5m for translation/scale
+            // Snap to 45 degrees for rotation
+            if (m_GizmoType == ImGuizmo::OPERATION::ROTATE)
+                snapValue = 45.0f;
+
+            float snapValues[3] = { snapValue, snapValue, snapValue };
+
+            ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(cameraProjection),
+                (ImGuizmo::OPERATION)m_GizmoType, ImGuizmo::LOCAL, glm::value_ptr(transform),
+                nullptr, snap ? snapValues : nullptr);
+
+            if (ImGuizmo::IsUsing())
+            {
+                glm::vec3 translation, rotation, scale;
+                Math::DecomposeTransform(transform, translation, rotation, scale);
+
+                glm::vec3 deltaRotation = rotation - tc.Rotation;
+                tc.Translation = translation;
+                tc.Rotation += deltaRotation;
+                tc.Scale = scale;
+            }
+        }
+
+
+
         ImGui::End(); // Viewport
         ImGui::PopStyleVar();
     }
@@ -256,6 +306,19 @@ namespace Shunya {
 
             break;
         }
+        // Gizmos
+        case SHUNYA_KEY_Q:
+            m_GizmoType = -1;
+            break;
+        case SHUNYA_KEY_W:
+            m_GizmoType = ImGuizmo::OPERATION::TRANSLATE;
+            break;
+        case SHUNYA_KEY_E:
+            m_GizmoType = ImGuizmo::OPERATION::ROTATE;
+            break;
+        case SHUNYA_KEY_R:
+            m_GizmoType = ImGuizmo::OPERATION::SCALE;
+            break;
         }
         return false;
     }

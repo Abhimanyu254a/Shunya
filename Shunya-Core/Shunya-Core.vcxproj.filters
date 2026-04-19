@@ -16,11 +16,17 @@
     <Filter Include="src\Core\Kernal">
       <UniqueIdentifier>{91C5C798-FD50-355D-0662-B851726C915D}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Core\Math">
+      <UniqueIdentifier>{9E477A55-0A08-F68B-D342-3F093FC23A68}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Core\Rendered">
       <UniqueIdentifier>{DD009555-4917-93EB-928E-1E0DFEE36373}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\Core\Scene">
       <UniqueIdentifier>{82A83005-6E76-240B-570A-953143770070}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Core\Utils">
+      <UniqueIdentifier>{C53C5E05-B10A-520B-9A9E-C231860B2E70}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\Core\imGui">
       <UniqueIdentifier>{AFC0C306-9B8E-B70C-8422-2833708F9371}</UniqueIdentifier>
@@ -102,6 +108,9 @@
     <ClInclude Include="src\Core\Log.h">
       <Filter>src\Core</Filter>
     </ClInclude>
+    <ClInclude Include="src\Core\Math\Math.h">
+      <Filter>src\Core\Math</Filter>
+    </ClInclude>
     <ClInclude Include="src\Core\MouseKeyCode.h">
       <Filter>src\Core</Filter>
     </ClInclude>
@@ -161,6 +170,9 @@
     </ClInclude>
     <ClInclude Include="src\Core\Scene\ScriptingEntity.h">
       <Filter>src\Core\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Utils\PlatformUtils.h">
+      <Filter>src\Core\Utils</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\Window.h">
       <Filter>src\Core</Filter>
@@ -1473,7 +1485,6 @@
     <ClInclude Include="third_party\stb_image\stb_image.h">
       <Filter>third_party\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\Utils\PlatformUtils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Application.cpp">
@@ -1487,6 +1498,9 @@
     </ClCompile>
     <ClCompile Include="src\Core\Log.cpp">
       <Filter>src\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Math\Math.cpp">
+      <Filter>src\Core\Math</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\OrthographicCameraController.cpp">
       <Filter>src\Core</Filter>
@@ -1539,6 +1553,9 @@
     <ClCompile Include="src\Core\WindowsInput.cpp">
       <Filter>src\Core</Filter>
     </ClCompile>
+    <ClCompile Include="src\Core\WindowsUtils.cpp">
+      <Filter>src\Core</Filter>
+    </ClCompile>
     <ClCompile Include="src\Core\imGui\imguiLayer.cpp">
       <Filter>src\Core\imGui</Filter>
     </ClCompile>
@@ -1575,6 +1592,5 @@
     <ClCompile Include="third_party\stb_image\stb_image.cpp">
       <Filter>third_party\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\WindowsUtils.cpp" />
   </ItemGroup>
 </Project>

@@ -18,6 +18,7 @@ namespace Shunya
 		entt::registry& getReg() { return m_Registry; }
 		
 		void OnViewportResize(uint32_t width, uint32_t height);
+		Entity GetPrimaryCameraEntity();
 		void OnUpdate(Timestamp ts);
 
 	private:

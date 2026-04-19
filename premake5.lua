@@ -16,12 +16,14 @@ IncludeDir["glm"] = "Shunya-Core/third_party/glm"
 IncludeDir["stb_image"] = "Shunya-Core/third_party/stb_image"
 IncludeDir["entt"] = "Shunya-Core/third_party/entt/include"
 IncludeDir["yaml_cpp"] = "Shunya-Core/third_party/yaml_cpp/include"
+IncludeDir["ImGizmos"] = "Shunya-Core/third_party/ImGizmos"
 
 group "Dependencies"
     include "Shunya-Core/third_party/GLFW"
     include "Shunya-Core/third_party/Glad"
     include "Shunya-Core/third_party/imGUI"
     include "Shunya-Core/third_party/yaml_cpp"
+    include "Shunya-Core/third_party/ImGizmos"
 group ""
 
 project "Shunya-Core"
@@ -48,7 +50,6 @@ project "Shunya-Core"
         "%{prj.name}/third_party/imGUI/examples/imgui_impl_glfw.cpp",
         "%{prj.name}/third_party/imGUI/examples/imgui_impl_opengl3.cpp",
         "%{prj.name}/third_party/imGUI/examples/imgui_impl_opengl3.h",
-
     }
 
     includedirs {
@@ -60,11 +61,16 @@ project "Shunya-Core"
         "%{IncludeDir.glm}",
         "%{IncludeDir.stb_image}",
         "%{IncludeDir.entt}",
-		"%{IncludeDir.yaml_cpp}"
+		"%{IncludeDir.yaml_cpp}",
+        "%{IncludeDir.ImGizmos}"
     }
 
-    links { "GLFW", "Glad", "imGUI","yaml_cpp","opengl32.lib" }
+    links { "GLFW", "Glad", "imGUI","yaml_cpp","opengl32.lib","ImGizmos" }
 
+    filter "files:third_party/ImGizmos/**.cpp"
+        flags {"NoPCH"}
+
+        
     filter "system:windows"
         systemversion "latest"
         defines { "SHUNYA_CORE_EXPORTS", "IMGUI_DISABLE_WIN32_FUNCTIONS", "GLFW_INCLUDE_NONE","YAML_CPP_STATIC_DEFINE" }
@@ -105,10 +111,15 @@ function CreateClientProject(name)
             "%{IncludeDir.GLFW}",
             "%{IncludeDir.Glad}",
             "%{IncludeDir.stb_image}",
-            "%{IncludeDir.entt}"
+            "%{IncludeDir.entt}",
+		    "%{IncludeDir.yaml_cpp}",
+            "%{IncludeDir.ImGizmos}"
         }
         links { "Shunya-Core" }
 
+        filter "files:third_party/ImGizmos/**.cpp"
+            flags {"NoPCH"}
+        
         filter "system:windows"
             systemversion "latest"
 

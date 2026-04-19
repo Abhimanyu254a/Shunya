@@ -88,6 +88,7 @@ namespace Shunya {
         bool m_ViewportFocused = false;
         bool m_ViewportHovered = false;
         SceneHierarchyPanel m_SceneHierarchyPanel;
+        int m_GizmoType = -1;
     private:
         bool OnKeyPressed(KeyPressedEvent& e);
 
