@@ -28,10 +28,14 @@ namespace Shunya {
         FramebufferSpecification fbspec;
         fbspec.Width = 1280;
         fbspec.Height = 720;
+        fbspec.Attachments = { FramebufferTextureFormat::RGBA8,
+                               FramebufferTextureFormat::Depth }; // ✅ add this
         m_FrameBuffer = FrameBuffer::Create(fbspec);
 
         
         m_ActiveScene = std::make_shared<Scene>();
+        m_EditorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f);
+
 #if 0
 
         m_SquareEntity = m_ActiveScene->CreateEntity("Blue Square");
@@ -101,10 +105,12 @@ namespace Shunya {
             m_FrameBuffer->Resize((uint32_t)m_ViewportSize.x,
                 (uint32_t)m_ViewportSize.y);
             m_CameraController.OnResize(m_ViewportSize.x, m_ViewportSize.y);
+            m_EditorCamera.SetViewportSize(m_ViewportSize.x, m_ViewportSize.y);
             m_ActiveScene->OnViewportResize(
                 (uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
         }
 
+        m_EditorCamera.OnUpdate(ts); // always update, it gates internally via Alt key
         if (m_ViewportFocused)
             m_CameraController.OnUpdate(ts);
 
@@ -114,7 +120,7 @@ namespace Shunya {
         RendererCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
         RendererCommand::Clear();
 
-        m_ActiveScene->OnUpdate(ts); // BeginScene/EndScene inside Scene::OnUpdate
+        m_ActiveScene->OnUpdateEditor(ts, m_EditorCamera); // BeginScene/EndScene inside Scene::OnUpdate
 
         m_FrameBuffer->UnBind();
     }
@@ -226,11 +232,13 @@ namespace Shunya {
             ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowWidth, windowHeight);
 
             // Camera
-            auto cameraEntity = m_ActiveScene->GetPrimaryCameraEntity();
-            const auto& camera = cameraEntity.GetComponent<CameraComponent>().Camera;
-            const glm::mat4& cameraProjection = camera.GetProjection();
-            glm::mat4 cameraView = glm::inverse(cameraEntity.GetComponent<TransformComponent>().GetTransform());
+            //auto cameraEntity = m_ActiveScene->GetPrimaryCameraEntity();
+            //const auto& camera = cameraEntity.GetComponent<CameraComponent>().Camera;
+            //const glm::mat4& cameraProjection = camera.GetProjection();
+            //glm::mat4 cameraView = glm::inverse(cameraEntity.GetComponent<TransformComponent>().GetTransform());
 
+            const glm::mat4& cameraProjection = m_EditorCamera.GetProjection();
+            glm::mat4 cameraView = m_EditorCamera.GetViewMatrix();
             // Entity transform
             auto& tc = selectedEntity.GetComponent<TransformComponent>();
             glm::mat4 transform = tc.GetTransform();
@@ -270,6 +278,7 @@ namespace Shunya {
     {
         if (m_ViewportFocused && m_ViewportHovered)
             m_CameraController.OnEvent(e);
+        m_EditorCamera.OnEvent(e);
         ImGuiIO& io = ImGui::GetIO();
         EventDispatcher dispatcher(e);
         dispatcher.Dispatch<KeyPressedEvent>(SHUNYA_BIND(EditorLayer::OnKeyPressed));

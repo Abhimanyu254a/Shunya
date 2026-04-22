@@ -58,6 +58,7 @@
 #pragma once
 #include "Shunya.h"
 #include "Panels/ScenePanel.h"
+#include "Core/Rendered/EditorCamera.h"
 
 namespace Shunya {
 
@@ -88,6 +89,7 @@ namespace Shunya {
         bool m_ViewportFocused = false;
         bool m_ViewportHovered = false;
         SceneHierarchyPanel m_SceneHierarchyPanel;
+        EditorCamera m_EditorCamera;
         int m_GizmoType = -1;
     private:
         bool OnKeyPressed(KeyPressedEvent& e);

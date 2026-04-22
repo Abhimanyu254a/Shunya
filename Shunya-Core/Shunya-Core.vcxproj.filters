@@ -1485,6 +1485,7 @@
     <ClInclude Include="third_party\stb_image\stb_image.h">
       <Filter>third_party\stb_image</Filter>
     </ClInclude>
+    <ClInclude Include="src\Core\Rendered\EditorCamera.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Application.cpp">
@@ -1592,5 +1593,6 @@
     <ClCompile Include="third_party\stb_image\stb_image.cpp">
       <Filter>third_party\stb_image</Filter>
     </ClCompile>
+    <ClCompile Include="src\Core\Rendered\EditorCamera.cpp" />
   </ItemGroup>
 </Project>

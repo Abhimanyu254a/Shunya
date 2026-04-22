@@ -195,9 +195,22 @@ namespace Shunya {
 	{
 		m_Registry.destroy(entity);
 	}
+	void Scene::OnUpdateEditor(Timestamp ts, EditorCamera& camera)
+	{
+		Renderer2D::BeginScene(camera);
 
+		auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
+		for (auto entity : group)
+		{
+			auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
 
-	void Scene::OnUpdate(Timestamp ts)
+			Renderer2D::DrawQuad(transform.GetTransform(), sprite.Color);
+		}
+
+		Renderer2D::EndScene();
+	}
+
+	void Scene::OnUpdateRuntime(Timestamp ts)
 	{
 		SHUNYA_PROFILE_FUNCTION("Scene::Onupdate");
 		{

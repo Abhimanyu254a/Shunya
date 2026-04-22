@@ -1,6 +1,7 @@
 #pragma once
 #include "entt.hpp"
 #include "Core/Kernal/Timestep.h"
+#include "Core/Rendered/EditorCamera.h"
 
 
 namespace Shunya
@@ -19,7 +20,8 @@ namespace Shunya
 		
 		void OnViewportResize(uint32_t width, uint32_t height);
 		Entity GetPrimaryCameraEntity();
-		void OnUpdate(Timestamp ts);
+		void OnUpdateRuntime(Timestamp ts);
+		void OnUpdateEditor(Timestamp ts, EditorCamera& camera);
 
 	private:
 		template<typename T>

@@ -165,6 +165,7 @@
     <ClInclude Include="src\Core\OrthographicCameraController.h" />
     <ClInclude Include="src\Core\Rendered\Buffer.h" />
     <ClInclude Include="src\Core\Rendered\Camera.h" />
+    <ClInclude Include="src\Core\Rendered\EditorCamera.h" />
     <ClInclude Include="src\Core\Rendered\FrameBuffer.h" />
     <ClInclude Include="src\Core\Rendered\GraphicsContext.h" />
     <ClInclude Include="src\Core\Rendered\OrthographicCamera.h" />
@@ -628,6 +629,7 @@
     <ClCompile Include="src\Core\Math\Math.cpp" />
     <ClCompile Include="src\Core\OrthographicCameraController.cpp" />
     <ClCompile Include="src\Core\Rendered\Buffer.cpp" />
+    <ClCompile Include="src\Core\Rendered\EditorCamera.cpp" />
     <ClCompile Include="src\Core\Rendered\FrameBuffer.cpp" />
     <ClCompile Include="src\Core\Rendered\OrthographicCamera.cpp" />
     <ClCompile Include="src\Core\Rendered\Renderer.cpp" />
