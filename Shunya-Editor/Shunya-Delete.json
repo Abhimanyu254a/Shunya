@@ -1,1 +1,1 @@
-{"otherData": {},"traceEvents":[{"cat":"function","dur":25,"name":"Shunya::OpenGLTexture2D::~OpenGLTexture2D","ph":"X","pid":0,"tid":1287420355,"ts":335976507677}]}
+{"otherData": {},"traceEvents":[{"cat":"function","dur":55,"name":"Shunya::OpenGLTexture2D::~OpenGLTexture2D","ph":"X","pid":0,"tid":319376681,"ts":133257366736}]}

@@ -515,6 +515,11 @@ namespace Shunya {
         }
     }
 
+    void SceneHierarchyPanel::SetSelectedEntity(Entity entity)
+    {
+        m_SelectionContext = entity;
+    }
+
     void SceneHierarchyPanel::DrawComponents(Entity entity)
     {
         if (!entity) return;

@@ -14,6 +14,17 @@ namespace Shunya
 		case Shunya::ShaderDataType::Float2:   return GL_FLOAT;
 		case Shunya::ShaderDataType::Float3:   return GL_FLOAT;
 		case Shunya::ShaderDataType::Float4:   return GL_FLOAT;
+		//{
+		//	glEnableVertexAttribArray(m_VertexBufferIndex);
+		//	glVertexAttribPointer(m_VertexBufferIndex,
+		//		element.GetComponentCount(),
+		//		ShaderDataTypeToOpenGLBaseType(element.Type),
+		//		element.Normalized ? GL_TRUE : GL_FALSE,
+		//		layout.GetStride(),
+		//		(const void*)element.Offset);
+		//	m_VertexBufferIndex++;
+		//	break;
+		//}
 		case Shunya::ShaderDataType::Mat3:     return GL_FLOAT;
 		case Shunya::ShaderDataType::Mat4:     return GL_FLOAT;
 		case Shunya::ShaderDataType::Int:      return GL_INT;
@@ -70,39 +81,62 @@ namespace Shunya
 
 	// In OpenGLVertexArray.cpp
 
-void OpenGLVertexArray::AddVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer)
-{
-	SHUNYA_PROFILE_FUNCTION();
+	void OpenGLVertexArray::AddVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer)
+	{
+		SHUNYA_PROFILE_FUNCTION();
 
-    glBindVertexArray(m_RendererID);
-    vertexBuffer->Bind();
+		glBindVertexArray(m_RendererID);
+		vertexBuffer->Bind();
 
-    // GET THE LAYOUT YOU JUST FIXED
-    const auto& layout = vertexBuffer->GetLayout();
-	SHUNYA_CORE_INFO("Vertex Buffer has no layout!");
-    
-    uint32_t m_VertexBufferIndex = 0;
-    for (const auto& element : layout)
-    {
-        // ENABLE THE ATTRIBUTE (Essential!)
-        glEnableVertexAttribArray(m_VertexBufferIndex);
+		const auto& layout = vertexBuffer->GetLayout();
+		SHUNYA_CORE_ASSERT(layout.GetElement().size(), "Vertex Buffer has no layout!");
 
-        // TELL OPENGL HOW TO READ THE DATA
-        // This links the specific 'index' (like location=0) to the data structure
-        glVertexAttribPointer(
-			m_VertexBufferIndex,                          // location = 0, 1, etc.
-            element.GetComponentCount(),    // vec3 = 3, vec2 = 2
-            ShaderDataTypeToOpenGLBaseType(element.Type), // GL_FLOAT, etc.
-            element.Normalized ? GL_TRUE : GL_FALSE,      // Is it normalized?
-            layout.GetStride(),             // Stride (The total size of one vertex)
-            (const void*)(uintptr_t)element.Offset       // Offset (Where this specific data starts)
-        );
-		m_VertexBufferIndex++;
+		uint32_t m_VertexBufferIndex = 0;
+		for (const auto& element : layout)
+		{
+			switch (element.Type)
+			{
+			case ShaderDataType::Float:
+			case ShaderDataType::Float2:
+			case ShaderDataType::Float3:
+			case ShaderDataType::Float4:
+			case ShaderDataType::Mat3:
+			case ShaderDataType::Mat4:
+			{
+				glEnableVertexAttribArray(m_VertexBufferIndex);
+				// FLOATS: Use glVertexAttribPointer (NO 'I')
+				glVertexAttribPointer(m_VertexBufferIndex,
+					element.GetComponentCount(),
+					ShaderDataTypeToOpenGLBaseType(element.Type),
+					element.Normalized ? GL_TRUE : GL_FALSE,
+					layout.GetStride(),
+					(const void*)(uintptr_t)element.Offset);
+				m_VertexBufferIndex++;
+				break;
+			}
+			case ShaderDataType::Int:
+			case ShaderDataType::Int2:
+			case ShaderDataType::Int3:
+			case ShaderDataType::Int4:
+			case ShaderDataType::Bool:
+			{
+				glEnableVertexAttribArray(m_VertexBufferIndex);
+				// INTEGERS (EntityID): Use glVertexAttribIPointer (WITH 'I')
+				glVertexAttribIPointer(m_VertexBufferIndex,
+					element.GetComponentCount(),
+					ShaderDataTypeToOpenGLBaseType(element.Type),
+					layout.GetStride(),
+					(const void*)(uintptr_t)element.Offset);
+				m_VertexBufferIndex++;
+				break;
+			}
+			default:
+				SHUNYA_CORE_ASSERT(false, "Unknown ShaderDataType!");
+			}
+		}
 
-    }
-
-    m_VertexBuffers.push_back(vertexBuffer);
-}
+		m_VertexBuffers.push_back(vertexBuffer);
+	}
 
 	void OpenGLVertexArray::SetIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer)
 	{
