@@ -77,7 +77,7 @@
       <PrecompiledHeaderFile>SNY-PCH.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>SHUNYA_CORE_EXPORTS;IMGUI_DISABLE_WIN32_FUNCTIONS;GLFW_INCLUDE_NONE;SHUNYA_DEBUG;YAML_CPP_STATIC_DEFINE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;third_party\spdlog\include;third_party\GLFW\include;third_party\Glad\include;third_party\imGUI;third_party\glm;third_party\stb_image;third_party\entt\include;third_party\yaml_cpp\include;third_party\ImGizmos;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;third_party\spdlog\include;third_party\GLFW\include;third_party\Glad\include;third_party\imGUI;third_party\glm;third_party\stb_image;third_party\entt\include;third_party\yaml_cpp\include;third_party\ImGizmos;C:\VulkanSDK\1.4.341.1\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -90,8 +90,10 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;C:\VulkanSDK\1.4.341.1\Lib\shaderc_sharedd.lib;C:\VulkanSDK\1.4.341.1\Lib\spirv-cross-cored.lib;C:\VulkanSDK\1.4.341.1\Lib\spirv-cross-glsld.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
+    <ProjectReference>
+    </ProjectReference>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -99,7 +101,7 @@
       <PrecompiledHeaderFile>SNY-PCH.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>SHUNYA_CORE_EXPORTS;IMGUI_DISABLE_WIN32_FUNCTIONS;GLFW_INCLUDE_NONE;SHUNYA_RELEASE;YAML_CPP_STATIC_DEFINE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;third_party\spdlog\include;third_party\GLFW\include;third_party\Glad\include;third_party\imGUI;third_party\glm;third_party\stb_image;third_party\entt\include;third_party\yaml_cpp\include;third_party\ImGizmos;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;third_party\spdlog\include;third_party\GLFW\include;third_party\Glad\include;third_party\imGUI;third_party\glm;third_party\stb_image;third_party\entt\include;third_party\yaml_cpp\include;third_party\ImGizmos;C:\VulkanSDK\1.4.341.1\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -116,8 +118,10 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <Lib>
-      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;C:\VulkanSDK\1.4.341.1\Lib\shaderc_shared.lib;C:\VulkanSDK\1.4.341.1\Lib\spirv-cross-core.lib;C:\VulkanSDK\1.4.341.1\Lib\spirv-cross-glsl.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
+    <ProjectReference>
+    </ProjectReference>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">
     <ClCompile>
@@ -125,7 +129,7 @@
       <PrecompiledHeaderFile>SNY-PCH.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>SHUNYA_CORE_EXPORTS;IMGUI_DISABLE_WIN32_FUNCTIONS;GLFW_INCLUDE_NONE;YAML_CPP_STATIC_DEFINE;SHUNYA_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;third_party\spdlog\include;third_party\GLFW\include;third_party\Glad\include;third_party\imGUI;third_party\glm;third_party\stb_image;third_party\entt\include;third_party\yaml_cpp\include;third_party\ImGizmos;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;third_party\spdlog\include;third_party\GLFW\include;third_party\Glad\include;third_party\imGUI;third_party\glm;third_party\stb_image;third_party\entt\include;third_party\yaml_cpp\include;third_party\ImGizmos;C:\VulkanSDK\1.4.341.1\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -142,8 +146,10 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <Lib>
-      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;C:\VulkanSDK\1.4.341.1\Lib\shaderc_shared.lib;C:\VulkanSDK\1.4.341.1\Lib\spirv-cross-core.lib;C:\VulkanSDK\1.4.341.1\Lib\spirv-cross-glsl.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
+    <ProjectReference>
+    </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\Core\All_Event.h" />
@@ -156,6 +162,7 @@
     <ClInclude Include="src\Core\Events\KeyEvent.h" />
     <ClInclude Include="src\Core\Events\MouseEvent.h" />
     <ClInclude Include="src\Core\Kernal\TimeStep.h" />
+    <ClInclude Include="src\Core\Kernal\Timer.h" />
     <ClInclude Include="src\Core\KeyCode.h" />
     <ClInclude Include="src\Core\Layer.h" />
     <ClInclude Include="src\Core\LayerStack.h" />
@@ -175,6 +182,7 @@
     <ClInclude Include="src\Core\Rendered\RendererCommand.h" />
     <ClInclude Include="src\Core\Rendered\Shader.h" />
     <ClInclude Include="src\Core\Rendered\Texture.h" />
+    <ClInclude Include="src\Core\Rendered\UniformBuffer.h" />
     <ClInclude Include="src\Core\Rendered\VertexArray.h" />
     <ClInclude Include="src\Core\Scene\Components.h" />
     <ClInclude Include="src\Core\Scene\Entity.h" />
@@ -195,6 +203,7 @@
     <ClInclude Include="src\Core\openGL\OpenGLVertexArray.h" />
     <ClInclude Include="src\Core\openGL\OpenglBuffer.h" />
     <ClInclude Include="src\Core\openGL\OpenglRendererAPI.h" />
+    <ClInclude Include="src\Core\openGL\OpenglUniformBuffer.h" />
     <ClInclude Include="src\SNY-PCH.h" />
     <ClInclude Include="src\Shunya.h" />
     <ClInclude Include="third_party\glm\glm\common.hpp" />
@@ -638,6 +647,7 @@
     <ClCompile Include="src\Core\Rendered\RendererCommand.cpp" />
     <ClCompile Include="src\Core\Rendered\Shader.cpp" />
     <ClCompile Include="src\Core\Rendered\Texture.cpp" />
+    <ClCompile Include="src\Core\Rendered\UniformBuffer.cpp" />
     <ClCompile Include="src\Core\Rendered\VertexArray.cpp" />
     <ClCompile Include="src\Core\Scene\Entity.cpp" />
     <ClCompile Include="src\Core\Scene\Scene.cpp" />
@@ -654,6 +664,7 @@
     <ClCompile Include="src\Core\openGL\OpenGLVertexArray.cpp" />
     <ClCompile Include="src\Core\openGL\OpenglBuffer.cpp" />
     <ClCompile Include="src\Core\openGL\OpenglRendererAPI.cpp" />
+    <ClCompile Include="src\Core\openGL\OpenglUniformBuffer.cpp" />
     <ClCompile Include="src\SNY-PCH.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>

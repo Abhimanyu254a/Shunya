@@ -1,12 +1,18 @@
 workspace "Shunya"
     architecture "x64"
-    startproject "Shunya-Editor" -- Start with the Editor
+    startproject "Shunya-Editor" 
     configurations { "Debug", "Release", "Dist" }
     
     filter "system:windows"
         buildoptions { "/utf-8" }
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
+
+-- ==============================================================================
+-- 1. DEFINE ALL VARIABLES FIRST (Before any projects are declared)
+-- ==============================================================================
+
+VULKAN_SDK = os.getenv("VULKAN_SDK")
 
 IncludeDir = {}
 IncludeDir["GLFW"] = "Shunya-Core/third_party/GLFW/include"
@@ -17,6 +23,23 @@ IncludeDir["stb_image"] = "Shunya-Core/third_party/stb_image"
 IncludeDir["entt"] = "Shunya-Core/third_party/entt/include"
 IncludeDir["yaml_cpp"] = "Shunya-Core/third_party/yaml_cpp/include"
 IncludeDir["ImGizmos"] = "Shunya-Core/third_party/ImGizmos"
+IncludeDir["VulkanSDK"] = "%{VULKAN_SDK}/Include"
+
+LibraryDir = {}
+LibraryDir["VulkanSDK"] = "%{VULKAN_SDK}/Lib"
+
+Library = {}
+Library["ShaderC_Debug"] = "%{LibraryDir.VulkanSDK}/shaderc_sharedd.lib"
+Library["SPIRV_Cross_Debug"] = "%{LibraryDir.VulkanSDK}/spirv-cross-cored.lib"
+Library["SPIRV_Cross_GLSL_Debug"] = "%{LibraryDir.VulkanSDK}/spirv-cross-glsld.lib"
+
+Library["ShaderC_Release"] = "%{LibraryDir.VulkanSDK}/shaderc_shared.lib"
+Library["SPIRV_Cross_Release"] = "%{LibraryDir.VulkanSDK}/spirv-cross-core.lib"
+Library["SPIRV_Cross_GLSL_Release"] = "%{LibraryDir.VulkanSDK}/spirv-cross-glsl.lib"
+
+-- ==============================================================================
+-- 2. NOW DECLARE THE PROJECTS
+-- ==============================================================================
 
 group "Dependencies"
     include "Shunya-Core/third_party/GLFW"
@@ -31,7 +54,7 @@ project "Shunya-Core"
     kind "StaticLib"
     language "C++"
     cppdialect "C++latest"
-    staticruntime "off" -- Switch to Dynamic to match /MDd
+    staticruntime "off" 
 
     targetdir ("bin/" .. outputdir .. "/%{prj.name}")
     objdir ("bin/" .. outputdir .. "/%{prj.name}")
@@ -61,8 +84,9 @@ project "Shunya-Core"
         "%{IncludeDir.glm}",
         "%{IncludeDir.stb_image}",
         "%{IncludeDir.entt}",
-		"%{IncludeDir.yaml_cpp}",
-        "%{IncludeDir.ImGizmos}"
+        "%{IncludeDir.yaml_cpp}",
+        "%{IncludeDir.ImGizmos}",
+        "%{IncludeDir.VulkanSDK}"
     }
 
     links { "GLFW", "Glad", "imGUI","yaml_cpp","opengl32.lib","ImGizmos" }
@@ -70,27 +94,44 @@ project "Shunya-Core"
     filter "files:third_party/ImGizmos/**.cpp"
         flags {"NoPCH"}
 
-        
     filter "system:windows"
         systemversion "latest"
         defines { "SHUNYA_CORE_EXPORTS", "IMGUI_DISABLE_WIN32_FUNCTIONS", "GLFW_INCLUDE_NONE","YAML_CPP_STATIC_DEFINE" }
 
     filter "configurations:Debug"
         defines { "SHUNYA_DEBUG", "YAML_CPP_STATIC_DEFINE" }
-        runtime "Debug" -- This replaces manual /MDd
+        runtime "Debug" 
         symbols "On"
+        links{
+            "%{Library.ShaderC_Debug}",
+            "%{Library.SPIRV_Cross_Debug}",
+            "%{Library.SPIRV_Cross_GLSL_Debug}"
+        }
 
     filter "configurations:Release"
         defines { "SHUNYA_RELEASE", "YAML_CPP_STATIC_DEFINE" }
-        runtime "Release" -- This replaces manual /MD
+        runtime "Release" 
         optimize "On"
+        links{
+            "%{Library.ShaderC_Release}",
+            "%{Library.SPIRV_Cross_Release}",
+            "%{Library.SPIRV_Cross_GLSL_Release}"
+        }   
 
     filter "configurations:Dist"
         defines { "SHUNYA_DIST" }
         runtime "Release"
         optimize "On"
+        links{
+            "%{Library.ShaderC_Release}",
+            "%{Library.SPIRV_Cross_Release}",
+            "%{Library.SPIRV_Cross_GLSL_Release}"
+        }
 
--- Client Template Function
+-- ==============================================================================
+-- 3. CLIENT TEMPLATE
+-- ==============================================================================
+
 function CreateClientProject(name)
     project (name)
         location (name)
@@ -112,7 +153,7 @@ function CreateClientProject(name)
             "%{IncludeDir.Glad}",
             "%{IncludeDir.stb_image}",
             "%{IncludeDir.entt}",
-		    "%{IncludeDir.yaml_cpp}",
+            "%{IncludeDir.yaml_cpp}",
             "%{IncludeDir.ImGizmos}"
         }
         links { "Shunya-Core" }

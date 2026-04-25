@@ -28,10 +28,21 @@ int main(int argc, char** argv);
 
 namespace Shunya
 {
+		struct ApplicationCommandLineArgs
+	{
+		int Count = 0;
+		char** Args = nullptr;
+
+		const char* operator[](int index) const
+		{
+			return Args[index];
+		}
+	};
+
 	class SHUNYA_API Application
 	{
 	public:
-		Application(const std::string& name = "Shunya app");
+		Application(const std::string& name = "Shunya", ApplicationCommandLineArgs args = ApplicationCommandLineArgs());
 		virtual ~Application();
 		void OnEvent(Event& e);
 		void PushLayer(Layer* layer);
@@ -40,7 +51,8 @@ namespace Shunya
 		void Close();
 
 		inline static Application& Get() { return *s_Instance; }
-		
+		ApplicationCommandLineArgs GetCommandLineArgs() const { return m_CommandLineArgs; }
+
 		imGUILayer* GetImGuiLayer() { return m_ImGuiLayer; }
 
 		inline Window& GetWindow() { return *m_Window; }
@@ -58,10 +70,10 @@ namespace Shunya
 		bool m_Minimized = false;	
 		static Application* s_Instance;
 		float m_LastTimeFrame = 0.0f;
-
+		ApplicationCommandLineArgs m_CommandLineArgs;
 	};
 
-	Application* CreateApplication();
+	Application* CreateApplication(ApplicationCommandLineArgs args);
 
 }
 

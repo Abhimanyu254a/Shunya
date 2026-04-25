@@ -17,8 +17,8 @@ namespace Shunya
     class ShunyaEditor : public Application
     {
     public:
-        ShunyaEditor()
-			:Application("Shunya Editor")
+        ShunyaEditor(ApplicationCommandLineArgs args)
+			:Application("Shunya Editor",args)
         {
             PushLayer(new EditorLayer());
         }
@@ -27,8 +27,8 @@ namespace Shunya
         }
     };
 
-    Application* CreateApplication()
+    Application* CreateApplication(ApplicationCommandLineArgs args)
     {
-        return new ShunyaEditor();
+        return new ShunyaEditor(args);
     }
 }

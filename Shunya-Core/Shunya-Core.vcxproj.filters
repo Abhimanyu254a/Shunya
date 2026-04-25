@@ -96,6 +96,9 @@
     <ClInclude Include="src\Core\Kernal\TimeStep.h">
       <Filter>src\Core\Kernal</Filter>
     </ClInclude>
+    <ClInclude Include="src\Core\Kernal\Timer.h">
+      <Filter>src\Core\Kernal</Filter>
+    </ClInclude>
     <ClInclude Include="src\Core\KeyCode.h">
       <Filter>src\Core</Filter>
     </ClInclude>
@@ -123,6 +126,9 @@
     <ClInclude Include="src\Core\Rendered\Camera.h">
       <Filter>src\Core\Rendered</Filter>
     </ClInclude>
+    <ClInclude Include="src\Core\Rendered\EditorCamera.h">
+      <Filter>src\Core\Rendered</Filter>
+    </ClInclude>
     <ClInclude Include="src\Core\Rendered\FrameBuffer.h">
       <Filter>src\Core\Rendered</Filter>
     </ClInclude>
@@ -148,6 +154,9 @@
       <Filter>src\Core\Rendered</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\Rendered\Texture.h">
+      <Filter>src\Core\Rendered</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Rendered\UniformBuffer.h">
       <Filter>src\Core\Rendered</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\Rendered\VertexArray.h">
@@ -208,6 +217,9 @@
       <Filter>src\Core\openGL</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\openGL\OpenglRendererAPI.h">
+      <Filter>src\Core\openGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\openGL\OpenglUniformBuffer.h">
       <Filter>src\Core\openGL</Filter>
     </ClInclude>
     <ClInclude Include="src\SNY-PCH.h">
@@ -1485,7 +1497,6 @@
     <ClInclude Include="third_party\stb_image\stb_image.h">
       <Filter>third_party\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\Rendered\EditorCamera.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Application.cpp">
@@ -1507,6 +1518,9 @@
       <Filter>src\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\Rendered\Buffer.cpp">
+      <Filter>src\Core\Rendered</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Rendered\EditorCamera.cpp">
       <Filter>src\Core\Rendered</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\Rendered\FrameBuffer.cpp">
@@ -1531,6 +1545,9 @@
       <Filter>src\Core\Rendered</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\Rendered\Texture.cpp">
+      <Filter>src\Core\Rendered</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Rendered\UniformBuffer.cpp">
       <Filter>src\Core\Rendered</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\Rendered\VertexArray.cpp">
@@ -1581,6 +1598,9 @@
     <ClCompile Include="src\Core\openGL\OpenglRendererAPI.cpp">
       <Filter>src\Core\openGL</Filter>
     </ClCompile>
+    <ClCompile Include="src\Core\openGL\OpenglUniformBuffer.cpp">
+      <Filter>src\Core\openGL</Filter>
+    </ClCompile>
     <ClCompile Include="src\SNY-PCH.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -1593,6 +1613,5 @@
     <ClCompile Include="third_party\stb_image\stb_image.cpp">
       <Filter>third_party\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\Rendered\EditorCamera.cpp" />
   </ItemGroup>
 </Project>
