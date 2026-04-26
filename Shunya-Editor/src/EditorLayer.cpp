@@ -215,6 +215,7 @@ namespace Shunya {
         ImGui::End(); // DockSpace
 
         m_SceneHierarchyPanel.OnImGuiRender();
+        m_ContentBrowserPanel.OnImGuiRender();
         // ──   s panel ──────────────────────────────────────
         ImGui::Begin("Settings");
 

@@ -2,6 +2,7 @@
 #include "Shunya.h"
 #include "Panels/ScenePanel.h"
 #include "Core/Rendered/EditorCamera.h"
+#include "Panels/ContentBrowserPanel.h"
 
 namespace Shunya {
 
@@ -33,6 +34,7 @@ namespace Shunya {
         bool m_ViewportFocused = false;
         bool m_ViewportHovered = false;
         SceneHierarchyPanel m_SceneHierarchyPanel;
+        ContentBrowserPanel m_ContentBrowserPanel;
         EditorCamera m_EditorCamera;
         int m_GizmoType = -1;
     private:

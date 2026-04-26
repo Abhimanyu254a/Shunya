@@ -1,0 +1,1640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shunya Engine — Architecture</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;700&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0c10;
+    --surface: #0f1318;
+    --surface2: #141920;
+    --border: #1e2733;
+    --accent: #00d4ff;
+    --accent2: #7b61ff;
+    --accent3: #ff6b35;
+    --green: #39d353;
+    --yellow: #f5c518;
+    --text: #c8d6e5;
+    --text-dim: #5a7080;
+    --text-bright: #edf2f7;
+    --mono: 'IBM Plex Mono', monospace;
+    --display: 'Rajdhani', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* SCANLINE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* HEADER */
+  header {
+    border-bottom: 1px solid var(--border);
+    padding: 24px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    background: rgba(10,12,16,0.95);
+    backdrop-filter: blur(10px);
+    z-index: 100;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .logo-mark {
+    width: 32px; height: 32px;
+    border: 2px solid var(--accent);
+    display: grid;
+    place-items: center;
+    position: relative;
+    animation: pulse-border 3s ease-in-out infinite;
+  }
+
+  .logo-mark::before {
+    content: '';
+    width: 12px; height: 12px;
+    background: var(--accent);
+    clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+  }
+
+  @keyframes pulse-border {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(0,212,255,0.4); }
+    50% { box-shadow: 0 0 0 6px rgba(0,212,255,0); }
+  }
+
+  .logo h1 {
+    font-family: var(--display);
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-bright);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+
+  .logo span {
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    display: block;
+    text-transform: uppercase;
+  }
+
+  .header-meta {
+    display: flex;
+    gap: 24px;
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+
+  .status-dot {
+    display: inline-block;
+    width: 6px; height: 6px;
+    background: var(--green);
+    border-radius: 50%;
+    margin-right: 6px;
+    animation: blink 2s ease-in-out infinite;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.2; }
+  }
+
+  /* NAV TABS */
+  .nav-tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .nav-tabs::-webkit-scrollbar { display: none; }
+
+  .tab-btn {
+    padding: 14px 24px;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--text-dim);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .tab-btn:hover { color: var(--text); background: var(--surface2); }
+
+  .tab-btn.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+    background: var(--surface2);
+  }
+
+  /* MAIN LAYOUT */
+  main {
+    padding: 32px 40px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .section { display: none; animation: fadeIn 0.3s ease; }
+  .section.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* SECTION HEADER */
+  .section-title {
+    font-family: var(--display);
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--text-bright);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .section-sub {
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-bottom: 32px;
+    letter-spacing: 1px;
+  }
+
+  /* GRID LAYOUTS */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+
+  /* CARD */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 20px;
+    position: relative;
+    transition: all 0.25s;
+    cursor: pointer;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 0;
+    background: var(--accent);
+    transition: height 0.3s ease;
+  }
+
+  .card:hover { border-color: var(--accent); background: var(--surface2); }
+  .card:hover::before { height: 100%; }
+
+  .card.accent2::before { background: var(--accent2); }
+  .card.accent2:hover { border-color: var(--accent2); }
+
+  .card.accent3::before { background: var(--accent3); }
+  .card.accent3:hover { border-color: var(--accent3); }
+
+  .card-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+
+  .card.accent2 .card-label { color: var(--accent2); }
+  .card.accent3 .card-label { color: var(--accent3); }
+
+  .card-title {
+    font-family: var(--display);
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-bright);
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+  }
+
+  .card-body {
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 1.7;
+  }
+
+  /* PIPELINE FLOW */
+  .pipeline {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin: 16px 0;
+    flex-wrap: wrap;
+  }
+
+  .pipe-step {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 10px 16px;
+    font-size: 11px;
+    color: var(--text);
+    letter-spacing: 1px;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .pipe-step:hover {
+    background: var(--accent);
+    color: var(--bg);
+    border-color: var(--accent);
+  }
+
+  .pipe-step.alt:hover {
+    background: var(--accent2);
+    border-color: var(--accent2);
+  }
+
+  .pipe-arrow {
+    color: var(--text-dim);
+    font-size: 14px;
+    padding: 0 4px;
+    user-select: none;
+  }
+
+  /* VERTICAL PIPELINE */
+  .v-pipeline {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+  }
+
+  .v-step {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .v-step-box {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 10px 20px;
+    font-size: 12px;
+    color: var(--text);
+    min-width: 220px;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .v-step-box:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .v-connector {
+    width: 1px;
+    height: 24px;
+    background: var(--border);
+    margin-left: 30px;
+    position: relative;
+  }
+
+  .v-connector::after {
+    content: '▼';
+    position: absolute;
+    bottom: -8px;
+    left: -5px;
+    color: var(--text-dim);
+    font-size: 9px;
+  }
+
+  /* BADGE */
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border: 1px solid;
+    margin: 2px;
+  }
+
+  .badge-cyan { color: var(--accent); border-color: var(--accent); background: rgba(0,212,255,0.08); }
+  .badge-purple { color: var(--accent2); border-color: var(--accent2); background: rgba(123,97,255,0.08); }
+  .badge-orange { color: var(--accent3); border-color: var(--accent3); background: rgba(255,107,53,0.08); }
+  .badge-green { color: var(--green); border-color: var(--green); background: rgba(57,211,83,0.08); }
+  .badge-yellow { color: var(--yellow); border-color: var(--yellow); background: rgba(245,197,24,0.08); }
+
+  /* TABLE */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+
+  th {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 10px 16px;
+    text-align: left;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  td {
+    border: 1px solid var(--border);
+    padding: 10px 16px;
+    color: var(--text);
+  }
+
+  tr:hover td { background: var(--surface2); }
+
+  td.mono { font-family: var(--mono); color: var(--accent); }
+
+  /* CODE BLOCK */
+  .code-block {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    padding: 16px 20px;
+    font-size: 12px;
+    color: var(--green);
+    overflow-x: auto;
+    margin: 12px 0;
+  }
+
+  /* DIVIDER */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 28px 0;
+  }
+
+  /* STAT BOX */
+  .stat {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 16px 20px;
+    text-align: center;
+  }
+
+  .stat-val {
+    font-family: var(--display);
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--accent);
+    display: block;
+    letter-spacing: -1px;
+  }
+
+  .stat-label {
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  /* LAYER STACK VIZ */
+  .layer-stack {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 4px;
+    margin: 16px 0;
+  }
+
+  .layer-item {
+    padding: 12px 20px;
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 12px;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+
+  .layer-item:hover { transform: translateX(6px); }
+
+  .layer-item.overlay {
+    background: rgba(123,97,255,0.1);
+    border-color: var(--accent2);
+    color: var(--accent2);
+  }
+
+  .layer-item.layer {
+    background: rgba(0,212,255,0.06);
+    border-color: rgba(0,212,255,0.3);
+    color: var(--accent);
+  }
+
+  .layer-tag {
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    opacity: 0.6;
+  }
+
+  /* RENDERING STACK */
+  .render-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    max-width: 400px;
+  }
+
+  .render-layer {
+    padding: 14px 20px;
+    border: 1px solid var(--border);
+    border-bottom: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+  }
+
+  .render-layer:last-child { border-bottom: 1px solid var(--border); }
+
+  .render-layer:hover { background: var(--surface2); }
+
+  .rl-0 { background: rgba(0,212,255,0.15); color: var(--accent); border-color: var(--accent); font-weight: 500; }
+  .rl-1 { background: rgba(0,212,255,0.10); }
+  .rl-2 { background: rgba(0,212,255,0.07); }
+  .rl-3 { background: rgba(0,212,255,0.04); }
+  .rl-4 { background: rgba(0,212,255,0.02); }
+  .rl-5 { background: rgba(57,211,83,0.08); color: var(--green); border-color: rgba(57,211,83,0.3); }
+
+  .render-label { font-size: 9px; color: var(--text-dim); letter-spacing: 1px; }
+
+  /* ECS DIAGRAM */
+  .ecs-diagram {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+    margin: 16px 0;
+  }
+
+  .ecs-col {
+    flex: 1;
+  }
+
+  .ecs-header {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .ecs-item {
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    margin-bottom: 4px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .ecs-item:hover { border-color: var(--accent); color: var(--accent); padding-left: 16px; }
+
+  .ecs-entity { border-left: 3px solid var(--accent3); }
+  .ecs-component { border-left: 3px solid var(--accent2); }
+  .ecs-system { border-left: 3px solid var(--green); }
+
+  /* TOOLTIP */
+  .tooltip-box {
+    display: none;
+    position: absolute;
+    background: var(--surface2);
+    border: 1px solid var(--accent);
+    padding: 10px 14px;
+    font-size: 11px;
+    color: var(--text);
+    z-index: 200;
+    min-width: 200px;
+    pointer-events: none;
+    bottom: calc(100% + 8px);
+    left: 0;
+    white-space: pre-line;
+  }
+
+  .has-tooltip { position: relative; }
+  .has-tooltip:hover .tooltip-box { display: block; }
+
+  /* PROFILING */
+  .profile-bar-container { margin: 8px 0; }
+  .profile-bar-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-bottom: 4px;
+  }
+
+  .profile-bar {
+    height: 6px;
+    background: var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .profile-bar-fill {
+    height: 100%;
+    transition: width 1s ease;
+  }
+
+  /* EVENTS */
+  .event-list { display: flex; flex-direction: column; gap: 4px; }
+  .event-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 14px;
+    border: 1px solid var(--border);
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .event-item:hover { border-color: var(--accent2); background: rgba(123,97,255,0.06); }
+  .event-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .event-name { flex: 1; color: var(--text); }
+  .event-cat { font-size: 10px; color: var(--text-dim); letter-spacing: 1px; }
+
+  /* MODAL */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 500;
+    backdrop-filter: blur(4px);
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--accent);
+    padding: 28px;
+    max-width: 520px;
+    width: 90%;
+    position: relative;
+    animation: modalIn 0.2s ease;
+  }
+
+  @keyframes modalIn {
+    from { transform: scale(0.95); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 12px; right: 16px;
+    background: none; border: none;
+    color: var(--text-dim);
+    font-size: 18px;
+    cursor: pointer;
+  }
+
+  .modal-close:hover { color: var(--text); }
+
+  .modal-title {
+    font-family: var(--display);
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-bright);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .modal-body {
+    font-size: 12px;
+    color: var(--text);
+    line-height: 1.8;
+  }
+
+  /* SCROLL */
+  ::-webkit-scrollbar { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    main { padding: 20px; }
+    header { padding: 16px 20px; }
+    .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+    .ecs-diagram { flex-direction: column; }
+  }
+
+  /* INTRO HERO */
+  .hero {
+    padding: 48px 0 40px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 40px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: center;
+  }
+
+  .hero-text h2 {
+    font-family: var(--display);
+    font-size: 48px;
+    font-weight: 700;
+    color: var(--text-bright);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    line-height: 1.1;
+  }
+
+  .hero-text h2 span { color: var(--accent); }
+
+  .hero-text p {
+    margin-top: 16px;
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.8;
+    max-width: 420px;
+  }
+
+  .hero-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .principles {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 32px;
+  }
+
+  .principle {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .principle:hover { border-color: var(--accent); background: var(--surface); }
+  .principle-num {
+    font-family: var(--display);
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--border);
+    line-height: 1;
+    transition: color 0.2s;
+  }
+  .principle:hover .principle-num { color: var(--accent); }
+  .principle-text h4 { font-size: 13px; color: var(--text-bright); margin-bottom: 4px; }
+  .principle-text p { font-size: 11px; color: var(--text-dim); line-height: 1.6; }
+
+  .projects-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 32px;
+  }
+
+  .proj {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .proj:hover { border-color: var(--accent3); }
+  .proj-name {
+    font-family: var(--display);
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--accent3);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  .proj-desc { font-size: 11px; color: var(--text-dim); margin-top: 4px; }
+  .proj-arrow { font-size: 11px; color: var(--text-dim); margin-top: 8px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-mark"></div>
+    <div>
+      <h1>Shunya</h1>
+      <span>Engine Architecture v1.0</span>
+    </div>
+  </div>
+  <div class="header-meta">
+    <span><span class="status-dot"></span>ENGINE ACTIVE</span>
+    <span>C++ / OpenGL</span>
+    <span>Release Build</span>
+  </div>
+</header>
+
+<div class="nav-tabs">
+  <button class="tab-btn active" onclick="showTab('overview')">Overview</button>
+  <button class="tab-btn" onclick="showTab('pipeline')">Exec Pipeline</button>
+  <button class="tab-btn" onclick="showTab('rendering')">Rendering Stack</button>
+  <button class="tab-btn" onclick="showTab('ecs')">ECS / Scene</button>
+  <button class="tab-btn" onclick="showTab('events')">Event System</button>
+  <button class="tab-btn" onclick="showTab('editor')">Editor</button>
+  <button class="tab-btn" onclick="showTab('profiling')">Profiling</button>
+  <button class="tab-btn" onclick="showTab('subsystems')">All Subsystems</button>
+</div>
+
+<main>
+
+  <!-- ======================== OVERVIEW ======================== -->
+  <div class="section active" id="tab-overview">
+    <div class="hero">
+      <div class="hero-text">
+        <h2>A Modular<br><span>Real-Time</span><br>Rendering Engine</h2>
+        <p>Shunya is a C++ game engine built for architectural transparency. Every subsystem is isolated, inspectable, and replaceable. Not a black box — a learning substrate.</p>
+        <div class="projects-row">
+          <div class="proj" onclick="openModal('core')">
+            <div class="proj-name">Shunya-Core</div>
+            <div class="proj-desc">Static engine library</div>
+            <div class="proj-arrow">→ Entry point: Shunya.h</div>
+          </div>
+          <div class="proj" onclick="openModal('playground')">
+            <div class="proj-name">PlayGround</div>
+            <div class="proj-desc">Runtime sandbox</div>
+            <div class="proj-arrow">→ Application consumer</div>
+          </div>
+          <div class="proj" onclick="openModal('editor')">
+            <div class="proj-name">Editor</div>
+            <div class="proj-desc">GUI application</div>
+            <div class="proj-arrow">→ ImGui-based tooling</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="hero-stats">
+          <div class="stat">
+            <span class="stat-val">10K</span>
+            <div class="stat-label">Max Quads / Batch</div>
+          </div>
+          <div class="stat">
+            <span class="stat-val">32</span>
+            <div class="stat-label">Texture Slots</div>
+          </div>
+          <div class="stat">
+            <span class="stat-val">1</span>
+            <div class="stat-label">Draw Call / Flush</div>
+          </div>
+          <div class="stat">
+            <span class="stat-val" style="color:var(--accent2)">ECS</span>
+            <div class="stat-label">Sparse-Set Storage</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title">Core Principles</div>
+    <div class="section-sub">Three architectural hypotheses validated at runtime</div>
+
+    <div class="principles">
+      <div class="principle" onclick="openModal('p1')">
+        <div class="principle-num">01</div>
+        <div class="principle-text">
+          <h4>Modular Architecture Reduces Orchestration Overhead</h4>
+          <p>Subsystems are decomposed and independently schedulable. The LayerStack dispatcher routes execution without coupling.</p>
+        </div>
+      </div>
+      <div class="principle" onclick="openModal('p2')">
+        <div class="principle-num">02</div>
+        <div class="principle-text">
+          <h4>Batch Rendering Minimizes Draw-Call Submission Cost</h4>
+          <p>Geometry accumulated on CPU, flushed in a single GPU submission. Dramatic reduction in API call overhead.</p>
+        </div>
+      </div>
+      <div class="principle" onclick="openModal('p3')">
+        <div class="principle-num">03</div>
+        <div class="principle-text">
+          <h4>ECS Improves Scalability Through Contiguous Iteration</h4>
+          <p>Sparse-set storage ensures cache-friendly traversal. Components iterated linearly, systems decoupled from entities.</p>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="section-title">Application Core</div>
+    <div class="section-sub">The Application class — orchestration kernel of the engine</div>
+
+    <div class="grid-2" style="margin-top:16px">
+      <div>
+        <table>
+          <thead><tr><th>Component</th><th>Role</th></tr></thead>
+          <tbody>
+            <tr><td class="mono">Window</td><td>Platform abstraction boundary</td></tr>
+            <tr><td class="mono">LayerStack</td><td>Scheduling pipeline</td></tr>
+            <tr><td class="mono">Renderer</td><td>GPU submission coordinator</td></tr>
+            <tr><td class="mono">ImGuiLayer</td><td>Editor overlay interface</td></tr>
+            <tr><td class="mono">Timing System</td><td>Delta-time computation</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <div class="card" style="height:100%">
+          <div class="card-label">Execution Order</div>
+          <div class="pipeline" style="flex-direction:column;align-items:flex-start;gap:8px">
+            <div class="pipe-step">① Layer Updates</div>
+            <div class="pipe-step">② Scene Rendering</div>
+            <div class="pipe-step">③ GUI Rendering</div>
+            <div class="pipe-step">④ Buffer Swap</div>
+          </div>
+          <div class="card-body" style="margin-top:12px">Rendering and GUI passes are <strong style="color:var(--accent)">intentionally separated</strong> — preserves deterministic GPU submission order.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================== PIPELINE ======================== -->
+  <div class="section" id="tab-pipeline">
+    <div class="section-title">Execution Lifecycle</div>
+    <div class="section-sub">Startup → Runtime Loop → Shutdown — click any step to inspect</div>
+
+    <div class="grid-3">
+      <div class="card accent3">
+        <div class="card-label">Phase 1</div>
+        <div class="card-title">Startup</div>
+        <div class="v-pipeline">
+          <div class="v-step"><div class="v-step-box has-tooltip" onclick="openModal('main')">main()<div class="tooltip-box">Program entry point. Calls CreateApplication() which returns a user-defined Application subclass.</div></div></div>
+          <div class="v-connector"></div>
+          <div class="v-step"><div class="v-step-box">Log Initialization</div></div>
+          <div class="v-connector"></div>
+          <div class="v-step"><div class="v-step-box has-tooltip" onclick="openModal('createapp')">CreateApplication()<div class="tooltip-box">Factory function defined by the client application. Returns Application*. Engine calls it but doesn't define it.</div></div></div>
+          <div class="v-connector"></div>
+          <div class="v-step"><div class="v-step-box">Application Constructor</div></div>
+          <div class="v-connector"></div>
+          <div class="v-step"><div class="v-step-box">Window Creation (1280×720)</div></div>
+          <div class="v-connector"></div>
+          <div class="v-step"><div class="v-step-box">Renderer Init</div></div>
+          <div class="v-connector"></div>
+          <div class="v-step"><div class="v-step-box">ImGui Overlay Inject</div></div>
+          <div class="v-connector"></div>
+          <div class="v-step"><div class="v-step-box" style="border-color:var(--accent3);color:var(--accent3)">→ Enter Runtime Loop</div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Phase 2</div>
+        <div class="card-title">Runtime Loop</div>
+        <div class="v-pipeline">
+          <div class="v-step"><div class="v-step-box has-tooltip">Poll Events<div class="tooltip-box">GLFW polls OS event queue. All pending events are gathered before processing.</div></div></div>
+          <div class="v-connector"></div>
+          <div class="v-step"><div class="v-step-box">Dispatch Events</div></div>
+          <div class="v-connector"></div>
+          <div class="v-step"><div class="v-step-box">Update Layers</div></div>
+          <div class="v-connector"></div>
+          <div class="v-step"><div class="v-step-box has-tooltip">Render Scene<div class="tooltip-box">Renderer2D accumulates quads. Single draw-call flush to GPU per batch limit.</div></div></div>
+          <div class="v-connector"></div>
+          <div class="v-step"><div class="v-step-box">Render GUI (ImGui)</div></div>
+          <div class="v-connector"></div>
+          <div class="v-step"><div class="v-step-box has-tooltip">Swap Buffers<div class="tooltip-box">GLFW swaps the front and back buffer. Frame presented to display.</div></div></div>
+          <div class="v-connector"></div>
+          <div class="v-step"><div class="v-step-box" style="border-color:var(--accent);color:var(--accent)">↺ Repeat</div></div>
+        </div>
+      </div>
+
+      <div class="card accent2">
+        <div class="card-label">Phase 3</div>
+        <div class="card-title">Shutdown</div>
+        <div class="v-pipeline">
+          <div class="v-step"><div class="v-step-box">Destroy Layers</div></div>
+          <div class="v-connector"></div>
+          <div class="v-step"><div class="v-step-box">Destroy Renderer</div></div>
+          <div class="v-connector"></div>
+          <div class="v-step"><div class="v-step-box">Destroy Window</div></div>
+          <div class="v-connector"></div>
+          <div class="v-step"><div class="v-step-box">Flush Profiling Sessions</div></div>
+          <div class="v-connector"></div>
+          <div class="v-step"><div class="v-step-box" style="border-color:var(--accent2);color:var(--accent2)">Terminate Runtime</div></div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="section-title">Layer Stack Scheduling</div>
+    <div class="section-sub">Runtime subsystem ordering — event propagation from Overlays → Layers</div>
+
+    <div class="grid-2" style="margin-top:16px">
+      <div>
+        <div class="card-label" style="margin-bottom:8px">Stack (Bottom → Top)</div>
+        <div class="layer-stack">
+          <div class="layer-item layer">
+            <span>GameLayer</span><span class="layer-tag">LAYER</span>
+          </div>
+          <div class="layer-item layer">
+            <span>PhysicsLayer</span><span class="layer-tag">LAYER</span>
+          </div>
+          <div class="layer-item layer">
+            <span>RenderLayer</span><span class="layer-tag">LAYER</span>
+          </div>
+          <div class="layer-item overlay" style="margin-top:8px">
+            <span>DebugOverlay</span><span class="layer-tag">OVERLAY</span>
+          </div>
+          <div class="layer-item overlay">
+            <span>ImGuiLayer</span><span class="layer-tag">OVERLAY ← top</span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="card" style="margin-bottom:16px">
+          <div class="card-label">Each Layer Implements</div>
+          <div style="margin-top:8px">
+            <code class="code-block">OnAttach()
+OnDetach()
+OnUpdate()
+OnImGuiRender()
+OnEvent()</code>
+          </div>
+        </div>
+        <div class="card accent2">
+          <div class="card-label">Event Propagation</div>
+          <div class="card-body" style="margin-top:8px;line-height:2">
+            <span style="color:var(--accent2)">Overlays receive first</span><br>
+            ↓ propagates down<br>
+            <span style="color:var(--accent)">Layers receive last</span><br>
+            <br>
+            Stops once <code style="color:var(--yellow)">Handled = true</code>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================== RENDERING ======================== -->
+  <div class="section" id="tab-rendering">
+    <div class="section-title">Rendering Architecture Stack</div>
+    <div class="section-sub">Layered abstraction from high-level API to GPU driver</div>
+
+    <div class="grid-2">
+      <div>
+        <div class="card-label" style="margin-bottom:8px">Abstraction Layers</div>
+        <div class="render-stack">
+          <div class="render-layer rl-0 has-tooltip" onclick="openModal('r2d')">
+            <span>Renderer2D API</span>
+            <span class="render-label">USER FACING</span>
+            <div class="tooltip-box">High-level 2D drawing API. BeginScene(), DrawQuad(), DrawRotatedQuad(), EndScene(). Accumulates geometry into CPU-side batch buffer.</div>
+          </div>
+          <div class="render-layer rl-1 has-tooltip">
+            <span>Renderer</span>
+            <span class="render-label">SCENE COORD</span>
+            <div class="tooltip-box">Manages scene state, camera transforms, and submission scheduling. Bridges high-level API and low-level commands.</div>
+          </div>
+          <div class="render-layer rl-2 has-tooltip">
+            <span>RendererCommand</span>
+            <span class="render-label">CMD LAYER</span>
+            <div class="tooltip-box">Stateless command interface. DrawIndexed(), Clear(), SetViewport(). Wraps RendererAPI calls.</div>
+          </div>
+          <div class="render-layer rl-3 has-tooltip">
+            <span>RendererAPI (Interface)</span>
+            <span class="render-label">ABSTRACT</span>
+            <div class="tooltip-box">Pure virtual backend contract. Implementations: OpenGLRendererAPI. Future: VulkanRendererAPI, DX12RendererAPI, MetalRendererAPI.</div>
+          </div>
+          <div class="render-layer rl-4">
+            <span>OpenGL Backend</span>
+            <span class="render-label">IMPLEMENTATION</span>
+          </div>
+          <div class="render-layer rl-5">
+            <span>GPU Driver</span>
+            <span class="render-label">HARDWARE</span>
+          </div>
+        </div>
+        <div style="margin-top:12px">
+          <div class="card-label" style="margin-bottom:6px">Future Backends (zero engine change)</div>
+          <span class="badge badge-cyan">Vulkan</span>
+          <span class="badge badge-purple">DirectX12</span>
+          <span class="badge badge-orange">Metal</span>
+        </div>
+      </div>
+
+      <div>
+        <div class="card accent3" style="margin-bottom:16px" onclick="openModal('batch')">
+          <div class="card-label">Batch Pipeline — Renderer2D</div>
+          <div class="card-title">Batch Constraints</div>
+          <div class="grid-2" style="margin-top:12px;gap:8px">
+            <div class="stat">
+              <span class="stat-val" style="font-size:24px;color:var(--accent3)">10,000</span>
+              <div class="stat-label">Max Quads</div>
+            </div>
+            <div class="stat">
+              <span class="stat-val" style="font-size:24px;color:var(--accent3)">40,000</span>
+              <div class="stat-label">Max Vertices</div>
+            </div>
+            <div class="stat">
+              <span class="stat-val" style="font-size:24px;color:var(--accent3)">60,000</span>
+              <div class="stat-label">Max Indices</div>
+            </div>
+            <div class="stat">
+              <span class="stat-val" style="font-size:24px;color:var(--accent3)">32</span>
+              <div class="stat-label">Texture Slots</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-label">Batch Workflow</div>
+          <div class="v-pipeline" style="margin-top:10px">
+            <div class="v-step"><div class="v-step-box">BeginScene()</div></div>
+            <div class="v-connector"></div>
+            <div class="v-step"><div class="v-step-box">Write quad → CPU buffer</div></div>
+            <div class="v-connector"></div>
+            <div class="v-step"><div class="v-step-box">Overflow check</div></div>
+            <div class="v-connector"></div>
+            <div class="v-step"><div class="v-step-box">Flush if necessary</div></div>
+            <div class="v-connector"></div>
+            <div class="v-step"><div class="v-step-box">EndScene()</div></div>
+            <div class="v-connector"></div>
+            <div class="v-step"><div class="v-step-box">Upload to GPU</div></div>
+            <div class="v-connector"></div>
+            <div class="v-step"><div class="v-step-box" style="color:var(--green);border-color:var(--green)">Single DrawIndexed() call</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="section-title">GPU Resource Abstractions</div>
+    <div class="section-sub">Core GPU resource types and their responsibilities</div>
+
+    <div class="grid-3" style="margin-top:16px">
+      <div class="card" onclick="openModal('shader')">
+        <div class="card-label">Shader</div>
+        <div class="card-title">Programmable Pipeline</div>
+        <div class="card-body">Controls vertex transformation and fragment output. OpenGLShader implements GLSL compilation and uniform uploads.</div>
+      </div>
+      <div class="card accent2" onclick="openModal('texture')">
+        <div class="card-label">Texture</div>
+        <div class="card-title">Image Sampling</div>
+        <div class="card-body">2D texture abstraction over OpenGL texture units. Bound to shader slots for batch rendering with multi-texture support.</div>
+      </div>
+      <div class="card accent3" onclick="openModal('framebuffer')">
+        <div class="card-label">FrameBuffer</div>
+        <div class="card-title">Off-Screen Rendering</div>
+        <div class="card-body">Renders scene to texture. Color attachment extracted and displayed inside ImGui viewport — critical for editor/runtime separation.</div>
+      </div>
+      <div class="card">
+        <div class="card-label">VertexBuffer / IndexBuffer</div>
+        <div class="card-title">Geometry Storage</div>
+        <div class="card-body">CPU-side geometry is mapped to GPU memory. Index buffer enables vertex reuse, reducing per-quad data by 33%.</div>
+      </div>
+      <div class="card accent2">
+        <div class="card-label">VertexArray</div>
+        <div class="card-title">Attribute Binding</div>
+        <div class="card-body">Declares vertex layout. Binds position, color, UV, texture-index, and entity-ID attributes to shader input locations.</div>
+      </div>
+      <div class="card accent3">
+        <div class="card-label">Camera System</div>
+        <div class="card-title">Orthographic Pipeline</div>
+        <div class="card-body">Projection → View → ViewProjection matrix chain. WASD + scroll control. Movement speed scales with zoom level dynamically.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================== ECS ======================== -->
+  <div class="section" id="tab-ecs">
+    <div class="section-title">Entity Component System</div>
+    <div class="section-sub">Sparse-set ECS via entt — cache-friendly, parallel-capable, modular</div>
+
+    <div class="grid-2">
+      <div>
+        <div class="ecs-diagram">
+          <div class="ecs-col">
+            <div class="ecs-header">Entities</div>
+            <div class="ecs-item ecs-entity has-tooltip" onclick="openModal('entity')">
+              Entity #0 (Player)
+              <div class="tooltip-box">Entities are lightweight integer handles. They carry no data themselves — they're just IDs that components attach to.</div>
+            </div>
+            <div class="ecs-item ecs-entity">Entity #1 (Enemy)</div>
+            <div class="ecs-item ecs-entity">Entity #2 (Camera)</div>
+            <div class="ecs-item ecs-entity">Entity #3 (Light)</div>
+          </div>
+          <div class="ecs-col">
+            <div class="ecs-header">Components</div>
+            <div class="ecs-item ecs-component has-tooltip">
+              TransformComponent
+              <div class="tooltip-box">Position, rotation, scale. Used by all entities. Iterated first in render system for spatial updates.</div>
+            </div>
+            <div class="ecs-item ecs-component">SpriteRendererComponent</div>
+            <div class="ecs-item ecs-component">TagComponent</div>
+            <div class="ecs-item ecs-component">CameraComponent</div>
+            <div class="ecs-item ecs-component">NativeScriptComponent</div>
+          </div>
+          <div class="ecs-col">
+            <div class="ecs-header">Systems</div>
+            <div class="ecs-item ecs-system has-tooltip">
+              RenderSystem
+              <div class="tooltip-box">Iterates all entities with TransformComponent + SpriteRendererComponent. Submits to Renderer2D.</div>
+            </div>
+            <div class="ecs-item ecs-system">ScriptSystem</div>
+            <div class="ecs-item ecs-system">CameraSystem</div>
+            <div class="ecs-item ecs-system">PhysicsSystem</div>
+          </div>
+        </div>
+
+        <hr class="divider">
+
+        <div class="card">
+          <div class="card-label">Sparse-Set Storage Layout</div>
+          <div class="card-body" style="margin-top:10px;line-height:2.2">
+            <span class="badge badge-cyan">Dense Array</span> — Contiguous component data (cache-hot)<br>
+            <span class="badge badge-purple">Sparse Array</span> — Entity → dense index mapping<br>
+            <span class="badge badge-orange">Entity IDs</span> — Parallel array to dense data<br>
+            <br>
+            Result: O(1) component lookup + linear iteration
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="card" style="margin-bottom:16px">
+          <div class="card-label">Why ECS over OOP Hierarchy?</div>
+          <table style="margin-top:12px">
+            <thead><tr><th>Property</th><th>OOP Hierarchy</th><th>ECS (entt)</th></tr></thead>
+            <tbody>
+              <tr><td>Memory layout</td><td>Scattered (vtable)</td><td class="mono" style="color:var(--green)">Contiguous</td></tr>
+              <tr><td>Cache behavior</td><td>Poor (pointer chase)</td><td class="mono" style="color:var(--green)">Cache-hot</td></tr>
+              <tr><td>Parallelism</td><td>Fragile</td><td class="mono" style="color:var(--green)">Native support</td></tr>
+              <tr><td>Composition</td><td>Inheritance coupling</td><td class="mono" style="color:var(--green)">Flat & flexible</td></tr>
+              <tr><td>Iteration cost</td><td>O(n) with indirection</td><td class="mono" style="color:var(--green)">O(n) linear scan</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card accent2">
+          <div class="card-label">Scene Serialization</div>
+          <div class="card-title">yaml-cpp</div>
+          <div class="card-body" style="margin-top:8px">
+            Each entity and its components serialize to YAML. Scene files are human-readable and version-controllable. Deserialization reconstructs the full ECS registry on load.
+          </div>
+          <div class="code-block" style="margin-top:12px">Scene: FlappyBird
+Entities:
+  - Entity: 140737488355328
+    TagComponent:
+      Tag: Player
+    TransformComponent:
+      Position: [0, 0, 0]</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================== EVENTS ======================== -->
+  <div class="section" id="tab-events">
+    <div class="section-title">Event Dispatch Architecture</div>
+    <div class="section-sub">Type-safe, macro-assisted, bitmask-filtered event pipeline</div>
+
+    <div class="grid-2">
+      <div>
+        <div class="card-label" style="margin-bottom:8px">Dispatch Pipeline</div>
+        <div class="v-pipeline">
+          <div class="v-step"><div class="v-step-box has-tooltip">GLFW Callback<div class="tooltip-box">OS-level input callback registered with GLFW. Fires on key press, mouse move, window resize, etc.</div></div></div>
+          <div class="v-connector"></div>
+          <div class="v-step"><div class="v-step-box">Event Object Creation</div></div>
+          <div class="v-connector"></div>
+          <div class="v-step"><div class="v-step-box">Application Dispatcher</div></div>
+          <div class="v-connector"></div>
+          <div class="v-step"><div class="v-step-box has-tooltip">LayerStack Reverse Traversal<div class="tooltip-box">Events travel Overlays → Layers. Reverse order ensures UI overlays intercept before game logic.</div></div></div>
+          <div class="v-connector"></div>
+          <div class="v-step"><div class="v-step-box" style="color:var(--green);border-color:var(--green)">Subsystem Handler</div></div>
+        </div>
+
+        <div class="card" style="margin-top:20px">
+          <div class="card-label">Design Properties</div>
+          <div class="card-body" style="margin-top:8px;line-height:2.2">
+            <span class="badge badge-cyan">Static Dispatch</span> Type-safe at compile time<br>
+            <span class="badge badge-purple">Bitmask Filtering</span> Events filtered by category<br>
+            <span class="badge badge-orange">Macro-Assisted</span> EVENT_CLASS_TYPE / CATEGORY<br>
+            <span class="badge badge-green">Early Termination</span> Stops at Handled = true
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="card-label" style="margin-bottom:8px">Supported Events</div>
+        <div class="event-list">
+          <div class="event-item" onclick="openModal('ev_wr')">
+            <div class="event-dot" style="background:var(--accent)"></div>
+            <span class="event-name">WindowResize</span>
+            <span class="event-cat">WINDOW</span>
+          </div>
+          <div class="event-item" onclick="openModal('ev_wc')">
+            <div class="event-dot" style="background:var(--accent)"></div>
+            <span class="event-name">WindowClose</span>
+            <span class="event-cat">WINDOW</span>
+          </div>
+          <div class="event-item" onclick="openModal('ev_ki')">
+            <div class="event-dot" style="background:var(--accent2)"></div>
+            <span class="event-name">KeyPressed / KeyReleased / KeyTyped</span>
+            <span class="event-cat">INPUT</span>
+          </div>
+          <div class="event-item">
+            <div class="event-dot" style="background:var(--accent3)"></div>
+            <span class="event-name">MouseButtonPressed / Released</span>
+            <span class="event-cat">MOUSE</span>
+          </div>
+          <div class="event-item">
+            <div class="event-dot" style="background:var(--accent3)"></div>
+            <span class="event-name">MouseScrolled</span>
+            <span class="event-cat">MOUSE</span>
+          </div>
+          <div class="event-item">
+            <div class="event-dot" style="background:var(--accent3)"></div>
+            <span class="event-name">MouseMoved</span>
+            <span class="event-cat">MOUSE</span>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:16px">
+          <div class="card-label">Input Polling (Complementary)</div>
+          <div class="code-block" style="margin-top:8px">Input::IsKeyPressed(SNYE_KEY_W)
+Input::IsMouseButtonPressed(0)
+Input::GetMousePosition()</div>
+          <div class="card-body" style="margin-top:8px">Polling-based input runs alongside event-driven. Used for continuous actions like camera movement. Complements, doesn't replace, event dispatch.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================== EDITOR ======================== -->
+  <div class="section" id="tab-editor">
+    <div class="section-title">Editor Runtime Separation</div>
+    <div class="section-sub">Detached client application — does not pollute engine frame scheduling</div>
+
+    <div class="grid-2">
+      <div>
+        <div class="card accent3">
+          <div class="card-label">Rendering Pipeline</div>
+          <div class="v-pipeline" style="margin-top:12px">
+            <div class="v-step"><div class="v-step-box">Scene render pass</div></div>
+            <div class="v-connector"></div>
+            <div class="v-step"><div class="v-step-box">→ FrameBuffer target</div></div>
+            <div class="v-connector"></div>
+            <div class="v-step"><div class="v-step-box">Extract color attachment</div></div>
+            <div class="v-connector"></div>
+            <div class="v-step"><div class="v-step-box">Display as ImGui texture</div></div>
+            <div class="v-connector"></div>
+            <div class="v-step"><div class="v-step-box" style="color:var(--accent3);border-color:var(--accent3)">Editor Viewport Panel</div></div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="card" style="margin-bottom:16px">
+          <div class="card-label">Editor Panels</div>
+          <div class="card-body" style="margin-top:8px;line-height:2.2">
+            <span class="badge badge-cyan">SceneHierarchyPanel</span> Entity tree, selection<br>
+            <span class="badge badge-purple">PropertiesPanel</span> Component inspector<br>
+            <span class="badge badge-orange">Viewport</span> FrameBuffer texture display<br>
+            <span class="badge badge-green">ContentBrowser</span> Asset filesystem view<br>
+            <span class="badge badge-yellow">StatsPanel</span> Draw calls, frame time
+          </div>
+        </div>
+        <div class="card accent2">
+          <div class="card-label">Why Separation Matters</div>
+          <div class="card-body" style="margin-top:8px">
+            Editor operations run in their own application layer. They <strong style="color:var(--accent2)">cannot interfere</strong> with runtime frame scheduling. The engine sees the editor as just another consumer of the FrameBuffer output — identical to how the game would use it.
+          </div>
+        </div>
+        <div class="card" style="margin-top:12px">
+          <div class="card-label">ImGui Theming</div>
+          <div class="card-body" style="margin-top:8px">Custom ImGui style applied via <code style="color:var(--accent)">ImGui::PushStyleVar</code> and <code style="color:var(--accent)">ImGui::PushStyleColor</code>. Consistent visual language across all editor panels with dark industrial aesthetic.</div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="section-title">Window Abstraction</div>
+    <div class="grid-2" style="margin-top:16px">
+      <table>
+        <thead><tr><th>Interface</th><th>Implementation</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">Window</td><td class="mono">WindowMaker (GLFW)</td></tr>
+        </tbody>
+      </table>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+        <span class="badge badge-cyan">Context Init</span>
+        <span class="badge badge-purple">Swap Interval</span>
+        <span class="badge badge-orange">Event Polling</span>
+        <span class="badge badge-green">Buffer Swap</span>
+        <span class="badge badge-yellow">Native Access</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================== PROFILING ======================== -->
+  <div class="section" id="tab-profiling">
+    <div class="section-title">Profiling Infrastructure</div>
+    <div class="section-sub">Instrumentation macros → JSON output → chrome://tracing visualization</div>
+
+    <div class="grid-2">
+      <div>
+        <div class="card">
+          <div class="card-label">Instrumentation Macros</div>
+          <div class="code-block" style="margin-top:10px">PROFILE_BEGIN_SESSION("Startup", "Startup.json")
+PROFILE_END_SESSION()
+
+PROFILE_FUNCTION()   // auto-names from __FUNCTION__
+PROFILE_SCOPE("name")  // custom label</div>
+        </div>
+
+        <div class="card" style="margin-top:16px">
+          <div class="card-label">Output Files</div>
+          <div class="card-body" style="margin-top:8px;line-height:2.5">
+            <span class="badge badge-orange">Startup.json</span> Application init timings<br>
+            <span class="badge badge-cyan">Runtime.json</span> Per-frame loop profiling<br>
+            <span class="badge badge-purple">Shutdown.json</span> Teardown sequence
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="card accent2">
+          <div class="card-label">Captured Metrics</div>
+          <div class="card-body" style="margin-top:8px;line-height:2.2">
+            <span class="badge badge-purple">Wall Duration</span> Total elapsed time per scope<br>
+            <span class="badge badge-purple">Self-Time</span> Excluding child call time<br>
+            <span class="badge badge-purple">Call Hierarchy</span> Full parent-child tree<br>
+            <span class="badge badge-purple">Frame Distribution</span> Hot-spot identification
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:16px">
+          <div class="card-label">Simulated Frame Profile</div>
+          <div style="margin-top:12px">
+            <div class="profile-bar-container">
+              <div class="profile-bar-label"><span>Renderer2D::Flush()</span><span style="color:var(--accent)">2.1ms</span></div>
+              <div class="profile-bar"><div class="profile-bar-fill" style="width:70%;background:var(--accent)"></div></div>
+            </div>
+            <div class="profile-bar-container">
+              <div class="profile-bar-label"><span>ECS System Iteration</span><span style="color:var(--accent2)">0.8ms</span></div>
+              <div class="profile-bar"><div class="profile-bar-fill" style="width:27%;background:var(--accent2)"></div></div>
+            </div>
+            <div class="profile-bar-container">
+              <div class="profile-bar-label"><span>Event Dispatch</span><span style="color:var(--accent3)">0.1ms</span></div>
+              <div class="profile-bar"><div class="profile-bar-fill" style="width:3%;background:var(--accent3)"></div></div>
+            </div>
+            <div class="profile-bar-container">
+              <div class="profile-bar-label"><span>ImGui Render</span><span style="color:var(--green)">0.4ms</span></div>
+              <div class="profile-bar"><div class="profile-bar-fill" style="width:13%;background:var(--green)"></div></div>
+            </div>
+          </div>
+          <div class="card-body" style="margin-top:12px;font-size:11px;color:var(--text-dim)">Visualization target: <code>chrome://tracing</code> — load JSON file to inspect flame graph.</div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="section-title">Logging System</div>
+    <div class="section-sub">Dual-channel spdlog backend — Core and Client separated</div>
+
+    <div class="grid-2" style="margin-top:16px">
+      <div class="card">
+        <div class="card-label">Channels</div>
+        <div style="margin-top:8px;display:flex;gap:12px">
+          <div style="flex:1;padding:12px;border:1px solid rgba(0,212,255,0.3);text-align:center">
+            <div style="color:var(--accent);font-family:var(--display);font-size:16px;letter-spacing:2px;font-weight:600">CORE</div>
+            <div style="font-size:11px;color:var(--text-dim);margin-top:4px">Engine internals</div>
+          </div>
+          <div style="flex:1;padding:12px;border:1px solid rgba(255,107,53,0.3);text-align:center">
+            <div style="color:var(--accent3);font-family:var(--display);font-size:16px;letter-spacing:2px;font-weight:600">CLIENT</div>
+            <div style="font-size:11px;color:var(--text-dim);margin-top:4px">Application code</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="card-label" style="margin-bottom:8px">Severity Levels</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <span class="badge badge-cyan">TRACE</span>
+          <span class="badge badge-green">INFO</span>
+          <span class="badge badge-yellow">WARN</span>
+          <span class="badge badge-orange">ERROR</span>
+          <span style="display:inline-block;padding:2px 8px;font-size:10px;letter-spacing:1px;text-transform:uppercase;border:1px solid #ff2020;color:#ff2020;background:rgba(255,32,32,0.08)">FATAL</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================== ALL SUBSYSTEMS ======================== -->
+  <div class="section" id="tab-subsystems">
+    <div class="section-title">All Subsystems</div>
+    <div class="section-sub">Complete reference — click any card to expand</div>
+
+    <div class="grid-4">
+      <div class="card" onclick="openModal('sys_app')">
+        <div class="card-label">Application</div>
+        <div class="card-title" style="font-size:14px">Orchestration Kernel</div>
+        <div class="card-body">Window, LayerStack, Renderer, ImGuiLayer, Delta-time</div>
+      </div>
+      <div class="card accent2" onclick="openModal('sys_layers')">
+        <div class="card-label">LayerStack</div>
+        <div class="card-title" style="font-size:14px">Scheduling Pipeline</div>
+        <div class="card-body">Ordered update, overlay priority, event routing</div>
+      </div>
+      <div class="card accent3" onclick="openModal('sys_renderer')">
+        <div class="card-label">Renderer2D</div>
+        <div class="card-title" style="font-size:14px">Batch Renderer</div>
+        <div class="card-body">10K quads, 32 textures, single draw-call flush</div>
+      </div>
+      <div class="card" onclick="openModal('sys_ecs')">
+        <div class="card-label">ECS (entt)</div>
+        <div class="card-title" style="font-size:14px">Scene Manager</div>
+        <div class="card-body">Sparse-set, cache-friendly, parallel-capable</div>
+      </div>
+      <div class="card accent2" onclick="openModal('sys_event')">
+        <div class="card-label">Event System</div>
+        <div class="card-title" style="font-size:14px">Dispatch Layer</div>
+        <div class="card-body">Type-safe, bitmask filtered, early termination</div>
+      </div>
+      <div class="card accent3" onclick="openModal('sys_window')">
+        <div class="card-label">Window</div>
+        <div class="card-title" style="font-size:14px">GLFW Abstraction</div>
+        <div class="card-body">Context, swap interval, event polling</div>
+      </div>
+      <div class="card" onclick="openModal('sys_camera')">
+        <div class="card-label">Camera</div>
+        <div class="card-title" style="font-size:14px">Orthographic</div>
+        <div class="card-body">Proj × View, WASD + scroll, zoom-aware speed</div>
+      </div>
+      <div class="card accent2" onclick="openModal('sys_input')">
+        <div class="card-label">Input</div>
+        <div class="card-title" style="font-size:14px">Polling API</div>
+        <div class="card-body">IsKeyPressed, MousePos, Button state</div>
+      </div>
+      <div class="card accent3" onclick="openModal('sys_fb')">
+        <div class="card-label">FrameBuffer</div>
+        <div class="card-title" style="font-size:14px">Off-Screen Target</div>
+        <div class="card-body">Color attachment → ImGui viewport texture</div>
+      </div>
+      <div class="card" onclick="openModal('sys_shader')">
+        <div class="card-label">Shader</div>
+        <div class="card-title" style="font-size:14px">GLSL Pipeline</div>
+        <div class="card-body">Compile, link, uniform upload, slot binding</div>
+      </div>
+      <div class="card accent2" onclick="openModal('sys_profiler')">
+        <div class="card-label">Profiler</div>
+        <div class="card-title" style="font-size:14px">Instrumentation</div>
+        <div class="card-body">JSON sessions, chrome://tracing, wall time</div>
+      </div>
+      <div class="card accent3" onclick="openModal('sys_log')">
+        <div class="card-label">Logger</div>
+        <div class="card-title" style="font-size:14px">spdlog Dual-Channel</div>
+        <div class="card-body">Core + Client, 5 severity levels</div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="section-title">Build Configurations</div>
+    <div class="grid-3" style="margin-top:16px">
+      <div class="card accent3">
+        <div class="card-label">Debug</div>
+        <div class="card-title">Development</div>
+        <div class="card-body">Full asserts, verbose logging, profiler active, no optimizations. Catches logic errors early.</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Release</div>
+        <div class="card-title">Benchmarking</div>
+        <div class="card-body">Optimizations enabled. Profiler macros stripped. Measures true subsystem performance. Used for all benchmark data.</div>
+      </div>
+      <div class="card accent2">
+        <div class="card-label">Distribution</div>
+        <div class="card-title">Shipping</div>
+        <div class="card-body">No logging, no profiling, full optimization. Final executable for end-user distribution.</div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal" onclick="closeModal(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-title" id="modal-title"></div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<script>
+  // Tab switching
+  function showTab(id) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + id).classList.add('active');
+    event.target.classList.add('active');
+  }
+
+  // Modal data
+  const modals = {
+    core: { title: 'Shunya-Core', body: 'The static engine library compiled from all engine source files.\n\nConsumers (#include <Shunya.h>) get:\n• Full rendering API\n• ECS scene management\n• Event system\n• Input polling\n• ImGui overlay\n• Profiler access\n\nLinked as a static .lib on Windows. No DLL dependency.' },
+    playground: { title: 'PlayGround', body: 'Runtime sandbox application. Acts as a testbed for engine features during development.\n\nInherits from Application. Implements CreateApplication() factory.\n\nUsed to test:\n• Batch renderer performance\n• ECS scene iteration\n• Camera controllers\n• Event handling\n• Flappy Bird prototype' },
+    editor: { title: 'Shunya-Editor', body: 'Full GUI editor built on the engine itself.\n\nPanels: SceneHierarchyPanel, PropertiesPanel, Viewport, ContentBrowser, Stats.\n\nScene is rendered to FrameBuffer. The color attachment is sampled as a texture inside an ImGui Image() call. Editor runs as a detached client — never impacts engine runtime scheduling.' },
+    p1: { title: 'Principle 01', body: 'Modular Architecture Reduces Orchestration Overhead\n\nSubsystems are isolated into Layers. The Application class delegates all execution to LayerStack. No subsystem knows about others.\n\nThe dispatcher pattern means adding a new subsystem requires only implementing the Layer interface — zero changes to existing code. Verified by profiling overhead of LayerStack traversal vs. monolithic update loops.' },
+    p2: { title: 'Principle 02', body: 'Batch Rendering Minimizes Draw-Call Submission Cost\n\nDraw call submission is expensive — it crosses the CPU-GPU boundary. Shunya accumulates up to 10,000 quads in a CPU-side buffer before issuing a single DrawIndexed() call.\n\nResult: Rendering 1,000 sprites = 1 draw call (not 1,000). Validated in Release configuration against per-object submission baseline.' },
+    p3: { title: 'Principle 03', body: 'ECS Improves Scalability Through Contiguous Iteration\n\nTraditional OOP stores objects with vtables, causing pointer indirection and cache misses.\n\nentt sparse-set packs component data contiguously. Iterating 10,000 TransformComponents is a linear scan of a single array — no pointer chasing, predictable prefetcher behavior, SIMD-friendly layout.\n\nParallel iteration is supported natively via entt\'s execution policies.' },
+    main: { title: 'main()', body: 'Program entry point defined inside the engine core.\n\nint main() {\n  auto app = CreateApplication();\n  app->Run();\n  delete app;\n}\n\nThe client never writes main(). They only implement CreateApplication() — which returns a subclass of Application. The engine owns the loop.' },
+    createapp: { title: 'CreateApplication()', body: 'Client-defined factory function. The engine calls it but never defines it.\n\nApplication* CreateApplication() {\n  return new MyGame();\n}\n\nThis is the sole entry point for client code injection into the engine lifecycle. MyGame derives from Application and pushes its own Layers in the constructor.' },
+    r2d: { title: 'Renderer2D API', body: 'The user-facing 2D drawing API.\n\nRenderer2D::BeginScene(camera)\nRenderer2D::DrawQuad(pos, size, color)\nRenderer2D::DrawQuad(pos, size, texture)\nRenderer2D::DrawRotatedQuad(pos, size, rotation, color)\nRenderer2D::DrawSprite(transform, sprite)\nRenderer2D::EndScene()\n\nAll geometry is written to a CPU buffer. On EndScene() or overflow, a Flush() is triggered — uploading the buffer and issuing a single draw call.' },
+    batch: { title: 'Batch Renderer Details', body: 'The batch system avoids per-object GPU submissions.\n\nCPU-side:\n• QuadVertex[40000] buffer (mapped pointer)\n• uint32_t[60000] index buffer (pre-computed)\n• TextureSlots[32] array\n\nFlush():\n1. Calculate vertex count\n2. glBufferSubData() upload\n3. Bind all texture slots\n4. glDrawElements() — single call\n5. Reset batch state\n\nOverflow triggers mid-scene flush + new batch.' },
+    shader: { title: 'Shader System', body: 'OpenGLShader wraps GLSL vertex + fragment compilation.\n\nFeatures:\n• Shader library (name → shader map)\n• Uniform upload: Int, Float, Vec2, Vec3, Vec4, Mat4\n• Texture sampler array upload for batch rendering\n• Hot-reload ready (recompile from source)\n\nThe flat-color and texture shaders are the two primary built-in shaders used by Renderer2D.' },
+    texture: { title: 'Texture System', body: 'OpenGLTexture2D wraps a GL texture object.\n\n• stb_image for PNG/JPG/BMP loading\n• Internal format: RGBA8 / RGB8\n• Bound to GL texture units 0-31\n• SubTexture2D for spritesheet UV cropping\n\nBatch renderer sends an int[32] sampler array to the shader. The quad\'s texture index selects which slot to sample from.' },
+    framebuffer: { title: 'FrameBuffer', body: 'FrameBuffer renders the scene off-screen.\n\nAttachments:\n• Color: GL_RGBA8 texture\n• Depth: GL_DEPTH24_STENCIL8 renderbuffer\n\nEditor flow:\n1. Bind FrameBuffer before render pass\n2. Render scene normally\n3. Unbind FrameBuffer\n4. Pass color attachment ID to ImGui::Image()\n5. Viewport panel displays live scene output\n\nThis is what makes the editor viewport possible.' },
+    entity: { title: 'Entity', body: 'In entt, an entity is a 32-bit integer (entt::entity).\n\nIt carries no data. It is simply an ID that the registry uses to associate components.\n\nCreation: auto e = m_Registry.create();\nDestruction: m_Registry.destroy(e);\n\nThe Scene class wraps entt::registry and exposes:\n• CreateEntity(name)\n• DestroyEntity(entity)\n• GetAllEntitiesWith<Components...>()' },
+    ev_wr: { title: 'WindowResizeEvent', body: 'Fired when the OS resizes the window.\n\nPayload: int width, int height\n\nHandled by:\n1. Application: updates viewport glViewport()\n2. Renderer: recalculates projection matrices\n3. Camera controller: updates aspect ratio\n\nCategory bitmask: EventCategoryApplication' },
+    ev_wc: { title: 'WindowCloseEvent', body: 'Fired when the user closes the window.\n\nPayload: none\n\nHandled by Application::OnWindowClose()\nSets m_Running = false → exits runtime loop.\n\nCategory: EventCategoryApplication' },
+    ev_ki: { title: 'Keyboard Events', body: 'KeyPressedEvent: key code + repeat count\nKeyReleasedEvent: key code\nKeyTypedEvent: UTF-8 character (for text input)\n\nKey codes mapped to platform-agnostic SNYE_KEY_* constants.\n\nCategory: EventCategoryKeyboard | EventCategoryInput\n\nConsumed by: ImGuiLayer (for text fields), Camera controller (WASD).' },
+    sys_app: { title: 'Application', body: 'The engine orchestration kernel.\n\nResponsibilities:\n• Owns the main window\n• Owns the LayerStack\n• Runs the main loop\n• Computes delta time\n• Routes events to layers\n• Injects ImGuiLayer as overlay\n\nClient subclasses Application and pushes Layers in the constructor.' },
+    sys_layers: { title: 'LayerStack', body: 'Ordered container of Layer*.\n\nLayers occupy indices [0, overlayBegin)\nOverlays occupy indices [overlayBegin, end)\n\nPushLayer() inserts before overlays.\nPushOverlay() appends at end.\n\nUpdate order: front to back.\nEvent order: back to front.\n\nFunctions as a pure dispatcher — no computation here.' },
+    sys_renderer: { title: 'Renderer2D', body: 'Performance core of the engine.\n\nBatch buffer: CPU-mapped VBO (40K vertices)\nIndex buffer: pre-baked (60K indices)\n\nSub-texture, rotation, tiling factor all supported.\n\nStatistics tracked:\n• Draw calls per frame\n• Quad count\n• Vertex count\n• Index count\n\nReset via ResetStats() between frames.' },
+    sys_ecs: { title: 'ECS (entt)', body: 'entt sparse-set ECS registry.\n\nCore components:\n• TagComponent (string name)\n• TransformComponent (glm mat4)\n• SpriteRendererComponent (color/texture)\n• CameraComponent (projection settings)\n• NativeScriptComponent (C++ behavior)\n\nScene serialization via yaml-cpp.\nEditor reflects live registry state.' },
+    sys_event: { title: 'Event System', body: 'Type-safe event dispatch via templates.\n\nEventDispatcher::Dispatch<T>(fn) checks event type at compile time.\n\nEventCategory bitmask enables filtering without RTTI:\nEventCategoryInput | EventCategoryKeyboard\n\nMacros:\nEVENT_CLASS_TYPE(type) → GetStaticType(), ToString()\nEVENT_CLASS_CATEGORY(cat) → GetCategoryFlags()' },
+    sys_window: { title: 'Window (GLFW)', body: 'WindowMaker implements Window interface via GLFW.\n\nInitializes:\n• OpenGL context (GLAD loader)\n• Window hints (OpenGL 4.x core)\n• GLFW callbacks for all events\n\nWindowProps struct:\n• Title: string\n• Width: 1280 (default)\n• Height: 720 (default)\n\nGetNativeWindow() returns GLFWwindow* for ImGui binding.' },
+    sys_camera: { title: 'Camera System', body: 'OrthographicCamera:\n• SetProjection(left, right, bottom, top)\n• GetViewProjectionMatrix() → mat4\n\nOrthographicCameraController:\n• WASD translation\n• Q/E rotation (optional)\n• Scroll zoom\n• Aspect ratio correction\n• Translation speed = zoomLevel * factor\n\nCamera matrix uploaded to shader each BeginScene().' },
+    sys_input: { title: 'Input System', body: 'Platform-agnostic polling API.\n\nInput::IsKeyPressed(keycode) → bool\nInput::IsMouseButtonPressed(button) → bool\nInput::GetMouseX() → float\nInput::GetMouseY() → float\nInput::GetMousePosition() → pair<float,float>\n\nWindowsInput implements via glfwGetKey() / glfwGetMouseButton().\n\nNo state buffering — queries GLFW directly each call.' },
+    sys_fb: { title: 'FrameBuffer', body: 'OpenGLFramebuffer wraps FBO creation.\n\nSpec: width, height, attachments list\nColor attachment: GL_RGBA8 texture → GetColorAttachmentRendererID()\nDepth attachment: GL_DEPTH24_STENCIL8 RBO\n\nResize(): destroys and recreates FBO on viewport change.\nBind() / Unbind() for render pass control.\n\nEditor samples color attachment via ImGui::Image().' },
+    sys_shader: { title: 'Shader', body: 'ShaderLibrary stores named shaders.\n\nShader::Create(path) → reads .glsl file\nShader::Create(name, vs, fs) → inline source\n\nBuilt-in shaders:\n• FlatColor.glsl — solid color quads\n• Texture.glsl — textured quads with tiling\n\nBatch shader uses:\nuniform sampler2D u_Textures[32];\nfloat texIndex attr → selects slot in shader.' },
+    sys_profiler: { title: 'Profiler', body: 'Instrumentor class writes Chrome Trace JSON.\n\nProfile struct: name, start, elapsed, threadID\n\nPROFILE_FUNCTION() uses __FUNCTION__ macro for auto-naming.\nPROFILE_SCOPE("name") for custom labels.\n\nInstrumentationTimer RAII: starts on construct, writes on destruct.\n\nSessions:\n• Startup.json\n• Runtime.json\n• Shutdown.json\n\nLoad into chrome://tracing for flame graph.' },
+    sys_log: { title: 'Logger', body: 'spdlog-backed dual-channel logging.\n\nLog::GetCoreLogger() → engine internal\nLog::GetClientLogger() → application code\n\nConvenience macros:\nSNYE_CORE_TRACE / INFO / WARN / ERROR / FATAL\nSNYE_TRACE / INFO / WARN / ERROR / FATAL\n\nSeverity filtering configurable per build config.\nDebug: all levels. Distribution: none.' },
+  };
+
+  function openModal(key) {
+    const data = modals[key];
+    if (!data) return;
+    document.getElementById('modal-title').textContent = data.title;
+    document.getElementById('modal-body').textContent = data.body;
+    document.getElementById('modal').classList.add('open');
+  }
+
+  function closeModal(e) {
+    if (!e || e.target === document.getElementById('modal')) {
+      document.getElementById('modal').classList.remove('open');
+    }
+  }
+
+  // Animate profile bars on tab switch
+  document.querySelector('[onclick="showTab(\'profiling\')"]').addEventListener('click', () => {
+    setTimeout(() => {
+      document.querySelectorAll('.profile-bar-fill').forEach(b => {
+        const w = b.style.width;
+        b.style.width = '0';
+        setTimeout(() => b.style.width = w, 50);
+      });
+    }, 100);
+  });
+</script>
+</body>
+</html>
