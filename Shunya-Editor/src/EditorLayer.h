@@ -16,6 +16,7 @@ namespace Shunya {
         void OnUpdate(Timestamp ts) override;
         virtual void OnImGuiRender() override;
         void OnEvent(Event& e) override;
+        void OpenScene(const std::filesystem::path& path);
 
     private:
         OrthographicCameraController m_CameraController;
