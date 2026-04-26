@@ -18,6 +18,12 @@ namespace Shunya {
         void OnEvent(Event& e) override;
         void OpenScene(const std::filesystem::path& path);
 
+        void OnScenePlay();
+        void OnSceneStop();
+
+        // UI Panels
+        void UI_Toolbar();
+
     private:
         OrthographicCameraController m_CameraController;
 
@@ -34,10 +40,17 @@ namespace Shunya {
         Ref<Texture2D> m_Texture;
         bool m_ViewportFocused = false;
         bool m_ViewportHovered = false;
-        SceneHierarchyPanel m_SceneHierarchyPanel;
-        ContentBrowserPanel m_ContentBrowserPanel;
         EditorCamera m_EditorCamera;
         int m_GizmoType = -1;
+        enum class SceneState
+        {
+            Edit = 0, Play = 1
+        };
+        SceneState m_SceneState = SceneState::Edit;
+
+        SceneHierarchyPanel m_SceneHierarchyPanel;
+        ContentBrowserPanel m_ContentBrowserPanel;
+        Ref<Texture2D> m_IconPlay, m_IconStop;
     private:
         bool OnMouseButtonPressed(MouseButtonPressedEvent& e);
         bool OnKeyPressed(KeyPressedEvent& e);

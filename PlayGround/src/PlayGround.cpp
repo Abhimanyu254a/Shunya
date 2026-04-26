@@ -243,7 +243,9 @@ public:
     }
 };
 
-Shunya::Application* Shunya::CreateApplication()
-{
-    return new PlayGround();
+namespace Shunya {
+    Application* CreateApplication()
+    {
+        return new PlayGround();
+    }
 }
