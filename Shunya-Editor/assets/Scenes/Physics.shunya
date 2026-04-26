@@ -1,0 +1,47 @@
+Scene: Untitled
+Entities:
+  - Entity: 12837192831273
+    TagComponent:
+      Tag: Platform2
+    TransformComponent:
+      Translation: [2.25642085, -1.27259159, 0.0752677917]
+      Rotation: [0, 0, 0.568738997]
+      Scale: [13.6843634, 0.368046314, 1]
+    SpriteRendererComponent:
+      Color: [0.058854226, 0.725868702, 0.625430167, 1]
+  - Entity: 12837192831273
+    TagComponent:
+      Tag: square
+    TransformComponent:
+      Translation: [-0.208157748, -2.34130526, 1.04509521]
+      Rotation: [0, 0, 2.13885379]
+      Scale: [0.446019948, 0.552526295, 1]
+    SpriteRendererComponent:
+      Color: [0.806287587, 0.752537966, 0.915057898, 1]
+  - Entity: 12837192831273
+    TagComponent:
+      Tag: Platform
+    TransformComponent:
+      Translation: [-2.45627809, -1.78475785, 0.43929863]
+      Rotation: [0, 0, -0.454885095]
+      Scale: [7.29648066, 0.23257719, 0.719999969]
+    SpriteRendererComponent:
+      Color: [0.00599276461, 0.156050846, 0.517374516, 1]
+  - Entity: 12837192831273
+    TagComponent:
+      Tag: Camera
+    TransformComponent:
+      Translation: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1.69700456, 1.76167238, 2.19271946]
+    CameraComponent:
+      Camera:
+        ProjectionType: 1
+        PerspectiveFOV: 0.785398185
+        PerspectiveNear: 0.00999999978
+        PerspectiveFar: 1000
+        OrthographicSize: 10
+        OrthographicNear: -1
+        OrthographicFar: 1
+      Primary: true
+      FixedAspectRatio: false

@@ -24,6 +24,7 @@ IncludeDir["entt"] = "Shunya-Core/third_party/entt/include"
 IncludeDir["yaml_cpp"] = "Shunya-Core/third_party/yaml_cpp/include"
 IncludeDir["ImGizmos"] = "Shunya-Core/third_party/ImGizmos"
 IncludeDir["VulkanSDK"] = "%{VULKAN_SDK}/Include"
+IncludeDir["Box2D"] = "Shunya-Core/third_party/Box2D/include"
 
 LibraryDir = {}
 LibraryDir["VulkanSDK"] = "%{VULKAN_SDK}/Lib"
@@ -44,6 +45,7 @@ Library["SPIRV_Cross_GLSL_Release"] = "%{LibraryDir.VulkanSDK}/spirv-cross-glsl.
 group "Dependencies"
     include "Shunya-Core/third_party/GLFW"
     include "Shunya-Core/third_party/Glad"
+    include "Shunya-Core/third_party/Box2D"
     include "Shunya-Core/third_party/imGUI"
     include "Shunya-Core/third_party/yaml_cpp"
     include "Shunya-Core/third_party/ImGizmos"
@@ -78,6 +80,7 @@ project "Shunya-Core"
     includedirs {
         "%{prj.name}/src",
         "%{prj.name}/third_party/spdlog/include",
+        "%{IncludeDir.Box2D}",
         "%{IncludeDir.GLFW}",
         "%{IncludeDir.Glad}",
         "%{IncludeDir.imGUI}",
@@ -89,7 +92,7 @@ project "Shunya-Core"
         "%{IncludeDir.VulkanSDK}"
     }
 
-    links { "GLFW", "Glad", "imGUI","yaml_cpp","opengl32.lib","ImGizmos" }
+    links { "Box2D","GLFW", "Glad", "imGUI","yaml_cpp","opengl32.lib","ImGizmos" }
 
     filter "files:third_party/ImGizmos/**.cpp"
         flags {"NoPCH"}
@@ -154,7 +157,8 @@ function CreateClientProject(name)
             "%{IncludeDir.stb_image}",
             "%{IncludeDir.entt}",
             "%{IncludeDir.yaml_cpp}",
-            "%{IncludeDir.ImGizmos}"
+            "%{IncludeDir.ImGizmos}",
+            "%{IncludeDir.Box2D}"
         }
         links { "Shunya-Core" }
 

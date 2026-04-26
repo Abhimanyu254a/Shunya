@@ -19,3 +19,6 @@
 [submodule "Shunya-Core/third_party/ImGizmos"]
 	path = Shunya-Core/third_party/ImGizmos
 	url = https://github.com/Abhimanyu254a/ImGuizmo.git
+[submodule "Shunya-Core/third_party/Box2D"]
+	path = Shunya-Core/third_party/Box2D
+	url = https://github.com/Abhimanyu254a/box2d.git

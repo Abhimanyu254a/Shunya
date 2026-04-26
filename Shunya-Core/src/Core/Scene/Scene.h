@@ -3,7 +3,7 @@
 #include "Core/Kernal/Timestep.h"
 #include "Core/Rendered/EditorCamera.h"
 
-
+class b2World;
 namespace Shunya
 {
 	class Entity;
@@ -15,7 +15,8 @@ namespace Shunya
 		Entity CreateEntity(const std::string& name = std::string());
 		void DestroyEntity(Entity entity);
 
-
+		void OnRuntimeStart();
+		void OnRuntimeStop();
 		entt::registry& getReg() { return m_Registry; }
 		
 		void OnViewportResize(uint32_t width, uint32_t height);
@@ -31,6 +32,7 @@ namespace Shunya
 		entt::registry m_Registry;
 		uint32_t m_ViewportWidth = 0; // ✅ add this
 		uint32_t m_ViewportHeight = 0; // ✅ add this
+		b2World* m_PhysicsWorld = nullptr;
 
 		friend class Entity;
 		friend class SceneSerializer;
