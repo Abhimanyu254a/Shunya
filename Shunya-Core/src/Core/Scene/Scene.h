@@ -12,7 +12,7 @@ namespace Shunya
 	public:
 		Scene();
 		~Scene();
-
+		static Ref<Scene> Copy(Ref<Scene> other);
 		Entity CreateEntity(const std::string& name = std::string());
 		Entity CreateEntityWithUUID(UUID uuid, const std::string& name = std::string());
 		void DestroyEntity(Entity entity);
@@ -25,6 +25,7 @@ namespace Shunya
 		Entity GetPrimaryCameraEntity();
 		void OnUpdateRuntime(Timestamp ts);
 		void OnUpdateEditor(Timestamp ts, EditorCamera& camera);
+		void DuplicateEntity(Entity entity);
 
 	private:
 		template<typename T>

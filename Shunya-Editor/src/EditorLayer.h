@@ -18,9 +18,11 @@ namespace Shunya {
         void OnEvent(Event& e) override;
         void OpenScene(const std::filesystem::path& path);
 
+        void SaveScene();
+        void SerializeScene(Ref<Scene> scene, const std::filesystem::path& path);
         void OnScenePlay();
         void OnSceneStop();
-
+        void OnDuplicateEntity();
         // UI Panels
         void UI_Toolbar();
 
@@ -31,6 +33,8 @@ namespace Shunya {
         glm::vec2 m_ViewportSize = { 0.0f, 0.0f }; // ✅ track viewport size
 
         Ref<Scene> m_ActiveScene;
+        Ref<Scene> m_EditorScene;
+        std::filesystem::path m_EditorScenePath;
         Entity m_SquareEntity;
         Entity m_CameraEntity;
         Entity m_SecondCamera;
@@ -58,6 +62,7 @@ namespace Shunya {
         void NewScene();
         void OpenScene();
         void SaveSceneAs();
+
         glm::vec2 m_ViewportBounds[2];
     private:
         glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.0f };

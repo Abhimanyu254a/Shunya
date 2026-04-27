@@ -1,3 +1,526 @@
+//#include "Shunya.h"
+//#include "EditorLayer.h"
+//#include <imgui.h>
+//#include <glm/gtc/matrix_transform.hpp>
+//#include <glm/gtc/type_ptr.hpp>
+//#include "Core/Scene/Entity.h"
+//#include "Core/Rendered/FrameBuffer.h"
+//#include "Core/Scene/SceneCamera.h"
+//#include "Panels/ScenePanel.h"
+//#include "Core/Scene/SceneSerializer.h"
+//#include "Core/Utils/PlatformUtils.h"
+//#include "ImGuizmo.h"
+//#include "Core/Math/Math.h"
+//
+//namespace Shunya {
+//    extern const std::filesystem::path g_AssetPath;
+//
+//    EditorLayer::EditorLayer()
+//        : Layer("EditorLayer"), m_CameraController(1280.0f / 720.0f, true)
+//    {
+//    }
+//
+//    EditorLayer::~EditorLayer() {}
+//
+//    void EditorLayer::OnAttach()
+//    {
+//        m_Texture = Texture2D::Create("assets/textures/cp.png");
+//        m_IconPlay = Texture2D::Create("Resources/Icons/PlayButton.png");
+//        m_IconStop = Texture2D::Create("Resources/Icons/StopButton.png");
+//
+//        FramebufferSpecification fbspec;
+//        fbspec.Width = 1280;
+//        fbspec.Height = 720;
+//        fbspec.Attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::RED_INTEGER, FramebufferTextureFormat::Depth };
+//        m_FrameBuffer = FrameBuffer::Create(fbspec);
+//
+//        
+//        m_ActiveScene = std::make_shared<Scene>();
+//        auto commandLineArgs = Application::Get().GetCommandLineArgs();
+//        if (commandLineArgs.Count > 1)
+//        {
+//            auto sceneFilePath = commandLineArgs[1];
+//            SceneSerializer serializer(m_ActiveScene);
+//            serializer.Deserialize(sceneFilePath);
+//        }
+//
+//        m_EditorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f);
+//
+//#if 0
+//
+//        m_SquareEntity = m_ActiveScene->CreateEntity("Blue Square");
+//        m_SquareEntity.AddComponent<SpriteRendererComponent>(
+//            glm::vec4{ 0.2f, 0.3f, 0.8f, 1.0f });
+//
+//        auto redSquare = m_ActiveScene->CreateEntity("Red Square");
+//        redSquare.AddComponent<SpriteRendererComponent>(glm::vec4{ 1.0f, 0.0f, 0.0f, 1.0f });
+//
+//        m_CameraEntity = m_ActiveScene->CreateEntity("Camera Entity");
+//        m_CameraEntity.AddComponent<CameraComponent>();
+//
+//        m_SecondCamera = m_ActiveScene->CreateEntity("Clip-Space Entity");
+//        auto& cc = m_SecondCamera.AddComponent<CameraComponent>();
+//        cc.Primary = false;
+//
+//        class CameraController : public ScriptingEntity
+//        {
+//        public:
+//
+//            virtual void OnCreate() override
+//            {
+//                auto& translation = GetComponent<TransformComponent>().Translation;
+//                translation.x = rand() % 10 - 5.0f;
+//            }
+//
+//            virtual void OnDestroy() override
+//            {
+//            }
+//
+//            virtual void OnUpdate(Timestamp ts) override
+//            {
+//                auto& transform = GetComponent<TransformComponent>().Translation;
+//                float speed = 5.0f;
+//
+//                if (Input::IsKeyPressed(SHUNYA_KEY_A))
+//                    transform.x -= speed * ts.GetSeconds();
+//                if (Input::IsKeyPressed(SHUNYA_KEY_D))
+//                    transform.x += speed * ts.GetSeconds();
+//                if (Input::IsKeyPressed(SHUNYA_KEY_W))
+//                    transform.y += speed * ts.GetSeconds();
+//                if (Input::IsKeyPressed(SHUNYA_KEY_S))
+//                    transform.y -= speed * ts.GetSeconds();
+//            }
+//        };
+//
+//        m_CameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
+//        m_SecondCamera.AddComponent<NativeScriptComponent>().Bind<CameraController>();
+//#endif
+//
+//    
+//    }
+//
+//    void EditorLayer::OnDetch() {}
+//
+//    void EditorLayer::OnUpdate(Timestamp ts)
+//    {
+//        SHUNYA_PROFILE_FUNCTION();
+//
+//        // ✅ Resize framebuffer if viewport size changed
+//        FramebufferSpecification spec = m_FrameBuffer->GetSpecification();
+//        if (m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f &&
+//            (spec.Width != (uint32_t)m_ViewportSize.x ||
+//                spec.Height != (uint32_t)m_ViewportSize.y))
+//        {
+//            m_FrameBuffer->Resize((uint32_t)m_ViewportSize.x,
+//                (uint32_t)m_ViewportSize.y);
+//            m_CameraController.OnResize(m_ViewportSize.x, m_ViewportSize.y);
+//            m_EditorCamera.SetViewportSize(m_ViewportSize.x, m_ViewportSize.y);
+//            m_ActiveScene->OnViewportResize(
+//                (uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+//        }
+//
+//
+//
+//        // ✅ Render into framebuffer
+//        Renderer2D::ResetStats();
+//        m_FrameBuffer->Bind();
+//        RendererCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
+//        RendererCommand::Clear();
+//
+//        m_FrameBuffer->ClearAttachment(1, -1);
+//
+//
+//        switch (m_SceneState)
+//        {
+//        case SceneState::Edit:
+//        {
+//            if (m_ViewportFocused)
+//                m_CameraController.OnUpdate(ts);
+//
+//            m_EditorCamera.OnUpdate(ts);
+//
+//            m_ActiveScene->OnUpdateEditor(ts, m_EditorCamera);
+//            break;
+//        }
+//        case SceneState::Play:
+//        {
+//            m_ActiveScene->OnUpdateRuntime(ts);
+//            break;
+//        }
+//        }
+//
+//
+//        auto [mx, my] = ImGui::GetMousePos();
+//        mx -= m_ViewportBounds[0].x;
+//        my -= m_ViewportBounds[0].y;
+//        glm::vec2 viewportSize = m_ViewportBounds[1] - m_ViewportBounds[0];
+//        my = viewportSize.y - my;
+//        int mouseX = (int)mx;
+//        int mouseY = (int)my;
+//
+//        if (mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y)
+//        {
+//            int pixelData = m_FrameBuffer->ReadPixel(1, mouseX, mouseY);
+//            m_HoveredEntity = pixelData == -1 ? Entity() : Entity((entt::entity)pixelData, m_ActiveScene.get());
+//        }
+//
+//
+//        m_FrameBuffer->UnBind();
+//    }
+//
+//    void EditorLayer::OnImGuiRender()
+//    {
+//        SHUNYA_PROFILE_FUNCTION();
+//
+//        static bool dockspaceOpen = true;
+//        static bool opt_fullscreen = true;
+//        static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
+//
+//        ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar |
+//            ImGuiWindowFlags_NoDocking;
+//        if (opt_fullscreen)
+//        {
+//            ImGuiViewport* viewport = ImGui::GetMainViewport();
+//            ImGui::SetNextWindowPos(viewport->GetWorkPos());
+//            ImGui::SetNextWindowSize(viewport->GetWorkSize());
+//            ImGui::SetNextWindowViewport(viewport->ID);
+//            ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+//            ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+//            window_flags |= ImGuiWindowFlags_NoTitleBar |
+//                ImGuiWindowFlags_NoCollapse |
+//                ImGuiWindowFlags_NoResize |
+//                ImGuiWindowFlags_NoMove;
+//            window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus |
+//                ImGuiWindowFlags_NoNavFocus;
+//        }
+//
+//        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+//        ImGui::Begin("DockSpace Demo", &dockspaceOpen, window_flags);
+//        ImGui::PopStyleVar(); // WindowPadding
+//        if (opt_fullscreen)
+//            ImGui::PopStyleVar(2); // WindowRounding + WindowBorderSize
+//
+//        ImGuiIO& io = ImGui::GetIO();
+//        ImGuiStyle& style = ImGui::GetStyle();
+//        float minWinSizeX = style.WindowMinSize.x;
+//        style.WindowMinSize.x = 370.0f;
+//        if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
+//        {
+//            ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+//            ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
+//        }
+//        style.WindowMinSize.x = minWinSizeX;
+//
+//        if (ImGui::BeginMenuBar())
+//        {
+//            if (ImGui::BeginMenu("Options"))
+//            {
+//                if (ImGui::MenuItem("New", "Ctrl+N"))
+//                    NewScene();
+//
+//                if (ImGui::MenuItem("Open...", "Ctrl+O"))
+//                    OpenScene();
+//
+//                if (ImGui::MenuItem("Save As...", "Ctrl+Shift+S"))
+//                    SaveSceneAs();
+//
+//                if (ImGui::MenuItem("Exit")) Application::Get().Close();
+//                ImGui::EndMenu();
+//            }
+//            ImGui::EndMenuBar();
+//        }
+//        ImGui::End(); // DockSpace
+//
+//        m_SceneHierarchyPanel.OnImGuiRender();
+//        m_ContentBrowserPanel.OnImGuiRender();
+//        // ──   s panel ──────────────────────────────────────
+//        ImGui::Begin("Settings");
+//
+//        std::string name = "None";
+//        if (m_HoveredEntity)
+//            name = m_HoveredEntity.GetComponent<TagComponent>().Tag;
+//        ImGui::Text("Hovered Entity: %s", name.c_str());
+//
+//        auto stats = Renderer2D::GetStats();
+//        ImGui::Text("Renderer2D Stats:");
+//        ImGui::Text("Draw Calls: %d", stats.DrawCalls);
+//        ImGui::Text("Quads:      %d", stats.QuadCount);
+//        ImGui::Text("Vertices:   %d", stats.GetTotalVertexCount());
+//        ImGui::Text("Indices:    %d", stats.GetTotalIndexCount());
+//        ImGui::Separator();
+//
+//        ImGui::End(); // Settings
+//
+//        // ── Viewport panel ───────────────────────────────────────
+//        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
+//        ImGui::Begin("Viewport");
+//
+//        auto viewportMinRegion = ImGui::GetWindowContentRegionMin();
+//        auto viewportMaxRegion = ImGui::GetWindowContentRegionMax();
+//        auto viewportOffset = ImGui::GetWindowPos();
+//        m_ViewportBounds[0] = { viewportMinRegion.x + viewportOffset.x, viewportMinRegion.y + viewportOffset.y };
+//        m_ViewportBounds[1] = { viewportMaxRegion.x + viewportOffset.x, viewportMaxRegion.y + viewportOffset.y };
+//
+//        m_ViewportFocused = ImGui::IsWindowFocused();
+//        m_ViewportHovered = ImGui::IsWindowHovered();
+//        Application::Get().GetImGuiLayer()->SetBlockEvents(!m_ViewportHovered);
+//
+//        // ✅ Capture viewport size for resize next frame
+//        ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
+//        m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
+//
+//        uint32_t textureID = m_FrameBuffer->GetColorAttachmentRendererID();
+//        ImGui::Image(reinterpret_cast<void*>(textureID), ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+//
+//        if (ImGui::BeginDragDropTarget())
+//        {
+//            if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+//            {
+//                const wchar_t* path = (const wchar_t*)payload->Data;
+//                OpenScene(std::filesystem::path(g_AssetPath) / path);
+//            }
+//            ImGui::EndDragDropTarget();
+//        }
+//
+//
+//        // Gizmos
+//        Entity selectedEntity = m_SceneHierarchyPanel.GetSelectedEntity();
+//        if (selectedEntity && m_GizmoType != -1)
+//        {
+//            ImGuizmo::SetOrthographic(false);
+//            ImGuizmo::SetDrawlist();
+//
+//            float windowWidth = (float)ImGui::GetWindowWidth();
+//            float windowHeight = (float)ImGui::GetWindowHeight();
+//            ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowWidth, windowHeight);
+//
+//            // Camera
+//            //auto cameraEntity = m_ActiveScene->GetPrimaryCameraEntity();
+//            //const auto& camera = cameraEntity.GetComponent<CameraComponent>().Camera;
+//            //const glm::mat4& cameraProjection = camera.GetProjection();
+//            //glm::mat4 cameraView = glm::inverse(cameraEntity.GetComponent<TransformComponent>().GetTransform());
+//
+//            const glm::mat4& cameraProjection = m_EditorCamera.GetProjection();
+//            glm::mat4 cameraView = m_EditorCamera.GetViewMatrix();
+//            // Entity transform
+//            auto& tc = selectedEntity.GetComponent<TransformComponent>();
+//            glm::mat4 transform = tc.GetTransform();
+//
+//            // Snapping
+//            bool snap = Input::IsKeyPressed(SHUNYA_KEY_LEFT_CONTROL);
+//            float snapValue = 0.5f; // Snap to 0.5m for translation/scale
+//            // Snap to 45 degrees for rotation
+//            if (m_GizmoType == ImGuizmo::OPERATION::ROTATE)
+//                snapValue = 45.0f;
+//
+//            float snapValues[3] = { snapValue, snapValue, snapValue };
+//
+//            ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(cameraProjection),
+//                (ImGuizmo::OPERATION)m_GizmoType, ImGuizmo::LOCAL, glm::value_ptr(transform),
+//                nullptr, snap ? snapValues : nullptr);
+//
+//            if (ImGuizmo::IsUsing())
+//            {
+//                glm::vec3 translation, rotation, scale;
+//                Math::DecomposeTransform(transform, translation, rotation, scale);
+//
+//                glm::vec3 deltaRotation = rotation - tc.Rotation;
+//                tc.Translation = translation;
+//                tc.Rotation += deltaRotation;
+//                tc.Scale = scale;
+//            }
+//        }
+//
+//
+//
+//        ImGui::End(); // Viewport
+//        ImGui::PopStyleVar();
+//
+//
+//        UI_Toolbar();
+//
+//
+//    }
+//
+//    void EditorLayer::UI_Toolbar()
+//    {
+//        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 2));
+//        ImGui::PushStyleVar(ImGuiStyleVar_ItemInnerSpacing, ImVec2(0, 0));
+//        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
+//        auto& colors = ImGui::GetStyle().Colors;
+//        const auto& buttonHovered = colors[ImGuiCol_ButtonHovered];
+//        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(buttonHovered.x, buttonHovered.y, buttonHovered.z, 0.5f));
+//        const auto& buttonActive = colors[ImGuiCol_ButtonActive];
+//        ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(buttonActive.x, buttonActive.y, buttonActive.z, 0.5f));
+//
+//        ImGui::Begin("##toolbar", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+//
+//        float size = ImGui::GetWindowHeight() - 4.0f;
+//        Ref<Texture2D> icon = m_SceneState == SceneState::Edit ? m_IconPlay : m_IconStop;
+//        ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
+//
+//        // FIXED: Added (uint64_t) cast to prevent x64 crashes. 
+//        // NOTE: If using ImGui 1.89+, ImageButton requires a string ID first. E.g., ImGui::ImageButton("##PlayBtn", (ImTextureID)...)
+//        if (ImGui::ImageButton((ImTextureID)(uint64_t)icon->GetRendererID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0))
+//        {
+//            if (m_SceneState == SceneState::Edit)
+//                OnScenePlay();
+//            else if (m_SceneState == SceneState::Play)
+//                OnSceneStop();
+//        }
+//        ImGui::PopStyleVar(2);
+//        ImGui::PopStyleColor(3);
+//        ImGui::End();
+//    }
+//    void EditorLayer::OnEvent(Event& e)
+//    {
+//        if (m_ViewportFocused && m_ViewportHovered)
+//            m_CameraController.OnEvent(e);
+//        m_EditorCamera.OnEvent(e);
+//        ImGuiIO& io = ImGui::GetIO();
+//        EventDispatcher dispatcher(e);
+//        dispatcher.Dispatch<KeyPressedEvent>(SHUNYA_BIND(EditorLayer::OnKeyPressed));
+//        dispatcher.Dispatch<MouseButtonPressedEvent>(SHUNYA_BIND(EditorLayer::OnMouseButtonPressed));
+//    }
+//
+//    bool EditorLayer::OnKeyPressed(KeyPressedEvent& e)
+//    {
+//        // Shortcuts
+//        if (e.GetRepeatCount() > 0)
+//            return false;
+//
+//        bool control = Input::IsKeyPressed(SHUNYA_KEY_LEFT_CONTROL) || Input::IsKeyPressed(SHUNYA_KEY_RIGHT_CONTROL);
+//        bool shift = Input::IsKeyPressed(SHUNYA_KEY_LEFT_SHIFT) || Input::IsKeyPressed(SHUNYA_KEY_RIGHT_SHIFT);
+//        switch (e.GetKeyCode())
+//        {
+//        case SHUNYA_KEY_N:
+//        {
+//            if (control)
+//                NewScene();
+//
+//            break;
+//        }
+//        case SHUNYA_KEY_O:
+//        {
+//            if (control)
+//                OpenScene();
+//
+//            break;
+//        }
+//        case SHUNYA_KEY_S:
+//        {
+//            if (control)
+//            {
+//                if (shift)
+//                    SaveSceneAs();
+//                else
+//                    SaveScene();
+//            }
+//
+//            break;
+//        }
+//
+//        // Scene Commands
+//        case SHUNYA_KEY_D:
+//        {
+//            if (control)
+//                OnDuplicateEntity();
+//            break;
+//        }
+//        // Gizmos
+//        case SHUNYA_KEY_Q:
+//            m_GizmoType = -1;
+//            break;
+//        case SHUNYA_KEY_W:
+//            m_GizmoType = ImGuizmo::OPERATION::TRANSLATE;
+//            break;
+//        case SHUNYA_KEY_E:
+//            m_GizmoType = ImGuizmo::OPERATION::ROTATE;
+//            break;
+//        case SHUNYA_KEY_R:
+//            m_GizmoType = ImGuizmo::OPERATION::SCALE;
+//            break;
+//        }
+//        return false;
+//    }
+//    void EditorLayer::SaveScene()
+//    {
+//        if (!m_EditorScenePath.empty())
+//            SerializeScene(m_ActiveScene, m_EditorScenePath);
+//        else
+//            SaveSceneAs();
+//    }
+//
+//
+//    bool EditorLayer::OnMouseButtonPressed(MouseButtonPressedEvent& e)
+//    {
+//        if (e.m_MouseButtonEvent() == SHUNYA_MOUSE_BUTTON_LEFT)
+//        {
+//            if (m_ViewportHovered && !ImGuizmo::IsOver() && !Input::IsKeyPressed(SHUNYA_KEY_LEFT_ALT))
+//                m_SceneHierarchyPanel.SetSelectedEntity(m_HoveredEntity);
+//        }
+//        return false;
+//    }
+//
+//    void EditorLayer::NewScene()
+//    {
+//        m_ActiveScene = CreateRef<Scene>();
+//        m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+//        m_SceneHierarchyPanel.SetContext(m_ActiveScene);
+//        m_EditorScenePath = std::filesystem::path();
+//    }
+//
+//    void EditorLayer::OpenScene()
+//    {
+//
+//        std::string filepath = FileDialogs::OpenFile("Shunya Scene (*.shunya)\0*.shunya\0");
+//        if (!filepath.empty())
+//        {
+//            OpenScene(filepath);
+//        }
+//    }
+//
+//            void EditorLayer::OpenScene(const std::filesystem::path & path)
+//            {
+//                if (m_SceneState != SceneState::Edit)
+//                    OnSceneStop();
+//                m_ActiveScene = CreateRef<Scene>();
+//                m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+//                m_SceneHierarchyPanel.SetContext(m_ActiveScene);
+//
+//                SceneSerializer serializer(m_ActiveScene);
+//                serializer.Deserialize(path.string());
+//            }
+//
+//    void EditorLayer::SaveSceneAs()
+//    {
+//        std::string filepath = FileDialogs::SaveFile("Shunya Scene (*.shunya)\0*.shunya\0");
+//        if (!filepath.empty())
+//        {
+//            SceneSerializer serializer(m_ActiveScene);
+//            serializer.Serialize(filepath);
+//        }
+//    }
+//    void EditorLayer::OnScenePlay()
+//    {
+//        m_SceneState = SceneState::Play;
+//        m_ActiveScene->OnRuntimeStart();
+//
+//    }
+//
+//    void EditorLayer::OnSceneStop()
+//    {
+//        m_SceneState = SceneState::Edit;
+//        m_ActiveScene->OnRuntimeStop();
+//    }
+//}
+
+
+
+
+
+
+
 #include "Shunya.h"
 #include "EditorLayer.h"
 #include <imgui.h>
@@ -13,6 +536,7 @@
 #include "Core/Math/Math.h"
 
 namespace Shunya {
+
     extern const std::filesystem::path g_AssetPath;
 
     EditorLayer::EditorLayer()
@@ -24,6 +548,8 @@ namespace Shunya {
 
     void EditorLayer::OnAttach()
     {
+        SHUNYA_PROFILE_FUNCTION();
+
         m_Texture = Texture2D::Create("assets/textures/cp.png");
         m_IconPlay = Texture2D::Create("Resources/Icons/PlayButton.png");
         m_IconStop = Texture2D::Create("Resources/Icons/StopButton.png");
@@ -34,8 +560,9 @@ namespace Shunya {
         fbspec.Attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::RED_INTEGER, FramebufferTextureFormat::Depth };
         m_FrameBuffer = FrameBuffer::Create(fbspec);
 
-        
-        m_ActiveScene = std::make_shared<Scene>();
+        m_EditorScene = std::make_shared<Scene>();
+        m_ActiveScene = m_EditorScene;
+
         auto commandLineArgs = Application::Get().GetCommandLineArgs();
         if (commandLineArgs.Count > 1)
         {
@@ -45,59 +572,6 @@ namespace Shunya {
         }
 
         m_EditorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f);
-
-#if 0
-
-        m_SquareEntity = m_ActiveScene->CreateEntity("Blue Square");
-        m_SquareEntity.AddComponent<SpriteRendererComponent>(
-            glm::vec4{ 0.2f, 0.3f, 0.8f, 1.0f });
-
-        auto redSquare = m_ActiveScene->CreateEntity("Red Square");
-        redSquare.AddComponent<SpriteRendererComponent>(glm::vec4{ 1.0f, 0.0f, 0.0f, 1.0f });
-
-        m_CameraEntity = m_ActiveScene->CreateEntity("Camera Entity");
-        m_CameraEntity.AddComponent<CameraComponent>();
-
-        m_SecondCamera = m_ActiveScene->CreateEntity("Clip-Space Entity");
-        auto& cc = m_SecondCamera.AddComponent<CameraComponent>();
-        cc.Primary = false;
-
-        class CameraController : public ScriptingEntity
-        {
-        public:
-
-            virtual void OnCreate() override
-            {
-                auto& translation = GetComponent<TransformComponent>().Translation;
-                translation.x = rand() % 10 - 5.0f;
-            }
-
-            virtual void OnDestroy() override
-            {
-            }
-
-            virtual void OnUpdate(Timestamp ts) override
-            {
-                auto& transform = GetComponent<TransformComponent>().Translation;
-                float speed = 5.0f;
-
-                if (Input::IsKeyPressed(SHUNYA_KEY_A))
-                    transform.x -= speed * ts.GetSeconds();
-                if (Input::IsKeyPressed(SHUNYA_KEY_D))
-                    transform.x += speed * ts.GetSeconds();
-                if (Input::IsKeyPressed(SHUNYA_KEY_W))
-                    transform.y += speed * ts.GetSeconds();
-                if (Input::IsKeyPressed(SHUNYA_KEY_S))
-                    transform.y -= speed * ts.GetSeconds();
-            }
-        };
-
-        m_CameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
-        m_SecondCamera.AddComponent<NativeScriptComponent>().Bind<CameraController>();
-#endif
-        
-        m_SceneHierarchyPanel.SetContext(m_ActiveScene);
-    
     }
 
     void EditorLayer::OnDetch() {}
@@ -106,30 +580,25 @@ namespace Shunya {
     {
         SHUNYA_PROFILE_FUNCTION();
 
-        // ✅ Resize framebuffer if viewport size changed
+        // Resize framebuffer if viewport size changed
         FramebufferSpecification spec = m_FrameBuffer->GetSpecification();
         if (m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f &&
             (spec.Width != (uint32_t)m_ViewportSize.x ||
                 spec.Height != (uint32_t)m_ViewportSize.y))
         {
-            m_FrameBuffer->Resize((uint32_t)m_ViewportSize.x,
-                (uint32_t)m_ViewportSize.y);
+            m_FrameBuffer->Resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
             m_CameraController.OnResize(m_ViewportSize.x, m_ViewportSize.y);
             m_EditorCamera.SetViewportSize(m_ViewportSize.x, m_ViewportSize.y);
-            m_ActiveScene->OnViewportResize(
-                (uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+            m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
         }
 
-
-
-        // ✅ Render into framebuffer
+        // Render into framebuffer
         Renderer2D::ResetStats();
         m_FrameBuffer->Bind();
         RendererCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
         RendererCommand::Clear();
 
         m_FrameBuffer->ClearAttachment(1, -1);
-
 
         switch (m_SceneState)
         {
@@ -139,7 +608,6 @@ namespace Shunya {
                 m_CameraController.OnUpdate(ts);
 
             m_EditorCamera.OnUpdate(ts);
-
             m_ActiveScene->OnUpdateEditor(ts, m_EditorCamera);
             break;
         }
@@ -149,7 +617,6 @@ namespace Shunya {
             break;
         }
         }
-
 
         auto [mx, my] = ImGui::GetMousePos();
         mx -= m_ViewportBounds[0].x;
@@ -165,7 +632,6 @@ namespace Shunya {
             m_HoveredEntity = pixelData == -1 ? Entity() : Entity((entt::entity)pixelData, m_ActiveScene.get());
         }
 
-
         m_FrameBuffer->UnBind();
     }
 
@@ -177,8 +643,7 @@ namespace Shunya {
         static bool opt_fullscreen = true;
         static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
 
-        ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar |
-            ImGuiWindowFlags_NoDocking;
+        ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
         if (opt_fullscreen)
         {
             ImGuiViewport* viewport = ImGui::GetMainViewport();
@@ -187,24 +652,22 @@ namespace Shunya {
             ImGui::SetNextWindowViewport(viewport->ID);
             ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
             ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
-            window_flags |= ImGuiWindowFlags_NoTitleBar |
-                ImGuiWindowFlags_NoCollapse |
-                ImGuiWindowFlags_NoResize |
-                ImGuiWindowFlags_NoMove;
-            window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus |
-                ImGuiWindowFlags_NoNavFocus;
+            window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+            window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
         }
 
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
         ImGui::Begin("DockSpace Demo", &dockspaceOpen, window_flags);
-        ImGui::PopStyleVar(); // WindowPadding
+        ImGui::PopStyleVar();
+
         if (opt_fullscreen)
-            ImGui::PopStyleVar(2); // WindowRounding + WindowBorderSize
+            ImGui::PopStyleVar(2);
 
         ImGuiIO& io = ImGui::GetIO();
         ImGuiStyle& style = ImGui::GetStyle();
         float minWinSizeX = style.WindowMinSize.x;
         style.WindowMinSize.x = 370.0f;
+
         if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
         {
             ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
@@ -225,16 +688,20 @@ namespace Shunya {
                 if (ImGui::MenuItem("Save As...", "Ctrl+Shift+S"))
                     SaveSceneAs();
 
-                if (ImGui::MenuItem("Exit")) Application::Get().Close();
+                if (ImGui::MenuItem("Exit"))
+                    Application::Get().Close();
+
                 ImGui::EndMenu();
             }
             ImGui::EndMenuBar();
         }
+
         ImGui::End(); // DockSpace
 
         m_SceneHierarchyPanel.OnImGuiRender();
         m_ContentBrowserPanel.OnImGuiRender();
-        // ──   s panel ──────────────────────────────────────
+
+        // ── Settings panel ──────────────────────────────────────
         ImGui::Begin("Settings");
 
         std::string name = "None";
@@ -250,7 +717,7 @@ namespace Shunya {
         ImGui::Text("Indices:    %d", stats.GetTotalIndexCount());
         ImGui::Separator();
 
-        ImGui::End(); // Settings
+        ImGui::End();
 
         // ── Viewport panel ───────────────────────────────────────
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
@@ -266,12 +733,11 @@ namespace Shunya {
         m_ViewportHovered = ImGui::IsWindowHovered();
         Application::Get().GetImGuiLayer()->SetBlockEvents(!m_ViewportHovered);
 
-        // ✅ Capture viewport size for resize next frame
         ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
         m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
 
         uint32_t textureID = m_FrameBuffer->GetColorAttachmentRendererID();
-        ImGui::Image(reinterpret_cast<void*>(textureID), ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+        ImGui::Image(reinterpret_cast<void*>((uint64_t)textureID), ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 
         if (ImGui::BeginDragDropTarget())
         {
@@ -282,7 +748,6 @@ namespace Shunya {
             }
             ImGui::EndDragDropTarget();
         }
-
 
         // Gizmos
         Entity selectedEntity = m_SceneHierarchyPanel.GetSelectedEntity();
@@ -295,22 +760,15 @@ namespace Shunya {
             float windowHeight = (float)ImGui::GetWindowHeight();
             ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowWidth, windowHeight);
 
-            // Camera
-            //auto cameraEntity = m_ActiveScene->GetPrimaryCameraEntity();
-            //const auto& camera = cameraEntity.GetComponent<CameraComponent>().Camera;
-            //const glm::mat4& cameraProjection = camera.GetProjection();
-            //glm::mat4 cameraView = glm::inverse(cameraEntity.GetComponent<TransformComponent>().GetTransform());
-
             const glm::mat4& cameraProjection = m_EditorCamera.GetProjection();
             glm::mat4 cameraView = m_EditorCamera.GetViewMatrix();
-            // Entity transform
+
             auto& tc = selectedEntity.GetComponent<TransformComponent>();
             glm::mat4 transform = tc.GetTransform();
 
             // Snapping
             bool snap = Input::IsKeyPressed(SHUNYA_KEY_LEFT_CONTROL);
-            float snapValue = 0.5f; // Snap to 0.5m for translation/scale
-            // Snap to 45 degrees for rotation
+            float snapValue = 0.5f;
             if (m_GizmoType == ImGuizmo::OPERATION::ROTATE)
                 snapValue = 45.0f;
 
@@ -332,15 +790,10 @@ namespace Shunya {
             }
         }
 
-
-
         ImGui::End(); // Viewport
         ImGui::PopStyleVar();
 
-
         UI_Toolbar();
-
-
     }
 
     void EditorLayer::UI_Toolbar()
@@ -360,8 +813,6 @@ namespace Shunya {
         Ref<Texture2D> icon = m_SceneState == SceneState::Edit ? m_IconPlay : m_IconStop;
         ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
 
-        // FIXED: Added (uint64_t) cast to prevent x64 crashes. 
-        // NOTE: If using ImGui 1.89+, ImageButton requires a string ID first. E.g., ImGui::ImageButton("##PlayBtn", (ImTextureID)...)
         if (ImGui::ImageButton((ImTextureID)(uint64_t)icon->GetRendererID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0))
         {
             if (m_SceneState == SceneState::Edit)
@@ -369,16 +820,19 @@ namespace Shunya {
             else if (m_SceneState == SceneState::Play)
                 OnSceneStop();
         }
+
         ImGui::PopStyleVar(2);
         ImGui::PopStyleColor(3);
         ImGui::End();
     }
+
     void EditorLayer::OnEvent(Event& e)
     {
         if (m_ViewportFocused && m_ViewportHovered)
             m_CameraController.OnEvent(e);
+
         m_EditorCamera.OnEvent(e);
-        ImGuiIO& io = ImGui::GetIO();
+
         EventDispatcher dispatcher(e);
         dispatcher.Dispatch<KeyPressedEvent>(SHUNYA_BIND(EditorLayer::OnKeyPressed));
         dispatcher.Dispatch<MouseButtonPressedEvent>(SHUNYA_BIND(EditorLayer::OnMouseButtonPressed));
@@ -386,52 +840,66 @@ namespace Shunya {
 
     bool EditorLayer::OnKeyPressed(KeyPressedEvent& e)
     {
-        // Shortcuts
         if (e.GetRepeatCount() > 0)
             return false;
 
         bool control = Input::IsKeyPressed(SHUNYA_KEY_LEFT_CONTROL) || Input::IsKeyPressed(SHUNYA_KEY_RIGHT_CONTROL);
         bool shift = Input::IsKeyPressed(SHUNYA_KEY_LEFT_SHIFT) || Input::IsKeyPressed(SHUNYA_KEY_RIGHT_SHIFT);
+
         switch (e.GetKeyCode())
         {
         case SHUNYA_KEY_N:
         {
             if (control)
                 NewScene();
-
             break;
         }
         case SHUNYA_KEY_O:
         {
             if (control)
                 OpenScene();
-
             break;
         }
         case SHUNYA_KEY_S:
         {
-            if (control && shift)
-                SaveSceneAs();
-
+            if (control)
+            {
+                if (shift)
+                    SaveSceneAs();
+                else
+                    SaveScene();
+            }
             break;
         }
-        // Gizmos
+        case SHUNYA_KEY_D:
+        {
+            if (control)
+                OnDuplicateEntity();
+            break;
+        }
         case SHUNYA_KEY_Q:
+        {
             m_GizmoType = -1;
             break;
+        }
         case SHUNYA_KEY_W:
+        {
             m_GizmoType = ImGuizmo::OPERATION::TRANSLATE;
             break;
+        }
         case SHUNYA_KEY_E:
+        {
             m_GizmoType = ImGuizmo::OPERATION::ROTATE;
             break;
+        }
         case SHUNYA_KEY_R:
+        {
             m_GizmoType = ImGuizmo::OPERATION::SCALE;
             break;
         }
+        }
         return false;
     }
-
 
     bool EditorLayer::OnMouseButtonPressed(MouseButtonPressedEvent& e)
     {
@@ -445,9 +913,12 @@ namespace Shunya {
 
     void EditorLayer::NewScene()
     {
-        m_ActiveScene = CreateRef<Scene>();
-        m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
-        m_SceneHierarchyPanel.SetContext(m_ActiveScene);
+        m_EditorScene = std::make_shared<Scene>();
+        m_EditorScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+        m_SceneHierarchyPanel.SetContext(m_EditorScene);
+
+        m_ActiveScene = m_EditorScene;
+        m_EditorScenePath = std::filesystem::path();
     }
 
     void EditorLayer::OpenScene()
@@ -459,14 +930,36 @@ namespace Shunya {
         }
     }
 
-            void EditorLayer::OpenScene(const std::filesystem::path & path)
-            {
-                m_ActiveScene = CreateRef<Scene>();
-                m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
-                m_SceneHierarchyPanel.SetContext(m_ActiveScene);
+    void EditorLayer::OpenScene(const std::filesystem::path& path)
+    {
+        if (m_SceneState != SceneState::Edit)
+            OnSceneStop();
 
-                SceneSerializer serializer(m_ActiveScene);
-                serializer.Deserialize(path.string());
+        if (path.extension().string() != ".shunya")
+        {
+            SHUNYA_CORE_WARNING("Could not load {0} - not a scene file", path.filename().string());
+            return;
+        }
+
+        Ref<Scene> newScene = std::make_shared<Scene>();
+        SceneSerializer serializer(newScene);
+        if (serializer.Deserialize(path.string()))
+        {
+            m_EditorScene = newScene;
+            m_EditorScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+            m_SceneHierarchyPanel.SetContext(m_EditorScene);
+
+            m_ActiveScene = m_EditorScene;
+            m_EditorScenePath = path;
+        }
+    }
+
+    void EditorLayer::SaveScene()
+    {
+        if (!m_EditorScenePath.empty())
+            SerializeScene(m_ActiveScene, m_EditorScenePath);
+        else
+            SaveSceneAs();
     }
 
     void EditorLayer::SaveSceneAs()
@@ -474,20 +967,44 @@ namespace Shunya {
         std::string filepath = FileDialogs::SaveFile("Shunya Scene (*.shunya)\0*.shunya\0");
         if (!filepath.empty())
         {
-            SceneSerializer serializer(m_ActiveScene);
-            serializer.Serialize(filepath);
+            SerializeScene(m_ActiveScene, filepath);
+            m_EditorScenePath = filepath;
         }
     }
+
+    void EditorLayer::SerializeScene(Ref<Scene> scene, const std::filesystem::path& path)
+    {
+        SceneSerializer serializer(scene);
+        serializer.Serialize(path.string());
+    }
+
     void EditorLayer::OnScenePlay()
     {
         m_SceneState = SceneState::Play;
+
+        m_ActiveScene = Scene::Copy(m_EditorScene);
         m_ActiveScene->OnRuntimeStart();
 
+        m_SceneHierarchyPanel.SetContext(m_ActiveScene);
     }
 
     void EditorLayer::OnSceneStop()
     {
         m_SceneState = SceneState::Edit;
+
         m_ActiveScene->OnRuntimeStop();
+        m_ActiveScene = m_EditorScene;
+
+        m_SceneHierarchyPanel.SetContext(m_ActiveScene);
+    }
+
+    void EditorLayer::OnDuplicateEntity()
+    {
+        if (m_SceneState != SceneState::Edit)
+            return;
+
+        Entity selectedEntity = m_SceneHierarchyPanel.GetSelectedEntity();
+        if (selectedEntity)
+            m_EditorScene->DuplicateEntity(selectedEntity);
     }
 }

@@ -178,6 +178,7 @@ namespace Shunya {
 	void OpenGLFrambuffer::Bind()
 	{
 		glBindFramebuffer(GL_FRAMEBUFFER, m_RendererID);
+		glViewport(0, 0, m_Specification.Width, m_Specification.Height);// this is one 
 	}
 	void OpenGLFrambuffer::UnBind()
 	{
