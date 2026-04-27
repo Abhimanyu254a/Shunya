@@ -1,16 +1,29 @@
 #pragma once
+
+#include "SceneCamera.h"
+#include "Core/UUID.h"
+#include "Core/Rendered/Texture.h"
+
+
 #include <string>
 #include <glm/glm.hpp>
 #include "Core/Rendered/Camera.h"
 #include "SceneCamera.h"
 #include <glm/gtc/matrix_transform.hpp>
-#include "ScriptingEntity.h"
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/quaternion.hpp>
 #include "Core/Rendered/Texture.h"
 
 namespace Shunya
 {
+	struct IDComponent
+	{
+		UUID ID;
+
+		IDComponent() = default;
+		IDComponent(const IDComponent&) = default;
+	};
+
 
 	struct TagComponent
 	{
@@ -61,6 +74,8 @@ namespace Shunya
 		CameraComponent() = default;
 		CameraComponent(const CameraComponent&) = default;
 	};
+
+	class ScriptingEntity;
 
 	struct NativeScriptComponent
 	{

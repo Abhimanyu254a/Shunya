@@ -159,6 +159,7 @@
 #include "Scene.h"
 #include "Entity.h"
 #include "Components.h"
+#include "Core/ScriptableEntity.h"
 #include "Core/Rendered/Renderer2D.h"
 #include "Core/Rendered/Camera.h"
 #include "box2d/b2_world.h"
@@ -199,9 +200,16 @@ namespace Shunya {
 	} 
 
 	Entity Scene::CreateEntity(const std::string& name)
+
+	{
+		return CreateEntityWithUUID(UUID(), name);
+	}
+
+	Entity Scene::CreateEntityWithUUID(UUID uuid, const std::string& name)
 	{
 		SHUNYA_PROFILE_FUNCTION();
 		Entity entity(m_Registry.create(), this);
+		entity.AddComponent<IDComponent>().ID = uuid;
 		entity.AddComponent<TransformComponent>();
 		auto& tag = entity.AddComponent<TagComponent>();
 		tag.Tag = name.empty() ? "Entity" : name;
@@ -379,6 +387,10 @@ namespace Shunya {
 
 	template<>
 	void Scene::OnComponentAdded<TagComponent>(Entity entity, TagComponent& component)
+	{
+	}
+	template<>
+	void Scene::OnComponentAdded<IDComponent>(Entity entity, IDComponent& component)
 	{
 	}
 

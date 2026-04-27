@@ -1,4 +1,6 @@
 #pragma once
+#include "Components.h"
+#include "Core/UUID.h"
 #include "Scene.h"
 #include "entt.hpp"
 
@@ -43,6 +45,8 @@ namespace Shunya
 		{
 			return m_EntityHandle == other.m_EntityHandle && m_Scene == other.m_Scene;
 		}
+
+		UUID GetUUID() { return GetComponent<IDComponent>().ID; }
 
 		bool operator!=(const Entity& other) const
 		{

@@ -1,5 +1,6 @@
 #pragma once
 #include "entt.hpp"
+#include "Core/UUID.h"
 #include "Core/Kernal/Timestep.h"
 #include "Core/Rendered/EditorCamera.h"
 
@@ -13,6 +14,7 @@ namespace Shunya
 		~Scene();
 
 		Entity CreateEntity(const std::string& name = std::string());
+		Entity CreateEntityWithUUID(UUID uuid, const std::string& name = std::string());
 		void DestroyEntity(Entity entity);
 
 		void OnRuntimeStart();

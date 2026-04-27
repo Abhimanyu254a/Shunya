@@ -183,8 +183,9 @@
     <ClInclude Include="src\Core\Scene\Scene.h" />
     <ClInclude Include="src\Core\Scene\SceneCamera.h" />
     <ClInclude Include="src\Core\Scene\SceneSerializer.h" />
-    <ClInclude Include="src\Core\Scene\ScriptingEntity.h" />
+    <ClInclude Include="src\Core\ScriptableEntity.h" />
     <ClInclude Include="src\Core\Utils\PlatformUtils.h" />
+    <ClInclude Include="src\Core\UUID.h" />
     <ClInclude Include="src\Core\Window.h" />
     <ClInclude Include="src\Core\WindowMaker.h" />
     <ClInclude Include="src\Core\imGui\imGuiBuild.h" />
@@ -647,6 +648,7 @@
     <ClCompile Include="src\Core\Scene\Scene.cpp" />
     <ClCompile Include="src\Core\Scene\SceneCamera.cpp" />
     <ClCompile Include="src\Core\Scene\SceneSerializer.cpp" />
+    <ClCompile Include="src\Core\UUID.cpp" />
     <ClCompile Include="src\Core\WindowMaker.cpp" />
     <ClCompile Include="src\Core\WindowsInput.cpp" />
     <ClCompile Include="src\Core\WindowsUtils.cpp" />
