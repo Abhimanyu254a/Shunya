@@ -1,14 +1,30 @@
 Scene: Untitled
 Entities:
-  - Entity: 16672940118998907085
+  - Entity: 6883095411278220008
+    TagComponent:
+      Tag: circle
+    TransformComponent:
+      Translation: [1.13187075, -2.43281364, -1.15665627]
+      Rotation: [0, 0, 0]
+      Scale: [2.56399798, 2.54708195, 1.50116396]
+  - Entity: 5134011587522944740
     TagComponent:
       Tag: Floor
     TransformComponent:
-      Translation: [-0.883175671, -1.09447932, 0]
-      Rotation: [0, 0, -0.638996005]
-      Scale: [6.74196768, 0.46067813, 1]
+      Translation: [2.3506453, -1.84539962, 0]
+      Rotation: [0, 0, 0.603692532]
+      Scale: [6.74196959, 0.46067816, 1]
     SpriteRendererComponent:
-      Color: [0.109832995, 0.00572443195, 0.370656371, 1]
+      Color: [0.06683743, 0.0518775843, 0.33590734, 1]
+  - Entity: 15045535320033348975
+    TagComponent:
+      Tag: Sprite
+    TransformComponent:
+      Translation: [1.15973222, 4.90658092, 0.0225147791]
+      Rotation: [0, 0, -0.235084534]
+      Scale: [0.361159712, 0.375572056, 0.848135769]
+    SpriteRendererComponent:
+      Color: [1, 1, 1, 1]
   - Entity: 4793924497264767156
     TagComponent:
       Tag: Camera
@@ -27,28 +43,12 @@ Entities:
         OrthographicFar: 1
       Primary: true
       FixedAspectRatio: false
-  - Entity: 15045535320033348975
-    TagComponent:
-      Tag: Sprite
-    TransformComponent:
-      Translation: [1.15973222, 4.90658092, 0.0225147791]
-      Rotation: [0, 0, -0.235084534]
-      Scale: [0.361159712, 0.375572056, 0.848135769]
-    SpriteRendererComponent:
-      Color: [1, 1, 1, 1]
-  - Entity: 5134011587522944740
+  - Entity: 16672940118998907085
     TagComponent:
       Tag: Floor
     TransformComponent:
-      Translation: [2.3506453, -1.84539962, 0]
-      Rotation: [0, 0, 0.603692532]
-      Scale: [6.74196959, 0.46067816, 1]
+      Translation: [-0.883175671, -1.09447932, 0]
+      Rotation: [0, 0, -0.638996005]
+      Scale: [6.74196768, 0.46067813, 1]
     SpriteRendererComponent:
-      Color: [0.06683743, 0.0518775843, 0.33590734, 1]
-  - Entity: 6883095411278220008
-    TagComponent:
-      Tag: circle
-    TransformComponent:
-      Translation: [1.13187075, -2.43281364, -1.15665627]
-      Rotation: [0, 0, 0]
-      Scale: [2.56399798, 2.54708195, 1.50116396]
+      Color: [0.109832995, 0.00572443195, 0.370656371, 1]

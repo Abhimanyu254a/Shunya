@@ -17,6 +17,7 @@ namespace Shunya {
         virtual void OnImGuiRender() override;
         void OnEvent(Event& e) override;
         void OpenScene(const std::filesystem::path& path);
+        void OnOverlayRender();
 
         void SaveScene();
         void SerializeScene(Ref<Scene> scene, const std::filesystem::path& path);
@@ -46,6 +47,7 @@ namespace Shunya {
         bool m_ViewportHovered = false;
         EditorCamera m_EditorCamera;
         int m_GizmoType = -1;
+        bool m_ShowPhysicsColliders = false;
         enum class SceneState
         {
             Edit = 0, Play = 1

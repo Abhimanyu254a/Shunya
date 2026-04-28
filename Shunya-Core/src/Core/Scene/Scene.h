@@ -17,6 +17,12 @@ namespace Shunya
 		Entity CreateEntityWithUUID(UUID uuid, const std::string& name = std::string());
 		void DestroyEntity(Entity entity);
 
+		template<typename... Components>
+		auto GetAllEntitiesWith()
+		{
+			return m_Registry.view<Components...>();
+		}
+
 		void OnRuntimeStart();
 		void OnRuntimeStop();
 		entt::registry& getReg() { return m_Registry; }
