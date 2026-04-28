@@ -26,5 +26,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\Shaders\Renderer2D_Circle.glsl" />
+    <None Include="assets\Shaders\Renderer2D_Line.glsl" />
+    <None Include="assets\Shaders\Renderer2D_Quad.glsl" />
   </ItemGroup>
 </Project>

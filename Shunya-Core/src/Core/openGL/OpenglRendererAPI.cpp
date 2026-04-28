@@ -14,6 +14,7 @@ namespace Shunya
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 			glEnable(GL_DEPTH_TEST);
+			glEnable(GL_LINE_SMOOTH);
 	}
 	void OpenGLRendererAPI::SetViewport(uint32_t x, uint32_t y, uint32_t breadth, uint32_t length) 
 	{
@@ -24,6 +25,16 @@ namespace Shunya
 		glClearColor(color.r, color.g, color.b, color.a);
 
 	}
+	void OpenGLRendererAPI::DrawLines(const Ref<VertexArray>& vertexArray, uint32_t vertexCount)
+	{
+		vertexArray->Bind();
+		glDrawArrays(GL_LINES, 0, vertexCount);
+	}
+
+	void OpenGLRendererAPI::SetLineWidth(float width)
+	{
+		glLineWidth(width);
+	}
 	void OpenGLRendererAPI::Clear()
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -32,6 +43,7 @@ namespace Shunya
 
 	void OpenGLRendererAPI::DrawIndexed(const std::shared_ptr<VertexArray>& vertexArray, uint32_t indexCount)
 	{
+		vertexArray->Bind();
 		uint32_t count = indexCount ? vertexArray->GetIndexBuffer()->GetCount() : indexCount;
 		glDrawElements(GL_TRIANGLES,count,GL_UNSIGNED_INT,nullptr);
 	}
