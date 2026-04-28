@@ -27,6 +27,7 @@ namespace Shunya
 		void OnUpdateEditor(Timestamp ts, EditorCamera& camera);
 		void DuplicateEntity(Entity entity);
 
+
 	private:
 		template<typename T>
 		void OnComponentAdded(Entity entity, T& component);
@@ -42,4 +43,8 @@ namespace Shunya
 		friend class SceneHierarchyPanel;
 
 	};
+
+	struct CircleRendererComponent;
+	template<>
+	void Scene::OnComponentAdded<CircleRendererComponent>(Entity entity, CircleRendererComponent& component);
 }
